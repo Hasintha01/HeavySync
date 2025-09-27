@@ -20,6 +20,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Dashboard from './pages/Dashboard';
+import LandingPage from './pages/LandingPage';
 
 // Import supplier module pages
 import SupplierList from './modules/supplier/pages/SupplierList';
@@ -38,8 +39,10 @@ function App() {
         {/* Main Content Area */}
         <main className="container mx-auto px-4 py-6">
           <Routes>
+            {/* Landing Page Route */}
+            <Route path="/" element={<LandingPage />} />
             {/* Dashboard Route */}
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             
             {/* Supplier Management Routes */}
             <Route path="/suppliers" element={<SupplierList />} />
