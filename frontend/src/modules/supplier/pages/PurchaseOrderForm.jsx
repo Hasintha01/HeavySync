@@ -110,6 +110,29 @@ const PurchaseOrderForm = ({ onSuccess }) => {
     setSuccess("");
 
     try {
+      // Validate form
+      if (!form.supplier) {
+        throw new Error("Please select a supplier");
+      }
+      
+      if (form.items.length === 0) {
+        throw new Error("Please add at least one item");
+      }
+      
+      // Validate items
+      for (let i = 0; i < form.items.length; i++) {
+        const item = form.items[i];
+        if (!item.name || item.name.trim() === "") {
+          throw new Error(`Item #${i + 1}: Please enter item name`);
+        }
+        if (item.quantity <= 0) {
+          throw new Error(`Item #${i + 1}: Quantity must be greater than 0`);
+        }
+        if (item.unitPrice <= 0) {
+          throw new Error(`Item #${i + 1}: Unit price must be greater than 0`);
+        }
+      }
+
       // Prepare data for backend
       const orderData = {
         supplier: form.supplier,
@@ -117,8 +140,11 @@ const PurchaseOrderForm = ({ onSuccess }) => {
         totalAmount: calculateTotal(),
       };
 
+      console.log('Submitting order data:', orderData);
+
       // Call API to create new purchase order
-      await purchaseOrderService.createOrder(orderData);
+      const response = await purchaseOrderService.createOrder(orderData);
+      console.log('Order created successfully:', response);
       
       // Reset form after success
       setForm({
@@ -131,8 +157,8 @@ const PurchaseOrderForm = ({ onSuccess }) => {
       // Call optional success callback if provided
       onSuccess?.();
     } catch (err) {
-      console.error(err);
-      setError("Failed to create purchase order. Please try again.");
+      console.error('Error creating purchase order:', err);
+      setError(err.message || "Failed to create purchase order. Please try again.");
     } finally {
       setLoading(false);
     }

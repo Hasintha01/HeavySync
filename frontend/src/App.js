@@ -7,6 +7,7 @@ import SupplierForm from './modules/supplier/pages/SupplierForm';
 import SupplierList from './modules/supplier/pages/SupplierList';
 import PurchaseOrderForm from './modules/supplier/pages/PurchaseOrderForm';
 import PurchaseOrderList from './modules/supplier/pages/PurchaseOrderList';
+import PurchaseOrderDetail from './modules/supplier/pages/PurchaseOrderDetail';
 import QuotationComparison from './modules/supplier/pages/QuotationComparison';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
             <Route path="/suppliers/new" element={<SupplierForm />} />
             <Route path="/purchase-orders" element={<PurchaseOrderList />} />
             <Route path="/purchase-orders/new" element={<PurchaseOrderForm />} />
+            <Route path="/purchase-orders/:id" element={<PurchaseOrderDetail />} />
             <Route path="/quotations" element={<QuotationComparison />} />
           </Routes>
         </main>

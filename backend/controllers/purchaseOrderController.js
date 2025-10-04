@@ -4,20 +4,41 @@ const Supplier = require("../models/Supplier");
 // Create new purchase order
 const createPurchaseOrder = async (req, res) => {
   try {
-    const { supplier, items } = req.body;
+    console.log('Received purchase order request:', req.body);
+    
+    const { supplier, items, totalAmount } = req.body;
 
-    // Validate supplier
+    // Validate required fields
+    if (!supplier) {
+      return res.status(400).json({ message: "Supplier ID is required" });
+    }
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: "At least one item is required" });
+    }
+
+    // Validate supplier exists
     const existingSupplier = await Supplier.findById(supplier);
     if (!existingSupplier) {
       return res.status(400).json({ message: "Supplier not found" });
     }
 
-    // Calculate totalAmount
-    const totalAmount = items.reduce((acc, item) => acc + item.totalPrice, 0);
+    // Calculate totalAmount if not provided
+    const calculatedTotal = items.reduce((acc, item) => acc + (item.totalPrice || 0), 0);
+    const finalTotalAmount = totalAmount || calculatedTotal;
 
-    const newPO = await PurchaseOrder.create({ supplier, items, totalAmount });
+    console.log('Creating purchase order with total:', finalTotalAmount);
+
+    const newPO = await PurchaseOrder.create({ 
+      supplier, 
+      items, 
+      totalAmount: finalTotalAmount 
+    });
+    
+    console.log('Purchase order created successfully:', newPO._id);
     res.status(201).json(newPO);
   } catch (error) {
+    console.error('Error creating purchase order:', error);
     res.status(500).json({ message: error.message });
   }
 };
