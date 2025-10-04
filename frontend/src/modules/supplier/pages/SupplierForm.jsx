@@ -16,19 +16,18 @@ import supplierService from "../services/supplierService";
  * @returns {JSX.Element} Supplier creation form
  */
 const SupplierForm = ({ onSuccess }) => {
-  // State to manage form fields
+  // State to manage form fields (matching backend schema)
   const [form, setForm] = useState({
     name: "",
-    email: "",
-    phone: "",
+    contactEmail: "",
+    contactPhone: "",
     address: "",
-    category: "",
-    status: "active", // Default status is 'active'
   });
 
   // State to manage loading and error
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   /**
    * Handle input field changes
@@ -48,6 +47,7 @@ const SupplierForm = ({ onSuccess }) => {
     e.preventDefault(); // Prevent page reload
     setLoading(true);
     setError("");
+    setSuccess("");
 
     try {
       // Call API to create new supplier with form data
@@ -56,12 +56,12 @@ const SupplierForm = ({ onSuccess }) => {
       // Reset form after success
       setForm({
         name: "",
-        email: "",
-        phone: "",
+        contactEmail: "",
+        contactPhone: "",
         address: "",
-        category: "",
-        status: "active",
       });
+
+      setSuccess("Supplier created successfully!");
 
       // Call optional success callback if provided
       onSuccess?.();
@@ -74,48 +74,91 @@ const SupplierForm = ({ onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg">
+    <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg max-w-md">
       {/* Form Title */}
       <h2 className="text-xl font-bold mb-4">Add Supplier</h2>
 
       {/* Display error if exists */}
       {error && <p className="text-red-500 mb-3">{error}</p>}
+      
+      {/* Display success message */}
+      {success && <p className="text-green-500 mb-3">{success}</p>}
 
-      {/* Dynamic Input Fields - Maps through array to create input fields */}
-      {["name", "email", "phone", "address", "category"].map((field) => (
-        <div key={field} className="mb-3">
-          <label htmlFor={field} className="block font-medium mb-1">{field}</label>
-          <input
-            id={field}
-            name={field}
-            type={field === "email" ? "email" : field === "phone" ? "tel" : "text"}
-            value={form[field]}
-            onChange={handleChange}
-            placeholder={field}
-            className="w-full border p-2 rounded"
-            required={field === "name"} // Only 'name' field is required
-          />
-        </div>
-      ))}
+      {/* Supplier Name */}
+      <div className="mb-3">
+        <label htmlFor="name" className="block font-medium mb-1">
+          Supplier Name <span className="text-red-500">*</span>
+        </label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Enter supplier name"
+          className="w-full border p-2 rounded"
+          required
+        />
+      </div>
 
-      {/* Status Dropdown - Select active or inactive */}
-      <select
-        name="status"
-        value={form.status}
-        onChange={handleChange}
-        className="w-full border p-2 rounded mb-3"
-      >
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
-      </select>
+      {/* Contact Email */}
+      <div className="mb-3">
+        <label htmlFor="contactEmail" className="block font-medium mb-1">
+          Contact Email <span className="text-red-500">*</span>
+        </label>
+        <input
+          id="contactEmail"
+          name="contactEmail"
+          type="email"
+          value={form.contactEmail}
+          onChange={handleChange}
+          placeholder="email@example.com"
+          className="w-full border p-2 rounded"
+          required
+        />
+      </div>
+
+      {/* Contact Phone */}
+      <div className="mb-3">
+        <label htmlFor="contactPhone" className="block font-medium mb-1">
+          Contact Phone <span className="text-red-500">*</span>
+        </label>
+        <input
+          id="contactPhone"
+          name="contactPhone"
+          type="tel"
+          value={form.contactPhone}
+          onChange={handleChange}
+          placeholder="Enter phone number"
+          className="w-full border p-2 rounded"
+          required
+        />
+      </div>
+
+      {/* Address */}
+      <div className="mb-3">
+        <label htmlFor="address" className="block font-medium mb-1">
+          Address <span className="text-red-500">*</span>
+        </label>
+        <textarea
+          id="address"
+          name="address"
+          value={form.address}
+          onChange={handleChange}
+          placeholder="Enter supplier address"
+          className="w-full border p-2 rounded"
+          rows="3"
+          required
+        />
+      </div>
 
       {/* Submit Button */}
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-        disabled={loading} // Disable while loading
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+        disabled={loading}
       >
-        {loading ? "Saving..." : "Save"}
+        {loading ? "Saving..." : "Save Supplier"}
       </button>
     </form>
   );

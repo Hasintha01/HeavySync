@@ -6,8 +6,9 @@
  * Handles form input and submission to the backend API
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import purchaseOrderService from "../services/purchaseOrderService";
+import supplierService from "../services/supplierService";
 
 /**
  * Purchase Order Form Component
@@ -16,21 +17,85 @@ import purchaseOrderService from "../services/purchaseOrderService";
  * @returns {JSX.Element} Purchase order creation form
  */
 const PurchaseOrderForm = ({ onSuccess }) => {
+  // State for suppliers list
+  const [suppliers, setSuppliers] = useState([]);
+  
   // State to manage form fields
   const [form, setForm] = useState({
     supplier: "",        // Supplier ID
-    items: [],           // Array of order items
-    totalCost: 0,        // Total cost of the order
-    status: "pending",   // Default status is 'pending'
+    items: [
+      {
+        name: "",
+        quantity: 1,
+        unitPrice: 0,
+        totalPrice: 0,
+      }
+    ],
   });
 
+  // State for loading and messages
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // Fetch suppliers on component mount
+  useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        const data = await supplierService.getSuppliers();
+        setSuppliers(data);
+      } catch (err) {
+        console.error("Failed to fetch suppliers:", err);
+      }
+    };
+    fetchSuppliers();
+  }, []);
+
   /**
-   * Handle input field changes
-   * Updates the form state when user types in any input field
-   * @param {Event} e - Input change event
+   * Handle supplier selection
    */
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleSupplierChange = (e) => {
+    setForm({ ...form, supplier: e.target.value });
+  };
+
+  /**
+   * Handle item field changes
+   */
+  const handleItemChange = (index, field, value) => {
+    const newItems = [...form.items];
+    newItems[index][field] = field === 'name' ? value : parseFloat(value) || 0;
+    
+    // Auto-calculate totalPrice for the item
+    if (field === 'quantity' || field === 'unitPrice') {
+      newItems[index].totalPrice = newItems[index].quantity * newItems[index].unitPrice;
+    }
+    
+    setForm({ ...form, items: newItems });
+  };
+
+  /**
+   * Add new item to the order
+   */
+  const addItem = () => {
+    setForm({
+      ...form,
+      items: [...form.items, { name: "", quantity: 1, unitPrice: 0, totalPrice: 0 }]
+    });
+  };
+
+  /**
+   * Remove item from the order
+   */
+  const removeItem = (index) => {
+    const newItems = form.items.filter((_, i) => i !== index);
+    setForm({ ...form, items: newItems });
+  };
+
+  /**
+   * Calculate total amount from all items
+   */
+  const calculateTotal = () => {
+    return form.items.reduce((sum, item) => sum + item.totalPrice, 0);
   };
 
   /**
@@ -39,54 +104,173 @@ const PurchaseOrderForm = ({ onSuccess }) => {
    * @param {Event} e - Form submit event
    */
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page reload
-    
-    // Call API to create new purchase order with form data
-    await purchaseOrderService.createOrder(form);
-    
-    // Call optional success callback if provided
-    onSuccess?.();
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      // Prepare data for backend
+      const orderData = {
+        supplier: form.supplier,
+        items: form.items,
+        totalAmount: calculateTotal(),
+      };
+
+      // Call API to create new purchase order
+      await purchaseOrderService.createOrder(orderData);
+      
+      // Reset form after success
+      setForm({
+        supplier: "",
+        items: [{ name: "", quantity: 1, unitPrice: 0, totalPrice: 0 }],
+      });
+
+      setSuccess("Purchase order created successfully!");
+
+      // Call optional success callback if provided
+      onSuccess?.();
+    } catch (err) {
+      console.error(err);
+      setError("Failed to create purchase order. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg">
+    <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg max-w-2xl">
       {/* Form Title */}
       <h2 className="text-xl font-bold mb-4">Create Purchase Order</h2>
+
+      {/* Display error if exists */}
+      {error && <p className="text-red-500 mb-3">{error}</p>}
       
-      {/* Supplier ID Input */}
-      <input
-        name="supplier"
-        value={form.supplier}
-        onChange={handleChange}
-        placeholder="Supplier ID"
-        className="w-full border p-2 rounded mb-3"
-      />
+      {/* Display success message */}
+      {success && <p className="text-green-500 mb-3">{success}</p>}
       
-      {/* Total Cost Input - Number type for numeric input */}
-      <input
-        name="totalCost"
-        value={form.totalCost}
-        onChange={handleChange}
-        placeholder="Total Cost"
-        type="number"
-        className="w-full border p-2 rounded mb-3"
-      />
-      
-      {/* Status Dropdown - Select order status */}
-      <select
-        name="status"
-        value={form.status}
-        onChange={handleChange}
-        className="w-full border p-2 rounded mb-3"
-      >
-        <option value="pending">Pending</option>
-        <option value="approved">Approved</option>
-        <option value="received">Received</option>
-      </select>
-      
+      {/* Supplier Selection */}
+      <div className="mb-4">
+        <label htmlFor="supplier" className="block font-medium mb-1">
+          Select Supplier <span className="text-red-500">*</span>
+        </label>
+        <select
+          id="supplier"
+          value={form.supplier}
+          onChange={handleSupplierChange}
+          className="w-full border p-2 rounded"
+          required
+        >
+          <option value="">-- Select Supplier --</option>
+          {suppliers.map((supplier) => (
+            <option key={supplier._id} value={supplier._id}>
+              {supplier.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Items Section */}
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="font-bold">Order Items</h3>
+          <button
+            type="button"
+            onClick={addItem}
+            className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600"
+          >
+            + Add Item
+          </button>
+        </div>
+
+        {form.items.map((item, index) => (
+          <div key={index} className="border p-3 rounded mb-3 bg-gray-50">
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-medium">Item #{index + 1}</span>
+              {form.items.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeItem(index)}
+                  className="text-red-500 text-sm hover:text-red-700"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+
+            {/* Item Name */}
+            <div className="mb-2">
+              <label className="block text-sm mb-1">Item Name *</label>
+              <input
+                type="text"
+                value={item.name}
+                onChange={(e) => handleItemChange(index, 'name', e.target.value)}
+                placeholder="Enter item name"
+                className="w-full border p-2 rounded"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              {/* Quantity */}
+              <div>
+                <label className="block text-sm mb-1">Quantity *</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={item.quantity}
+                  onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                  className="w-full border p-2 rounded"
+                  required
+                />
+              </div>
+
+              {/* Unit Price */}
+              <div>
+                <label className="block text-sm mb-1">Unit Price *</label>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={item.unitPrice}
+                  onChange={(e) => handleItemChange(index, 'unitPrice', e.target.value)}
+                  className="w-full border p-2 rounded"
+                  required
+                />
+              </div>
+
+              {/* Total Price (Read-only) */}
+              <div>
+                <label className="block text-sm mb-1">Total</label>
+                <input
+                  type="number"
+                  value={item.totalPrice.toFixed(2)}
+                  className="w-full border p-2 rounded bg-gray-100"
+                  readOnly
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Total Amount Display */}
+      <div className="mb-4 p-3 bg-blue-50 rounded">
+        <div className="flex justify-between items-center">
+          <span className="font-bold text-lg">Total Amount:</span>
+          <span className="font-bold text-lg text-blue-600">
+            ${calculateTotal().toFixed(2)}
+          </span>
+        </div>
+      </div>
+
       {/* Submit Button */}
-      <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
-        Save
+      <button
+        type="submit"
+        className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:bg-gray-400 w-full"
+        disabled={loading}
+      >
+        {loading ? "Creating Order..." : "Create Purchase Order"}
       </button>
     </form>
   );
