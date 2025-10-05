@@ -62,7 +62,7 @@ const PurchaseOrderCard = ({ order }) => {
       
       {/* Total Amount of the order */}
       <p className="mb-2">
-        <strong>Total Amount:</strong> ${order.totalAmount?.toFixed(2) || '0.00'}
+        <strong>Total Amount:</strong> LKR {order.totalAmount?.toFixed(2) || '0.00'}
       </p>
       
       {/* Status Badge - Changes color based on order status */}

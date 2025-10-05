@@ -170,8 +170,8 @@ const PurchaseOrderDetail = () => {
                     <td className="p-3">{index + 1}</td>
                     <td className="p-3 font-medium">{item.name}</td>
                     <td className="p-3 text-center">{item.quantity}</td>
-                    <td className="p-3 text-right">${item.unitPrice.toFixed(2)}</td>
-                    <td className="p-3 text-right font-medium">${item.totalPrice.toFixed(2)}</td>
+                    <td className="p-3 text-right">LKR {item.unitPrice.toFixed(2)}</td>
+                    <td className="p-3 text-right font-medium">LKR {item.totalPrice.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -179,7 +179,7 @@ const PurchaseOrderDetail = () => {
                 <tr className="bg-gray-800 text-white">
                   <td colSpan="4" className="p-3 text-right font-bold">TOTAL AMOUNT:</td>
                   <td className="p-3 text-right font-bold text-lg">
-                    ${order.totalAmount.toFixed(2)}
+                    LKR {order.totalAmount.toFixed(2)}
                   </td>
                 </tr>
               </tfoot>

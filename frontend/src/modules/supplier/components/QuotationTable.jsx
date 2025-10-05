@@ -39,8 +39,8 @@ const QuotationTable = ({ quotations }) => (
           {/* Supplier Name cell */}
           <td className="p-2 border">{q.supplier}</td>
           
-          {/* Price cell - Formatted with $ sign */}
-          <td className="p-2 border">${q.price}</td>
+          {/* Price cell - Formatted with LKR */}
+          <td className="p-2 border">LKR {q.price}</td>
           
           {/* Delivery Time cell - Shows days */}
           <td className="p-2 border">{q.deliveryTime} days</td>

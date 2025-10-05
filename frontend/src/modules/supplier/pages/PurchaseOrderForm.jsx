@@ -59,11 +59,46 @@ const PurchaseOrderForm = ({ onSuccess }) => {
   };
 
   /**
+   * Validate item name
+   * - Only alphanumeric characters and spaces allowed
+   * - No special characters
+   * - No character repeated more than twice consecutively
+   */
+  const validateItemName = (name) => {
+    // Check for special characters (only allow letters, numbers, and spaces)
+    const hasSpecialChars = /[^a-zA-Z0-9\s]/.test(name);
+    if (hasSpecialChars) {
+      return false;
+    }
+    
+    // Check for same character repeated more than twice
+    const hasTripleRepeat = /(.)\1{2,}/.test(name);
+    if (hasTripleRepeat) {
+      return false;
+    }
+    
+    return true;
+  };
+
+  /**
    * Handle item field changes
    */
   const handleItemChange = (index, field, value) => {
     const newItems = [...form.items];
-    newItems[index][field] = field === 'name' ? value : parseFloat(value) || 0;
+    
+    if (field === 'name') {
+      // Validate item name before setting
+      if (value === '' || validateItemName(value)) {
+        newItems[index][field] = value;
+      } else {
+        // Don't update if validation fails (prevents typing invalid characters)
+        return;
+      }
+    } else {
+      // For quantity and unitPrice, parse and validate
+      const numValue = parseFloat(value) || 0;
+      newItems[index][field] = numValue;
+    }
     
     // Auto-calculate totalPrice for the item
     if (field === 'quantity' || field === 'unitPrice') {
@@ -231,10 +266,17 @@ const PurchaseOrderForm = ({ onSuccess }) => {
                 type="text"
                 value={item.name}
                 onChange={(e) => handleItemChange(index, 'name', e.target.value)}
-                placeholder="Enter item name"
+                placeholder="Enter item name (letters and numbers only)"
                 className="w-full border p-2 rounded"
                 required
+                minLength="1"
               />
+              {item.name.trim() === '' && (
+                <p className="text-red-500 text-xs mt-1">Item name is required</p>
+              )}
+              <p className="text-gray-500 text-xs mt-1">
+                Only letters, numbers, and spaces. No character more than twice in a row.
+              </p>
             </div>
 
             <div className="grid grid-cols-3 gap-2">
@@ -249,6 +291,9 @@ const PurchaseOrderForm = ({ onSuccess }) => {
                   className="w-full border p-2 rounded"
                   required
                 />
+                {item.quantity <= 0 && (
+                  <p className="text-red-500 text-xs mt-1">Must be greater than 0</p>
+                )}
               </div>
 
               {/* Unit Price */}
@@ -285,7 +330,7 @@ const PurchaseOrderForm = ({ onSuccess }) => {
         <div className="flex justify-between items-center">
           <span className="font-bold text-lg">Total Amount:</span>
           <span className="font-bold text-lg text-blue-600">
-            ${calculateTotal().toFixed(2)}
+            LKR {calculateTotal().toFixed(2)}
           </span>
         </div>
       </div>
