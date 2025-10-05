@@ -18,16 +18,52 @@ import supplierService from "../services/supplierService";
 const SupplierForm = ({ onSuccess }) => {
   // State to manage form fields (matching backend schema)
   const [form, setForm] = useState({
+    supplierId: "",
     name: "",
     contactEmail: "",
     contactPhone: "",
     address: "",
+    reportId: "",
   });
 
   // State to manage loading and error
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
+
+  /**
+   * Validate phone number (must be exactly 10 digits and no digit repeated more than 4 times)
+   */
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) {
+      return false;
+    }
+    
+    // Check if any digit appears more than 4 times
+    const digitCount = {};
+    for (let digit of phone) {
+      digitCount[digit] = (digitCount[digit] || 0) + 1;
+      if (digitCount[digit] > 4) {
+        return false;
+      }
+    }
+    
+    return true;
+  };
+
+  /**
+   * Validate email format (must contain @)
+   */
+  const validateEmail = (email) => {
+    // Must contain @ symbol
+    if (!email.includes('@')) {
+      return false;
+    }
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return emailRegex.test(email);
+  };
 
   /**
    * Handle input field changes
@@ -35,7 +71,85 @@ const SupplierForm = ({ onSuccess }) => {
    * @param {Event} e - Input change event
    */
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    // Clear validation error for this field
+    setValidationErrors({ ...validationErrors, [name]: "" });
+    
+    // Special handling for phone number - only allow digits and validate
+    if (name === 'contactPhone') {
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+      
+      // Check if phone is valid (including digit repetition check)
+      if (digitsOnly.length === 10 && !validatePhone(digitsOnly)) {
+        // Phone has invalid pattern (same digit more than 4 times)
+        // Don't update the value if it would make it invalid
+        return;
+      }
+      
+      setForm({ ...form, [name]: digitsOnly });
+      
+      // Validate phone in real-time
+      if (digitsOnly && digitsOnly.length < 10) {
+        setValidationErrors({ 
+          ...validationErrors, 
+          [name]: `${10 - digitsOnly.length} more digit(s) needed` 
+        });
+      }
+    } else if (name === 'contactEmail') {
+      setForm({ ...form, [name]: value });
+      
+      // Validate email in real-time
+      if (value && !value.includes('@')) {
+        setValidationErrors({ 
+          ...validationErrors, 
+          [name]: "Email must contain @" 
+        });
+      } else if (value && !validateEmail(value)) {
+        setValidationErrors({ 
+          ...validationErrors, 
+          [name]: "Invalid email format" 
+        });
+      }
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+  };
+
+  /**
+   * Validate form before submission
+   */
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!form.supplierId.trim()) {
+      errors.supplierId = "Supplier ID is required";
+    }
+    
+    if (!form.name.trim()) {
+      errors.name = "Supplier name is required";
+    }
+    
+    if (!form.contactEmail.trim()) {
+      errors.contactEmail = "Email is required";
+    } else if (!form.contactEmail.includes('@')) {
+      errors.contactEmail = "Email must contain @";
+    } else if (!validateEmail(form.contactEmail)) {
+      errors.contactEmail = "Invalid email format";
+    }
+    
+    if (!form.contactPhone.trim()) {
+      errors.contactPhone = "Phone number is required";
+    } else if (!validatePhone(form.contactPhone)) {
+      errors.contactPhone = "Phone number must be exactly 10 digits";
+    }
+    
+    if (!form.address.trim()) {
+      errors.address = "Address is required";
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   /**
@@ -45,9 +159,16 @@ const SupplierForm = ({ onSuccess }) => {
    */
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
-    setLoading(true);
     setError("");
     setSuccess("");
+
+    // Validate form
+    if (!validateForm()) {
+      setError("Recheck entered details");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       // Call API to create new supplier with form data
@@ -55,11 +176,14 @@ const SupplierForm = ({ onSuccess }) => {
       
       // Reset form after success
       setForm({
+        supplierId: "",
         name: "",
         contactEmail: "",
         contactPhone: "",
         address: "",
+        reportId: "",
       });
+      setValidationErrors({});
 
       setSuccess("Supplier created successfully!");
 
@@ -67,7 +191,7 @@ const SupplierForm = ({ onSuccess }) => {
       onSuccess?.();
     } catch (err) {
       console.error(err);
-      setError("Failed to create supplier. Please try again.");
+      setError(err.response?.data?.message || "Failed to create supplier. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -84,6 +208,26 @@ const SupplierForm = ({ onSuccess }) => {
       {/* Display success message */}
       {success && <p className="text-green-500 mb-3">{success}</p>}
 
+      {/* Supplier ID */}
+      <div className="mb-3">
+        <label htmlFor="supplierId" className="block font-medium mb-1">
+          Supplier ID <span className="text-red-500">*</span>
+        </label>
+        <input
+          id="supplierId"
+          name="supplierId"
+          type="text"
+          value={form.supplierId}
+          onChange={handleChange}
+          placeholder="Enter unique supplier ID"
+          className={`w-full border p-2 rounded ${validationErrors.supplierId ? 'border-red-500' : ''}`}
+          required
+        />
+        {validationErrors.supplierId && (
+          <p className="text-red-500 text-xs mt-1">{validationErrors.supplierId}</p>
+        )}
+      </div>
+
       {/* Supplier Name */}
       <div className="mb-3">
         <label htmlFor="name" className="block font-medium mb-1">
@@ -96,9 +240,12 @@ const SupplierForm = ({ onSuccess }) => {
           value={form.name}
           onChange={handleChange}
           placeholder="Enter supplier name"
-          className="w-full border p-2 rounded"
+          className={`w-full border p-2 rounded ${validationErrors.name ? 'border-red-500' : ''}`}
           required
         />
+        {validationErrors.name && (
+          <p className="text-red-500 text-xs mt-1">{validationErrors.name}</p>
+        )}
       </div>
 
       {/* Contact Email */}
@@ -113,9 +260,12 @@ const SupplierForm = ({ onSuccess }) => {
           value={form.contactEmail}
           onChange={handleChange}
           placeholder="email@example.com"
-          className="w-full border p-2 rounded"
+          className={`w-full border p-2 rounded ${validationErrors.contactEmail ? 'border-red-500' : ''}`}
           required
         />
+        {validationErrors.contactEmail && (
+          <p className="text-red-500 text-xs mt-1">{validationErrors.contactEmail}</p>
+        )}
       </div>
 
       {/* Contact Phone */}
@@ -129,10 +279,14 @@ const SupplierForm = ({ onSuccess }) => {
           type="tel"
           value={form.contactPhone}
           onChange={handleChange}
-          placeholder="Enter phone number"
-          className="w-full border p-2 rounded"
+          placeholder="0712345678 (10 digits)"
+          className={`w-full border p-2 rounded ${validationErrors.contactPhone ? 'border-red-500' : ''}`}
           required
+          maxLength="10"
         />
+        {validationErrors.contactPhone && (
+          <p className="text-red-500 text-xs mt-1">{validationErrors.contactPhone}</p>
+        )}
       </div>
 
       {/* Address */}
@@ -146,9 +300,28 @@ const SupplierForm = ({ onSuccess }) => {
           value={form.address}
           onChange={handleChange}
           placeholder="Enter supplier address"
-          className="w-full border p-2 rounded"
+          className={`w-full border p-2 rounded ${validationErrors.address ? 'border-red-500' : ''}`}
           rows="3"
           required
+        />
+        {validationErrors.address && (
+          <p className="text-red-500 text-xs mt-1">{validationErrors.address}</p>
+        )}
+      </div>
+
+      {/* Report ID (Optional) */}
+      <div className="mb-3">
+        <label htmlFor="reportId" className="block font-medium mb-1">
+          Report ID <span className="text-gray-500 text-sm">(Optional)</span>
+        </label>
+        <input
+          id="reportId"
+          name="reportId"
+          type="text"
+          value={form.reportId}
+          onChange={handleChange}
+          placeholder="Enter report ID if applicable"
+          className="w-full border p-2 rounded"
         />
       </div>
 
