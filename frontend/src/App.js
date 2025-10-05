@@ -9,6 +9,8 @@ import PurchaseOrderForm from './modules/supplier/pages/PurchaseOrderForm';
 import PurchaseOrderList from './modules/supplier/pages/PurchaseOrderList';
 import PurchaseOrderDetail from './modules/supplier/pages/PurchaseOrderDetail';
 import QuotationComparison from './modules/supplier/pages/QuotationComparison';
+import PartForm from './modules/supplier/pages/PartForm';
+import PartList from './modules/supplier/pages/PartList';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
               <li><Link to="/">Home</Link></li>
               <li><Link to="/suppliers">Suppliers</Link></li>
               <li><Link to="/suppliers/new">Add Supplier</Link></li>
+              <li><Link to="/parts">Parts Inventory</Link></li>
+              <li><Link to="/parts/new">Add Part</Link></li>
               <li><Link to="/purchase-orders">Purchase Orders</Link></li>
               <li><Link to="/purchase-orders/new">Create Order</Link></li>
               <li><Link to="/quotations">Compare Quotations</Link></li>
@@ -38,6 +42,8 @@ function App() {
             } />
             <Route path="/suppliers" element={<SupplierList />} />
             <Route path="/suppliers/new" element={<SupplierForm />} />
+            <Route path="/parts" element={<PartList />} />
+            <Route path="/parts/new" element={<PartForm />} />
             <Route path="/purchase-orders" element={<PurchaseOrderList />} />
             <Route path="/purchase-orders/new" element={<PurchaseOrderForm />} />
             <Route path="/purchase-orders/:id" element={<PurchaseOrderDetail />} />

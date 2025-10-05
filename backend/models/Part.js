@@ -64,9 +64,7 @@ const partSchema = new mongoose.Schema(
     }
 );
 
-// Add index for faster queries
-partSchema.index({ partId: 1 });
-partSchema.index({ partNumber: 1 });
+// Add index for faster queries on categoryId only (partId and partNumber already have unique indexes)
 partSchema.index({ categoryId: 1 });
 
 // Virtual property to check if stock is low
