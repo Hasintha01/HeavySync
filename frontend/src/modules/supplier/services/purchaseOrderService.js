@@ -66,6 +66,7 @@ const deleteOrder = async (id) => {
 export default {
   getOrders,
   getOrderById,
+  getPurchaseOrderById: getOrderById, // Alias for consistency
   createOrder,
   updateOrder,
   deleteOrder,

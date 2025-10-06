@@ -2,20 +2,25 @@
 
 /**
  * PartForm Page Component
- * Form for creating a new part/item
+ * Form for creating or editing a part/item
  * Handles form input and submission to the backend API
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import partService from "../services/partService";
 
 /**
  * Part Form Component
  * @param {Object} props - Component props
- * @param {Function} props.onSuccess - Optional callback function called after successful part creation
- * @returns {JSX.Element} Part creation form
+ * @param {Function} props.onSuccess - Optional callback function called after successful part creation/update
+ * @returns {JSX.Element} Part creation/edit form
  */
 const PartForm = ({ onSuccess }) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEditMode = Boolean(id);
+
   // State to manage form fields
   const [form, setForm] = useState({
     partId: "",
@@ -32,9 +37,41 @@ const PartForm = ({ onSuccess }) => {
 
   // State to manage loading and error
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
+
+  /**
+   * Load part data when editing
+   */
+  useEffect(() => {
+    if (isEditMode) {
+      setLoadingData(true);
+      partService.getPartById(id)
+        .then((data) => {
+          setForm({
+            partId: data.partId || "",
+            name: data.name || "",
+            description: data.description || "",
+            partNumber: data.partNumber || "",
+            quantity: data.quantity || 0,
+            minimumStock: data.minimumStock || 0,
+            unitPrice: data.unitPrice || 0,
+            location: data.location || "",
+            categoryId: data.categoryId || "",
+            reportId: data.reportId || "",
+          });
+        })
+        .catch((err) => {
+          console.error("Error loading part:", err);
+          setError("Failed to load part data");
+        })
+        .finally(() => {
+          setLoadingData(false);
+        });
+    }
+  }, [id, isEditMode]);
 
   /**
    * Validate part name
@@ -150,40 +187,62 @@ const PartForm = ({ onSuccess }) => {
     setLoading(true);
 
     try {
-      // Call API to create new part
-      await partService.createPart(form);
-      
-      // Reset form after success
-      setForm({
-        partId: "",
-        name: "",
-        description: "",
-        partNumber: "",
-        quantity: 0,
-        minimumStock: 0,
-        unitPrice: 0,
-        location: "",
-        categoryId: "",
-        reportId: "",
-      });
-      setValidationErrors({});
-
-      setSuccess("Part created successfully!");
+      if (isEditMode) {
+        // Update existing part
+        await partService.updatePart(id, form);
+        setSuccess("Part updated successfully!");
+      } else {
+        // Create new part
+        await partService.createPart(form);
+        setSuccess("Part created successfully!");
+        
+        // Reset form after success (only for create mode)
+        setForm({
+          partId: "",
+          name: "",
+          description: "",
+          partNumber: "",
+          quantity: 0,
+          minimumStock: 0,
+          unitPrice: 0,
+          location: "",
+          categoryId: "",
+          reportId: "",
+        });
+        setValidationErrors({});
+      }
 
       // Call optional success callback if provided
       onSuccess?.();
+      
+      // If editing, navigate back to parts list after a delay
+      if (isEditMode) {
+        setTimeout(() => {
+          navigate("/parts");
+        }, 1500);
+      }
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || "Failed to create part. Please try again.");
+      setError(err.response?.data?.message || `Failed to ${isEditMode ? 'update' : 'create'} part. Please try again.`);
     } finally {
       setLoading(false);
     }
   };
 
+  if (loadingData) {
+    return (
+      <div className="bg-white p-6 shadow rounded-lg max-w-2xl">
+        <p className="text-center">Loading part data...</p>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg max-w-2xl">
       {/* Form Title */}
-      <h2 className="text-xl font-bold mb-4">Add New Part</h2>
+      <h2 className="text-xl font-bold mb-4">
+        {isEditMode ? 'Edit Part' : 'Add New Part'}
+      </h2>
 
       {/* Display error if exists */}
       {error && <p className="text-red-500 mb-3">{error}</p>}
@@ -398,13 +457,26 @@ const PartForm = ({ onSuccess }) => {
       </div>
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 w-full"
-        disabled={loading}
-      >
-        {loading ? "Saving..." : "Add Part"}
-      </button>
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 flex-1"
+          disabled={loading}
+        >
+          {loading ? "Saving..." : isEditMode ? "Update Part" : "Add Part"}
+        </button>
+        
+        {isEditMode && (
+          <button
+            type="button"
+            onClick={() => navigate("/parts")}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            disabled={loading}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 };

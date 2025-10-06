@@ -2,20 +2,25 @@
 
 /**
  * SupplierForm Page Component
- * Form for creating a new supplier
+ * Form for creating or editing a supplier
  * Handles form input and submission to the backend API
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import supplierService from "../services/supplierService";
 
 /**
  * Supplier Form Component
  * @param {Object} props - Component props
- * @param {Function} props.onSuccess - Optional callback function called after successful supplier creation
- * @returns {JSX.Element} Supplier creation form
+ * @param {Function} props.onSuccess - Optional callback function called after successful supplier creation/update
+ * @returns {JSX.Element} Supplier creation/edit form
  */
 const SupplierForm = ({ onSuccess }) => {
+  const { id } = useParams(); // Get supplier ID from URL if editing
+  const navigate = useNavigate();
+  const isEditMode = Boolean(id);
+
   // State to manage form fields (matching backend schema)
   const [form, setForm] = useState({
     supplierId: "",
@@ -28,9 +33,37 @@ const SupplierForm = ({ onSuccess }) => {
 
   // State to manage loading and error
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
+
+  /**
+   * Load supplier data when editing
+   */
+  useEffect(() => {
+    if (isEditMode) {
+      setLoadingData(true);
+      supplierService.getSupplierById(id)
+        .then((data) => {
+          setForm({
+            supplierId: data.supplierId || "",
+            name: data.name || "",
+            contactEmail: data.contactEmail || "",
+            contactPhone: data.contactPhone || "",
+            address: data.address || "",
+            reportId: data.reportId || "",
+          });
+        })
+        .catch((err) => {
+          console.error("Error loading supplier:", err);
+          setError("Failed to load supplier data");
+        })
+        .finally(() => {
+          setLoadingData(false);
+        });
+    }
+  }, [id, isEditMode]);
 
   /**
    * Validate phone number (must be exactly 10 digits and no digit repeated more than 4 times)
@@ -154,7 +187,7 @@ const SupplierForm = ({ onSuccess }) => {
 
   /**
    * Handle form submission
-   * Prevents default form behavior and calls the API to create supplier
+   * Prevents default form behavior and calls the API to create or update supplier
    * @param {Event} e - Form submit event
    */
   const handleSubmit = async (e) => {
@@ -171,36 +204,58 @@ const SupplierForm = ({ onSuccess }) => {
     setLoading(true);
 
     try {
-      // Call API to create new supplier with form data
-      await supplierService.createSupplier(form);
-      
-      // Reset form after success
-      setForm({
-        supplierId: "",
-        name: "",
-        contactEmail: "",
-        contactPhone: "",
-        address: "",
-        reportId: "",
-      });
-      setValidationErrors({});
-
-      setSuccess("Supplier created successfully!");
+      if (isEditMode) {
+        // Update existing supplier
+        await supplierService.updateSupplier(id, form);
+        setSuccess("Supplier updated successfully!");
+      } else {
+        // Create new supplier
+        await supplierService.createSupplier(form);
+        setSuccess("Supplier created successfully!");
+        
+        // Reset form after success (only for create mode)
+        setForm({
+          supplierId: "",
+          name: "",
+          contactEmail: "",
+          contactPhone: "",
+          address: "",
+          reportId: "",
+        });
+        setValidationErrors({});
+      }
 
       // Call optional success callback if provided
       onSuccess?.();
+      
+      // If editing, navigate back to supplier list after a delay
+      if (isEditMode) {
+        setTimeout(() => {
+          navigate("/suppliers");
+        }, 1500);
+      }
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || "Failed to create supplier. Please try again.");
+      setError(err.response?.data?.message || `Failed to ${isEditMode ? 'update' : 'create'} supplier. Please try again.`);
     } finally {
       setLoading(false);
     }
   };
 
+  if (loadingData) {
+    return (
+      <div className="bg-white p-6 shadow rounded-lg max-w-md">
+        <p className="text-center">Loading supplier data...</p>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg max-w-md">
       {/* Form Title */}
-      <h2 className="text-xl font-bold mb-4">Add Supplier</h2>
+      <h2 className="text-xl font-bold mb-4">
+        {isEditMode ? 'Edit Supplier' : 'Add Supplier'}
+      </h2>
 
       {/* Display error if exists */}
       {error && <p className="text-red-500 mb-3">{error}</p>}
@@ -327,13 +382,26 @@ const SupplierForm = ({ onSuccess }) => {
       </div>
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
-        disabled={loading}
-      >
-        {loading ? "Saving..." : "Save Supplier"}
-      </button>
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 flex-1"
+          disabled={loading}
+        >
+          {loading ? "Saving..." : isEditMode ? "Update Supplier" : "Save Supplier"}
+        </button>
+        
+        {isEditMode && (
+          <button
+            type="button"
+            onClick={() => navigate("/suppliers")}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            disabled={loading}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 };

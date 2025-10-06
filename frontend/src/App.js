@@ -32,10 +32,13 @@ function App() {
             } />
             <Route path="/suppliers" element={<SupplierList />} />
             <Route path="/suppliers/new" element={<SupplierForm />} />
+            <Route path="/suppliers/edit/:id" element={<SupplierForm />} />
             <Route path="/parts" element={<PartList />} />
             <Route path="/parts/new" element={<PartForm />} />
+            <Route path="/parts/edit/:id" element={<PartForm />} />
             <Route path="/purchase-orders" element={<PurchaseOrderList />} />
             <Route path="/purchase-orders/new" element={<PurchaseOrderForm />} />
+            <Route path="/purchase-orders/edit/:id" element={<PurchaseOrderForm />} />
             <Route path="/purchase-orders/:id" element={<PurchaseOrderDetail />} />
             <Route path="/quotations" element={<QuotationComparison />} />
           </Routes>

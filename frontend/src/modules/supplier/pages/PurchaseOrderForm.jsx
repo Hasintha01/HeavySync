@@ -2,21 +2,26 @@
 
 /**
  * PurchaseOrderForm Page Component
- * Form for creating a new purchase order
+ * Form for creating or editing a purchase order
  * Handles form input and submission to the backend API
  */
 
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import purchaseOrderService from "../services/purchaseOrderService";
 import supplierService from "../services/supplierService";
 
 /**
  * Purchase Order Form Component
  * @param {Object} props - Component props
- * @param {Function} props.onSuccess - Optional callback function called after successful order creation
- * @returns {JSX.Element} Purchase order creation form
+ * @param {Function} props.onSuccess - Optional callback function called after successful order creation/update
+ * @returns {JSX.Element} Purchase order creation/edit form
  */
 const PurchaseOrderForm = ({ onSuccess }) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEditMode = Boolean(id);
+
   // State for suppliers list
   const [suppliers, setSuppliers] = useState([]);
   
@@ -35,8 +40,35 @@ const PurchaseOrderForm = ({ onSuccess }) => {
 
   // State for loading and messages
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  // Load purchase order data when editing
+  useEffect(() => {
+    if (isEditMode) {
+      setLoadingData(true);
+      purchaseOrderService.getPurchaseOrderById(id)
+        .then((data) => {
+          setForm({
+            supplier: data.supplier?._id || data.supplier,
+            items: data.items && data.items.length > 0 ? data.items : [{
+              name: "",
+              quantity: 1,
+              unitPrice: 0,
+              totalPrice: 0,
+            }],
+          });
+        })
+        .catch((err) => {
+          console.error("Error loading purchase order:", err);
+          setError("Failed to load purchase order data");
+        })
+        .finally(() => {
+          setLoadingData(false);
+        });
+    }
+  }, [id, isEditMode]);
 
   // Fetch suppliers on component mount
   useEffect(() => {
@@ -177,32 +209,53 @@ const PurchaseOrderForm = ({ onSuccess }) => {
 
       console.log('Submitting order data:', orderData);
 
-      // Call API to create new purchase order
-      const response = await purchaseOrderService.createOrder(orderData);
-      console.log('Order created successfully:', response);
-      
-      // Reset form after success
-      setForm({
-        supplier: "",
-        items: [{ name: "", quantity: 1, unitPrice: 0, totalPrice: 0 }],
-      });
-
-      setSuccess("Purchase order created successfully!");
+      if (isEditMode) {
+        // Update existing order
+        const response = await purchaseOrderService.updateOrder(id, orderData);
+        console.log('Order updated successfully:', response);
+        setSuccess("Purchase order updated successfully!");
+        
+        // Navigate back after delay
+        setTimeout(() => {
+          navigate("/purchase-orders");
+        }, 1500);
+      } else {
+        // Create new order
+        const response = await purchaseOrderService.createOrder(orderData);
+        console.log('Order created successfully:', response);
+        setSuccess("Purchase order created successfully!");
+        
+        // Reset form after success (only for create mode)
+        setForm({
+          supplier: "",
+          items: [{ name: "", quantity: 1, unitPrice: 0, totalPrice: 0 }],
+        });
+      }
 
       // Call optional success callback if provided
       onSuccess?.();
     } catch (err) {
-      console.error('Error creating purchase order:', err);
-      setError(err.message || "Failed to create purchase order. Please try again.");
+      console.error('Error with purchase order:', err);
+      setError(err.message || `Failed to ${isEditMode ? 'update' : 'create'} purchase order. Please try again.`);
     } finally {
       setLoading(false);
     }
   };
 
+  if (loadingData) {
+    return (
+      <div className="bg-white p-6 shadow rounded-lg max-w-2xl">
+        <p className="text-center">Loading purchase order data...</p>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg max-w-2xl">
       {/* Form Title */}
-      <h2 className="text-xl font-bold mb-4">Create Purchase Order</h2>
+      <h2 className="text-xl font-bold mb-4">
+        {isEditMode ? 'Edit Purchase Order' : 'Create Purchase Order'}
+      </h2>
 
       {/* Display error if exists */}
       {error && <p className="text-red-500 mb-3">{error}</p>}
@@ -336,13 +389,29 @@ const PurchaseOrderForm = ({ onSuccess }) => {
       </div>
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:bg-gray-400 w-full"
-        disabled={loading}
-      >
-        {loading ? "Creating Order..." : "Create Purchase Order"}
-      </button>
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:bg-gray-400 flex-1"
+          disabled={loading}
+        >
+          {loading 
+            ? (isEditMode ? "Updating..." : "Creating Order...") 
+            : (isEditMode ? "Update Purchase Order" : "Create Purchase Order")
+          }
+        </button>
+        
+        {isEditMode && (
+          <button
+            type="button"
+            onClick={() => navigate("/purchase-orders")}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            disabled={loading}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 };

@@ -7,6 +7,7 @@
  */
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Part Card Component
@@ -14,8 +15,14 @@ import React from "react";
  * @param {Object} props.part - Part object containing part details
  */
 const PartCard = ({ part }) => {
+  const navigate = useNavigate();
+  
   // Determine if stock is low
   const isLowStock = part.quantity <= part.minimumStock;
+  
+  const handleEdit = () => {
+    navigate(`/parts/edit/${part._id}`);
+  };
   
   return (
     <div className={`card ${isLowStock ? 'border-l-4 border-red-500' : 'border-l-4 border-green-500'}`}>
@@ -75,6 +82,16 @@ const PartCard = ({ part }) => {
           <strong>Report ID:</strong> {part.reportId}
         </p>
       )}
+      
+      {/* Edit Button */}
+      <div className="mt-4">
+        <button 
+          onClick={handleEdit}
+          className="btn-primary text-sm"
+        >
+          Edit Part
+        </button>
+      </div>
     </div>
   );
 };
