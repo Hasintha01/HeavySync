@@ -53,6 +53,8 @@ const QuotationComparison = () => {
     const fetchSuppliers = async () => {
         try {
             const data = await supplierService.getSuppliers();
+            console.log("Fetched suppliers:", data);
+            console.log("Supplier IDs:", data.map(s => s.supplierId));
             setSuppliers(data);
         } catch (err) {
             console.error("Error fetching suppliers:", err);
@@ -97,19 +99,28 @@ const QuotationComparison = () => {
 
     // Handle supplier selection
     const handleSupplierToggle = (supplierId) => {
-        const isSelected = formData.supplierIds.includes(supplierId);
+        console.log("=== TOGGLE CLICKED ===");
+        console.log("Supplier ID clicked:", supplierId);
         
-        if (isSelected) {
-            setFormData({
-                ...formData,
-                supplierIds: formData.supplierIds.filter(id => id !== supplierId),
-            });
-        } else {
-            setFormData({
-                ...formData,
-                supplierIds: [...formData.supplierIds, supplierId],
-            });
-        }
+        setFormData(prevData => {
+            console.log("Previous supplierIds:", prevData.supplierIds);
+            const isSelected = prevData.supplierIds.includes(supplierId);
+            console.log("Is currently selected?:", isSelected);
+            
+            let newIds;
+            if (isSelected) {
+                newIds = prevData.supplierIds.filter(id => id !== supplierId);
+                console.log("REMOVING - New IDs:", newIds);
+            } else {
+                newIds = [...prevData.supplierIds, supplierId];
+                console.log("ADDING - New IDs:", newIds);
+            }
+            
+            return {
+                ...prevData,
+                supplierIds: newIds,
+            };
+        });
     };
 
     // Handle form submission
@@ -303,23 +314,21 @@ HeavySync Team`;
                                     <p className="text-gray-500">No suppliers available</p>
                                 ) : (
                                     suppliers.map(supplier => (
-                                        <div key={supplier._id} className="mb-2">
-                                            <div className="flex items-center hover:bg-gray-50 p-2 rounded">
-                                                <input
-                                                    type="checkbox"
-                                                    id={`supplier-${supplier.supplierId}`}
-                                                    checked={formData.supplierIds.includes(supplier.supplierId)}
-                                                    onChange={() => handleSupplierToggle(supplier.supplierId)}
-                                                    className="mr-3"
-                                                />
-                                                <label 
-                                                    htmlFor={`supplier-${supplier.supplierId}`}
-                                                    className="cursor-pointer flex-1"
-                                                >
-                                                    <span className="font-medium">{supplier.name}</span>
-                                                    <span className="text-gray-600 ml-2">({supplier.supplierId})</span>
-                                                    <p className="text-sm text-gray-500">{supplier.contactEmail}</p>
-                                                </label>
+                                        <div 
+                                            key={supplier._id} 
+                                            className="mb-2 flex items-center hover:bg-gray-50 p-2 rounded cursor-pointer"
+                                            onClick={() => handleSupplierToggle(supplier.supplierId)}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.supplierIds.includes(supplier.supplierId)}
+                                                onChange={() => {}} // Controlled by parent div click
+                                                className="mr-3 pointer-events-none"
+                                            />
+                                            <div>
+                                                <span className="font-medium">{supplier.name}</span>
+                                                <span className="text-gray-600 ml-2">({supplier.supplierId})</span>
+                                                <p className="text-sm text-gray-500">{supplier.contactEmail}</p>
                                             </div>
                                         </div>
                                     ))
@@ -328,6 +337,10 @@ HeavySync Team`;
                             <p className="text-sm text-gray-500 mt-2">
                                 {formData.supplierIds.length} supplier(s) selected
                             </p>
+                            {/* Debug info */}
+                            <div className="text-xs text-blue-600 mt-2 p-2 bg-blue-50 rounded">
+                                <strong>Selected IDs:</strong> {formData.supplierIds.join(', ') || 'None'}
+                            </div>
                         </div>
 
                         {/* Notes */}

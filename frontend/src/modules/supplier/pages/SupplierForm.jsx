@@ -223,6 +223,7 @@ const SupplierForm = ({ onSuccess }) => {
           className={`w-full border p-2 rounded ${validationErrors.supplierId ? 'border-red-500' : ''}`}
           required
         />
+        <p className="text-xs text-gray-500 mt-1">Must be unique (e.g., SUP001, SUP002)</p>
         {validationErrors.supplierId && (
           <p className="text-red-500 text-xs mt-1">{validationErrors.supplierId}</p>
         )}
