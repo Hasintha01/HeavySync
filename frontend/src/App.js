@@ -2,6 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 
+// Import components
+import Footer from './components/Footer';
+
 // Import pages
 import SupplierForm from './modules/supplier/pages/SupplierForm';
 import SupplierList from './modules/supplier/pages/SupplierList';
@@ -50,6 +53,8 @@ function App() {
             <Route path="/quotations" element={<QuotationComparison />} />
           </Routes>
         </main>
+
+        <Footer />
       </div>
     </Router>
   );
