@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const supplierRoutes = require("./routes/supplierRoutes");
 const purchaseOrderRoutes = require("./routes/purchaseOrderRoutes");
 const partRoutes = require("./routes/partRoutes");
+const quotationRoutes = require("./routes/quotationRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 app.use("/api/suppliers", supplierRoutes);
 app.use("/api/purchase-orders", purchaseOrderRoutes);
 app.use("/api/parts", partRoutes);
+app.use("/api/quotations", quotationRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
