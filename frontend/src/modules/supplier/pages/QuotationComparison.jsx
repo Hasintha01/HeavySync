@@ -176,36 +176,49 @@ const QuotationComparison = () => {
 
         // Create email content
         const subject = `Quotation Request - ${quotation.part.name} (${quotation.quotationId})`;
+        
+        // Create formatted email body with proper line breaks for Gmail
         const body = `Dear Supplier,
 
 We would like to request a quotation for the following:
 
 Part Details:
-- Part ID: ${quotation.part.partId}
-- Part Number: ${quotation.part.partNumber}
-- Part Name: ${quotation.part.name}
-- Quantity: ${quotation.quantity}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Part ID: ${quotation.part.partId}
+• Part Number: ${quotation.part.partNumber}
+• Part Name: ${quotation.part.name}
+• Quantity Required: ${quotation.quantity} units
 
-Quotation ID: ${quotation.quotationId}
+Quotation Reference: ${quotation.quotationId}
 
-${quotation.notes ? `Additional Notes:\n${quotation.notes}\n\n` : ''}
-Please provide your best price and delivery time for this part.
+${quotation.notes ? `Additional Notes:\n${quotation.notes}\n\n` : ''}Please provide:
+1. Your best unit price (in LKR)
+2. Estimated delivery time
+3. Availability status
+4. Any applicable terms and conditions
 
-Thank you for your cooperation.
+We look forward to receiving your competitive quotation at your earliest convenience.
 
 Best regards,
-HeavySync Team`;
+HeavySync Procurement Team
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
         // Get all supplier emails
         const emails = selectedSuppliers.map(s => s.contactEmail).join(',');
         
-        // Open mailto link
-        const mailtoLink = `mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        window.location.href = mailtoLink;
+        // Use Gmail compose URL instead of mailto (opens in browser)
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(emails)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        
+        // Open in new tab
+        window.open(gmailUrl, '_blank');
 
         // Update status to 'sent'
         updateQuotationStatus(quotation._id, 'sent')
-            .then(() => fetchQuotations())
+            .then(() => {
+                fetchQuotations();
+                setSuccess(`Email draft opened in Gmail for ${selectedSuppliers.length} supplier(s)`);
+                setTimeout(() => setSuccess(null), 5000);
+            })
             .catch(err => console.error("Failed to update status:", err));
     };
 
