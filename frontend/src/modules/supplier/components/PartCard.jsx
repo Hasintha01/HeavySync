@@ -25,7 +25,7 @@ const PartCard = ({ part }) => {
   };
   
   return (
-    <div className={`card ${isLowStock ? 'border-l-4 border-red-500' : 'border-l-4 border-green-500'}`}>
+    <div className={`card cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${isLowStock ? 'border-l-4 border-red-500' : 'border-l-4 border-green-500'}`}>
       {/* Part Name - Main heading */}
       <div className="flex justify-between items-start mb-2">
         <h3 className="text-lg font-bold">{part.name}</h3>

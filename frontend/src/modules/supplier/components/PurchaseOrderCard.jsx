@@ -49,7 +49,7 @@ const PurchaseOrderCard = ({ order }) => {
 
   return (
     <div 
-      className="card cursor-pointer hover:scale-[1.02] transition-transform"
+      className="card cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
       onClick={handleCardClick}
     >
       {/* Order ID - Main heading */}

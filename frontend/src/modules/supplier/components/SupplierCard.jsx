@@ -29,7 +29,7 @@ const SupplierCard = ({ supplier }) => {
   };
 
   return (
-    <div className="card">
+    <div className="card cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       {/* Supplier Name - Main heading */}
       <h3 className="text-lg font-bold mb-2">{supplier.name}</h3>
       
