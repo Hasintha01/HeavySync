@@ -8,6 +8,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import purchaseOrderService from "../services/purchaseOrderService";
 import pdfService from "../services/pdfService";
 
@@ -38,9 +39,10 @@ const PurchaseOrderDetail = () => {
   const handleDownloadPDF = () => {
     try {
       pdfService.generatePurchaseOrderPDF(order);
+      toast.success('PDF downloaded successfully');
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Failed to generate PDF. Please try again.');
+      toast.error('Failed to generate PDF. Please try again.');
     }
   };
 
@@ -50,10 +52,10 @@ const PurchaseOrderDetail = () => {
       try {
         const updatedOrder = await purchaseOrderService.updateOrder(id, { status: newStatus });
         setOrder(updatedOrder);
-        alert('Status updated successfully!');
+        toast.success(`Status updated to ${newStatus} successfully!`);
       } catch (error) {
         console.error('Error updating status:', error);
-        alert('Failed to update status. Please try again.');
+        toast.error('Failed to update status. Please try again.');
       } finally {
         setUpdating(false);
       }

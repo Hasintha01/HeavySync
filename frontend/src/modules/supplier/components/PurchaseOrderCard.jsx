@@ -8,6 +8,7 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import pdfService from "../services/pdfService";
 import purchaseOrderService from "../services/purchaseOrderService";
 import StatusBadge from "./StatusBadge";
@@ -37,9 +38,10 @@ const PurchaseOrderCard = ({ order, onDelete }) => {
       
       pdfService.generatePurchaseOrderPDF(order);
       console.log('PDF generation completed successfully');
+      toast.success('PDF downloaded successfully');
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert(`Failed to generate PDF: ${error.message}\n\nCheck browser console for details.`);
+      toast.error(`Failed to generate PDF: ${error.message}`);
     }
   };
 
@@ -64,11 +66,12 @@ const PurchaseOrderCard = ({ order, onDelete }) => {
     setIsDeleting(true);
     try {
       await purchaseOrderService.deleteOrder(order._id);
+      toast.success('Purchase order deleted successfully');
       if (onDelete) {
         onDelete(order._id);
       }
     } catch (error) {
-      alert(`Failed to delete purchase order: ${error.response?.data?.message || error.message}`);
+      toast.error(`Failed to delete purchase order: ${error.response?.data?.message || error.message}`);
       setIsDeleting(false);
     }
   };

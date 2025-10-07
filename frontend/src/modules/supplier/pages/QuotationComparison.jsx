@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 import partService from "../services/partService";
 import supplierService from "../services/supplierService";
 import { 
@@ -225,7 +226,7 @@ const QuotationComparison = () => {
         const selectedSuppliers = quotation.suppliers;
         
         if (selectedSuppliers.length === 0) {
-            alert("No suppliers selected for this quotation");
+            toast.error("No suppliers selected for this quotation");
             return;
         }
 

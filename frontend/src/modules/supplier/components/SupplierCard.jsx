@@ -8,6 +8,7 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { FiEdit, FiTrash2 } from "react-icons/fi"; // Feather Icons - Edit, Trash
 import supplierService from "../services/supplierService";
 
@@ -42,11 +43,12 @@ const SupplierCard = ({ supplier, onDelete }) => {
     setIsDeleting(true);
     try {
       await supplierService.deleteSupplier(supplier._id);
+      toast.success(`Supplier "${supplier.name}" deleted successfully`);
       if (onDelete) {
         onDelete(supplier._id);
       }
     } catch (error) {
-      alert(`Failed to delete supplier: ${error.response?.data?.message || error.message}`);
+      toast.error(`Failed to delete supplier: ${error.response?.data?.message || error.message}`);
       setIsDeleting(false);
     }
   };

@@ -1,6 +1,7 @@
 // frontend/src/modules/supplier/pages/PurchaseOrderReport.jsx
 
 import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import purchaseOrderService from "../services/purchaseOrderService";
 import supplierService from "../services/supplierService";
 import { FiFilter, FiDownload, FiRefreshCw } from "react-icons/fi";
@@ -144,8 +145,9 @@ const PurchaseOrderReport = () => {
      * Export report to PDF with professional formatting
      */
     const exportToPDF = () => {
-        const doc = new jsPDF();
-        const pageWidth = doc.internal.pageSize.getWidth();
+        try {
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.getWidth();
 
         // Title
         doc.setFontSize(20);
@@ -246,6 +248,13 @@ const PurchaseOrderReport = () => {
         // Save PDF
         const filename = `PO_Report_${new Date().toISOString().split('T')[0]}.pdf`;
         doc.save(filename);
+        
+        // Show success toast notification
+        toast.success(`Report exported successfully as ${filename}`);
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            toast.error('Failed to generate PDF report. Please try again.');
+        }
     };
 
     /**
