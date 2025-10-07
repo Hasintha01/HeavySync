@@ -244,18 +244,21 @@ const PurchaseOrderForm = ({ onSuccess }) => {
 
   if (loadingData) {
     return (
-      <div className="bg-white p-6 shadow rounded-lg max-w-2xl">
-        <p className="text-center">Loading purchase order data...</p>
+      <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
+        <div className="bg-white p-6 shadow rounded-lg w-full md:w-11/12 lg:w-4/5 xl:w-3/4 mt-8">
+          <p className="text-center">Loading purchase order data...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg max-w-2xl">
-      {/* Form Title */}
-      <h2 className="text-xl font-bold mb-4">
-        {isEditMode ? 'Edit Purchase Order' : 'Create Purchase Order'}
-      </h2>
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
+      <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg w-full md:w-11/12 lg:w-4/5 xl:w-3/4 mt-8">
+        {/* Form Title */}
+        <h2 className="text-xl font-bold mb-4">
+          {isEditMode ? 'Edit Purchase Order' : 'Create Purchase Order'}
+        </h2>
 
       {/* Display error if exists */}
       {error && <p className="text-red-500 mb-3">{error}</p>}
@@ -412,7 +415,8 @@ const PurchaseOrderForm = ({ onSuccess }) => {
           </button>
         )}
       </div>
-    </form>
+      </form>
+    </div>
   );
 };
 

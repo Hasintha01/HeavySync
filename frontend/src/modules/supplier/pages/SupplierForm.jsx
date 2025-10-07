@@ -244,27 +244,30 @@ const SupplierForm = ({ onSuccess }) => {
 
   if (loadingData) {
     return (
-      <div className="bg-white p-6 shadow rounded-lg max-w-md">
-        <p className="text-center">Loading supplier data...</p>
+      <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
+        <div className="bg-white p-6 shadow rounded-lg w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mt-8">
+          <p className="text-center">Loading supplier data...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg max-w-md">
-      {/* Form Title */}
-      <h2 className="text-xl font-bold mb-4">
-        {isEditMode ? 'Edit Supplier' : 'Add Supplier'}
-      </h2>
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
+      <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mt-8">
+        {/* Form Title */}
+        <h2 className="text-xl font-bold mb-4">
+          {isEditMode ? 'Edit Supplier' : 'Add Supplier'}
+        </h2>
 
-      {/* Display error if exists */}
-      {error && <p className="text-red-500 mb-3">{error}</p>}
-      
-      {/* Display success message */}
-      {success && <p className="text-green-500 mb-3">{success}</p>}
+        {/* Display error if exists */}
+        {error && <p className="text-red-500 mb-3">{error}</p>}
+        
+        {/* Display success message */}
+        {success && <p className="text-green-500 mb-3">{success}</p>}
 
-      {/* Supplier ID */}
-      <div className="mb-3">
+        {/* Supplier ID */}
+        <div className="mb-3">
         <label htmlFor="supplierId" className="block font-medium mb-1">
           Supplier ID <span className="text-red-500">*</span>
         </label>
@@ -379,30 +382,31 @@ const SupplierForm = ({ onSuccess }) => {
           placeholder="Enter report ID if applicable"
           className="w-full border p-2 rounded"
         />
-      </div>
+        </div>
 
-      {/* Submit Button */}
-      <div className="flex gap-2">
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 flex-1"
-          disabled={loading}
-        >
-          {loading ? "Saving..." : isEditMode ? "Update Supplier" : "Save Supplier"}
-        </button>
-        
-        {isEditMode && (
+        {/* Submit Button */}
+        <div className="flex gap-2">
           <button
-            type="button"
-            onClick={() => navigate("/suppliers")}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 flex-1"
             disabled={loading}
           >
-            Cancel
+            {loading ? "Saving..." : isEditMode ? "Update Supplier" : "Save Supplier"}
           </button>
-        )}
-      </div>
-    </form>
+          
+          {isEditMode && (
+            <button
+              type="button"
+              onClick={() => navigate("/suppliers")}
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              disabled={loading}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
   );
 };
 
