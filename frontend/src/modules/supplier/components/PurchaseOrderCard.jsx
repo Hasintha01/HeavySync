@@ -9,6 +9,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import pdfService from "../services/pdfService";
+import StatusBadge from "./StatusBadge";
 
 /**
  * Purchase Order Card Component
@@ -72,19 +73,7 @@ const PurchaseOrderCard = ({ order }) => {
       
       {/* Status Badge - Changes color based on order status */}
       <div className="mb-3">
-        <span
-          className={`px-2 py-1 rounded text-sm ${
-            order.status === "Pending"
-              ? "bg-yellow-100 text-yellow-700"  // Yellow badge for pending orders
-              : order.status === "Approved"
-              ? "bg-blue-100 text-blue-700"      // Blue badge for approved orders
-              : order.status === "Received"
-              ? "bg-green-100 text-green-700"    // Green badge for received orders
-              : "bg-red-100 text-red-700"        // Red badge for cancelled orders
-          }`}
-        >
-          {order.status}
-        </span>
+        <StatusBadge status={order.status} />
       </div>
 
       {/* Download PDF Button */}

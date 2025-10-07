@@ -8,6 +8,7 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import StatusBadge from "./StatusBadge";
 
 /**
  * Part Card Component
@@ -30,9 +31,7 @@ const PartCard = ({ part }) => {
       <div className="flex justify-between items-start mb-2">
         <h3 className="text-lg font-bold">{part.name}</h3>
         {isLowStock && (
-          <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded">
-            Low Stock
-          </span>
+          <StatusBadge status="low-stock" />
         )}
       </div>
       
