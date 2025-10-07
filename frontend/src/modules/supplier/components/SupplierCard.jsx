@@ -8,6 +8,7 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { FiEdit } from "react-icons/fi"; // Feather Icons - Edit
 
 /**
  * Supplier Card Component
@@ -64,8 +65,9 @@ const SupplierCard = ({ supplier }) => {
       <div className="mt-4">
         <button 
           onClick={handleEdit}
-          className="btn-primary text-sm"
+          className="btn-primary text-sm flex items-center gap-2"
         >
+          <FiEdit className="w-4 h-4" />
           Edit Supplier
         </button>
       </div>

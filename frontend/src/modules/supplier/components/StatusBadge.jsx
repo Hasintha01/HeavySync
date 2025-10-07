@@ -7,14 +7,16 @@
  */
 
 import React from 'react';
+import { FiCheck, FiClock, FiX, FiAlertCircle, FiSend, FiFileText } from 'react-icons/fi';
 
 /**
  * StatusBadge Component
  * @param {Object} props - Component props
  * @param {string} props.status - The status to display (e.g., "pending", "approved", "completed")
  * @param {string} props.className - Optional additional CSS classes
+ * @param {boolean} props.showIcon - Whether to show an icon (default: true)
  */
-const StatusBadge = ({ status, className = '' }) => {
+const StatusBadge = ({ status, className = '', showIcon = true }) => {
   // Define color schemes for each status
   const statusStyles = {
     // Purchase Order Statuses
@@ -48,6 +50,35 @@ const StatusBadge = ({ status, className = '' }) => {
   // Get the style for this status (default to draft if not found)
   const style = statusStyles[normalizedStatus] || statusStyles.draft;
 
+  // Map status to icons
+  const statusIcons = {
+    // Purchase Order Statuses
+    pending: FiClock,
+    approved: FiCheck,
+    received: FiCheck,
+    cancelled: FiX,
+    
+    // Quotation Statuses
+    draft: FiFileText,
+    sent: FiSend,
+    comparing: FiClock,
+    completed: FiCheck,
+    
+    // Stock Statuses
+    'low-stock': FiAlertCircle,
+    'in-stock': FiCheck,
+    
+    // Generic Statuses
+    active: FiCheck,
+    inactive: FiX,
+    success: FiCheck,
+    warning: FiAlertCircle,
+    error: FiX,
+    info: FiAlertCircle,
+  };
+
+  const IconComponent = statusIcons[normalizedStatus] || FiFileText;
+
   // Capitalize first letter for display
   const displayStatus = status?.charAt(0).toUpperCase() + status?.slice(1) || 'Draft';
 
@@ -64,6 +95,7 @@ const StatusBadge = ({ status, className = '' }) => {
         ${className}
       `}
     >
+      {showIcon && <IconComponent className="w-3 h-3 mr-1.5" />}
       {displayStatus}
     </span>
   );
