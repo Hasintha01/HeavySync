@@ -45,21 +45,21 @@ const SupplierList = () => {
   }, []); // Empty dependency array ensures this runs only once on mount
 
   return (
-    <div className="p-6">
+    <div className="p-8 max-w-7xl mx-auto">
       {/* Page Title */}
-      <h2 className="text-2xl font-bold mb-4">Suppliers</h2>
+      <h2 className="text-3xl font-bold mb-6 text-gray-800">Suppliers</h2>
       
       {/* Warning for duplicate IDs */}
       {duplicateIds.length > 0 && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6 shadow-sm">
           <strong>⚠️ Warning:</strong> Found {duplicateIds.length} duplicate Supplier ID(s): {duplicateIds.join(', ')}
           <br />
-          <span className="text-sm">Please update these suppliers with unique IDs to avoid issues.</span>
+          <span className="text-sm mt-2 block">Please update these suppliers with unique IDs to avoid issues.</span>
         </div>
       )}
       
-      {/* Supplier Grid - Responsive: 1 column on mobile, 2 columns on medium+ screens */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Supplier Grid - Responsive: 1 column on mobile, 2 columns on medium+, 3 columns on large screens */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Map through suppliers array and render a SupplierCard for each */}
         {suppliers.map((s) => (
           <div key={s._id} className={duplicateIds.includes(s.supplierId) ? 'ring-2 ring-red-500 rounded-lg' : ''}>

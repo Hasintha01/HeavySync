@@ -231,32 +231,40 @@ const PartForm = ({ onSuccess }) => {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
-        <div className="bg-white p-6 shadow rounded-lg w-full md:w-11/12 lg:w-4/5 xl:w-3/4 mt-8">
-          <p className="text-center">Loading part data...</p>
+      <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
+        <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-4xl mt-12">
+          <p className="text-center text-lg text-gray-600">Loading part data...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg w-full md:w-11/12 lg:w-4/5 xl:w-3/4 mt-8">
+    <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
+      <form onSubmit={handleSubmit} className="bg-white p-8 shadow-lg rounded-lg w-full max-w-4xl mt-12">
         {/* Form Title */}
-        <h2 className="text-xl font-bold mb-4">
+        <h2 className="text-3xl font-bold mb-8 text-gray-800">
           {isEditMode ? 'Edit Part' : 'Add New Part'}
         </h2>
 
         {/* Display error if exists */}
-        {error && <p className="text-red-500 mb-3">{error}</p>}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6">
+            {error}
+          </div>
+        )}
         
         {/* Display success message */}
-        {success && <p className="text-green-500 mb-3">{success}</p>}
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg mb-6">
+            {success}
+          </div>
+        )}
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Part ID */}
-        <div className="mb-3">
-          <label htmlFor="partId" className="block font-medium mb-1">
+        <div className="mb-6">
+          <label htmlFor="partId" className="block font-semibold mb-2 text-gray-700">
             Part ID <span className="text-red-500">*</span>
           </label>
           <input
@@ -266,17 +274,17 @@ const PartForm = ({ onSuccess }) => {
             value={form.partId}
             onChange={handleChange}
             placeholder="Enter unique part ID"
-            className={`w-full border p-2 rounded ${validationErrors.partId ? 'border-red-500' : ''}`}
+            className={`w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.partId ? 'border-red-500' : 'border-gray-300'}`}
             required
           />
           {validationErrors.partId && (
-            <p className="text-red-500 text-xs mt-1">{validationErrors.partId}</p>
+            <p className="text-red-500 text-sm mt-2">{validationErrors.partId}</p>
           )}
         </div>
 
         {/* Part Number */}
-        <div className="mb-3">
-          <label htmlFor="partNumber" className="block font-medium mb-1">
+        <div className="mb-6">
+          <label htmlFor="partNumber" className="block font-semibold mb-2 text-gray-700">
             Part Number <span className="text-red-500">*</span>
           </label>
           <input
@@ -296,7 +304,7 @@ const PartForm = ({ onSuccess }) => {
       </div>
 
       {/* Part Name */}
-      <div className="mb-3">
+      <div className="mb-6">
         <label htmlFor="name" className="block font-medium mb-1">
           Part Name <span className="text-red-500">*</span>
         </label>
@@ -319,7 +327,7 @@ const PartForm = ({ onSuccess }) => {
       </div>
 
       {/* Description */}
-      <div className="mb-3">
+      <div className="mb-6">
         <label htmlFor="description" className="block font-medium mb-1">
           Description <span className="text-red-500">*</span>
         </label>
@@ -338,9 +346,9 @@ const PartForm = ({ onSuccess }) => {
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-6">
         {/* Quantity */}
-        <div className="mb-3">
+        <div className="mb-6">
           <label htmlFor="quantity" className="block font-medium mb-1">
             Quantity <span className="text-red-500">*</span>
           </label>
@@ -360,7 +368,7 @@ const PartForm = ({ onSuccess }) => {
         </div>
 
         {/* Minimum Stock */}
-        <div className="mb-3">
+        <div className="mb-6">
           <label htmlFor="minimumStock" className="block font-medium mb-1">
             Minimum Stock <span className="text-red-500">*</span>
           </label>
@@ -380,7 +388,7 @@ const PartForm = ({ onSuccess }) => {
         </div>
 
         {/* Unit Price */}
-        <div className="mb-3">
+        <div className="mb-6">
           <label htmlFor="unitPrice" className="block font-medium mb-1">
             Unit Price (LKR) <span className="text-red-500">*</span>
           </label>
@@ -401,9 +409,9 @@ const PartForm = ({ onSuccess }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-6">
         {/* Location */}
-        <div className="mb-3">
+        <div className="mb-6">
           <label htmlFor="location" className="block font-medium mb-1">
             Location <span className="text-red-500">*</span>
           </label>
@@ -423,7 +431,7 @@ const PartForm = ({ onSuccess }) => {
         </div>
 
         {/* Category ID */}
-        <div className="mb-3">
+        <div className="mb-6">
           <label htmlFor="categoryId" className="block font-medium mb-1">
             Category ID <span className="text-red-500">*</span>
           </label>
@@ -444,7 +452,7 @@ const PartForm = ({ onSuccess }) => {
       </div>
 
       {/* Report ID (Optional) */}
-      <div className="mb-3">
+      <div className="mb-6">
         <label htmlFor="reportId" className="block font-medium mb-1">
           Report ID <span className="text-gray-500 text-sm">(Optional)</span>
         </label>
@@ -486,3 +494,5 @@ const PartForm = ({ onSuccess }) => {
 };
 
 export default PartForm;
+
+

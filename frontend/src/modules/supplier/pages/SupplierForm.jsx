@@ -244,31 +244,39 @@ const SupplierForm = ({ onSuccess }) => {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
-        <div className="bg-white p-6 shadow rounded-lg w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mt-8">
-          <p className="text-center">Loading supplier data...</p>
+      <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
+        <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-2xl mt-12">
+          <p className="text-center text-lg text-gray-600">Loading supplier data...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mt-8">
+    <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
+      <form onSubmit={handleSubmit} className="bg-white p-8 shadow-lg rounded-lg w-full max-w-2xl mt-12">
         {/* Form Title */}
-        <h2 className="text-xl font-bold mb-4">
-          {isEditMode ? 'Edit Supplier' : 'Add Supplier'}
+        <h2 className="text-3xl font-bold mb-8 text-gray-800">
+          {isEditMode ? 'Edit Supplier' : 'Add New Supplier'}
         </h2>
 
         {/* Display error if exists */}
-        {error && <p className="text-red-500 mb-3">{error}</p>}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6">
+            {error}
+          </div>
+        )}
         
         {/* Display success message */}
-        {success && <p className="text-green-500 mb-3">{success}</p>}
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg mb-6">
+            {success}
+          </div>
+        )}
 
         {/* Supplier ID */}
-        <div className="mb-3">
-        <label htmlFor="supplierId" className="block font-medium mb-1">
+        <div className="mb-6">
+        <label htmlFor="supplierId" className="block font-semibold mb-2 text-gray-700">
           Supplier ID <span className="text-red-500">*</span>
         </label>
         <input

@@ -244,38 +244,46 @@ const PurchaseOrderForm = ({ onSuccess }) => {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
-        <div className="bg-white p-6 shadow rounded-lg w-full md:w-11/12 lg:w-4/5 xl:w-3/4 mt-8">
-          <p className="text-center">Loading purchase order data...</p>
+      <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
+        <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-4xl mt-12">
+          <p className="text-center text-lg text-gray-600">Loading purchase order data...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8 flex justify-center items-start">
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg w-full md:w-11/12 lg:w-4/5 xl:w-3/4 mt-8">
+    <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
+      <form onSubmit={handleSubmit} className="bg-white p-8 shadow-lg rounded-lg w-full max-w-4xl mt-12">
         {/* Form Title */}
-        <h2 className="text-xl font-bold mb-4">
+        <h2 className="text-3xl font-bold mb-8 text-gray-800">
           {isEditMode ? 'Edit Purchase Order' : 'Create Purchase Order'}
         </h2>
 
       {/* Display error if exists */}
-      {error && <p className="text-red-500 mb-3">{error}</p>}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6">
+          {error}
+        </div>
+      )}
       
       {/* Display success message */}
-      {success && <p className="text-green-500 mb-3">{success}</p>}
+      {success && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg mb-6">
+          {success}
+        </div>
+      )}
       
       {/* Supplier Selection */}
-      <div className="mb-4">
-        <label htmlFor="supplier" className="block font-medium mb-1">
+      <div className="mb-8">
+        <label htmlFor="supplier" className="block font-semibold mb-2 text-gray-700">
           Select Supplier <span className="text-red-500">*</span>
         </label>
         <select
           id="supplier"
           value={form.supplier}
           onChange={handleSupplierChange}
-          className="w-full border p-2 rounded"
+          className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           required
         >
           <option value="">-- Select Supplier --</option>
@@ -288,27 +296,27 @@ const PurchaseOrderForm = ({ onSuccess }) => {
       </div>
 
       {/* Items Section */}
-      <div className="mb-4">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="font-bold">Order Items</h3>
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold text-gray-800">Order Items</h3>
           <button
             type="button"
             onClick={addItem}
-            className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
           >
             + Add Item
           </button>
         </div>
 
         {form.items.map((item, index) => (
-          <div key={index} className="border p-3 rounded mb-3 bg-gray-50">
-            <div className="flex justify-between items-center mb-2">
-              <span className="font-medium">Item #{index + 1}</span>
+          <div key={index} className="border border-gray-300 p-6 rounded-lg mb-6 bg-gray-50">
+            <div className="flex justify-between items-center mb-4">
+              <span className="font-semibold text-lg text-gray-700">Item #{index + 1}</span>
               {form.items.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeItem(index)}
-                  className="text-red-500 text-sm hover:text-red-700"
+                  className="text-red-600 text-sm font-medium hover:text-red-700 transition-colors"
                 >
                   Remove
                 </button>
@@ -316,63 +324,63 @@ const PurchaseOrderForm = ({ onSuccess }) => {
             </div>
 
             {/* Item Name */}
-            <div className="mb-2">
-              <label className="block text-sm mb-1">Item Name *</label>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold mb-2 text-gray-700">Item Name *</label>
               <input
                 type="text"
                 value={item.name}
                 onChange={(e) => handleItemChange(index, 'name', e.target.value)}
                 placeholder="Enter item name (letters and numbers only)"
-                className="w-full border p-2 rounded"
+                className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
                 minLength="1"
               />
               {item.name.trim() === '' && (
-                <p className="text-red-500 text-xs mt-1">Item name is required</p>
+                <p className="text-red-500 text-sm mt-2">Item name is required</p>
               )}
-              <p className="text-gray-500 text-xs mt-1">
+              <p className="text-gray-500 text-xs mt-2">
                 Only letters, numbers, and spaces. No character more than twice in a row.
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Quantity */}
               <div>
-                <label className="block text-sm mb-1">Quantity *</label>
+                <label className="block text-sm font-semibold mb-2 text-gray-700">Quantity *</label>
                 <input
                   type="number"
                   min="1"
                   value={item.quantity}
                   onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                  className="w-full border p-2 rounded"
+                  className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
                 {item.quantity <= 0 && (
-                  <p className="text-red-500 text-xs mt-1">Must be greater than 0</p>
+                  <p className="text-red-500 text-sm mt-2">Must be greater than 0</p>
                 )}
               </div>
 
               {/* Unit Price */}
               <div>
-                <label className="block text-sm mb-1">Unit Price *</label>
+                <label className="block text-sm font-semibold mb-2 text-gray-700">Unit Price *</label>
                 <input
                   type="number"
                   min="0"
                   step="0.01"
                   value={item.unitPrice}
                   onChange={(e) => handleItemChange(index, 'unitPrice', e.target.value)}
-                  className="w-full border p-2 rounded"
+                  className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
 
               {/* Total Price (Read-only) */}
               <div>
-                <label className="block text-sm mb-1">Total</label>
+                <label className="block text-sm font-semibold mb-2 text-gray-700">Total</label>
                 <input
                   type="number"
                   value={item.totalPrice.toFixed(2)}
-                  className="w-full border p-2 rounded bg-gray-100"
+                  className="w-full border border-gray-300 p-3 rounded-lg bg-gray-100"
                   readOnly
                 />
               </div>
@@ -382,20 +390,20 @@ const PurchaseOrderForm = ({ onSuccess }) => {
       </div>
 
       {/* Total Amount Display */}
-      <div className="mb-4 p-3 bg-blue-50 rounded">
+      <div className="mb-8 p-6 bg-blue-50 rounded-lg border-2 border-blue-200">
         <div className="flex justify-between items-center">
-          <span className="font-bold text-lg">Total Amount:</span>
-          <span className="font-bold text-lg text-blue-600">
+          <span className="font-bold text-xl text-gray-800">Total Amount:</span>
+          <span className="font-bold text-2xl text-blue-600">
             LKR {calculateTotal().toFixed(2)}
           </span>
         </div>
       </div>
 
       {/* Submit Button */}
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         <button
           type="submit"
-          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:bg-gray-400 flex-1"
+          className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-400 flex-1 transition-colors"
           disabled={loading}
         >
           {loading 
@@ -408,7 +416,7 @@ const PurchaseOrderForm = ({ onSuccess }) => {
           <button
             type="button"
             onClick={() => navigate("/purchase-orders")}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            className="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors"
             disabled={loading}
           >
             Cancel
