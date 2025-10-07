@@ -7,7 +7,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import purchaseOrderService from "../services/purchaseOrderService";
 import supplierService from "../services/supplierService";
 
@@ -20,7 +20,11 @@ import supplierService from "../services/supplierService";
 const PurchaseOrderForm = ({ onSuccess }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const isEditMode = Boolean(id);
+
+  // Get part data from navigation state (if coming from Dashboard reorder)
+  const partFromDashboard = location.state?.part;
 
   // State for suppliers list
   const [suppliers, setSuppliers] = useState([]);
@@ -82,6 +86,37 @@ const PurchaseOrderForm = ({ onSuccess }) => {
     };
     fetchSuppliers();
   }, []);
+
+  /**
+   * Auto-fill form if part data is passed from Dashboard
+   * This happens when user clicks "Create PO" from low stock alert
+   */
+  useEffect(() => {
+    if (partFromDashboard && !isEditMode) {
+      // Calculate recommended quantity (minimum stock - current quantity + buffer)
+      const recommendedQty = Math.max(
+        partFromDashboard.minimumStock - partFromDashboard.quantity + 10,
+        10
+      );
+
+      // Auto-fill the first item with part details
+      setForm(prev => ({
+        ...prev,
+        items: [
+          {
+            name: partFromDashboard.name,
+            quantity: recommendedQty,
+            unitPrice: partFromDashboard.unitPrice,
+            totalPrice: recommendedQty * partFromDashboard.unitPrice
+          }
+        ]
+      }));
+
+      // Show info message to user
+      setSuccess(`Auto-filled with low stock item: ${partFromDashboard.name}. Recommended quantity: ${recommendedQty} units.`);
+      setTimeout(() => setSuccess(""), 8000);
+    }
+  }, [partFromDashboard, isEditMode]);
 
   /**
    * Handle supplier selection

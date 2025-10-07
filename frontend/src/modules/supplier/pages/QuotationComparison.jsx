@@ -1,6 +1,7 @@
 // frontend/src/modules/supplier/pages/QuotationComparison.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import partService from "../services/partService";
 import supplierService from "../services/supplierService";
 import { 
@@ -11,6 +12,14 @@ import {
 } from "../services/quotationService";
 
 const QuotationComparison = () => {
+    const location = useLocation();
+    
+    // Get part data from navigation state (if coming from Dashboard reorder)
+    const partFromDashboard = location.state?.part;
+    
+    // Track if we've already auto-selected suppliers to prevent multiple runs
+    const hasAutoSelectedSuppliers = useRef(false);
+    
     // State management
     const [showForm, setShowForm] = useState(false);
     const [parts, setParts] = useState([]);
@@ -39,6 +48,51 @@ const QuotationComparison = () => {
         fetchSuppliers();
         fetchQuotations();
     }, []);
+
+    /**
+     * Auto-fill form when navigating from Dashboard's low stock alert
+     * Automatically opens form, selects the part, and pre-selects all suppliers
+     */
+    useEffect(() => {
+        if (partFromDashboard && !showForm) {
+            // Auto-fill form data with the part from Dashboard
+            setFormData({
+                partId: partFromDashboard.partId, // Use partId (not _id) to match dropdown value
+                partNumber: partFromDashboard.partNumber,
+                partName: partFromDashboard.name,
+                quantity: Math.max(partFromDashboard.minimumStock - partFromDashboard.quantity + 10, 10),
+                supplierIds: [], // Will be filled after suppliers load
+                notes: `Quotation request for low stock item. Current stock: ${partFromDashboard.quantity} units, Minimum required: ${partFromDashboard.minimumStock} units.`,
+            });
+            
+            setSelectedPart(partFromDashboard);
+            setShowForm(true);
+            
+            // Show success message
+            setSuccess(`Auto-filled quotation request for low stock item: ${partFromDashboard.name}`);
+            setTimeout(() => setSuccess(null), 8000);
+        }
+    }, [partFromDashboard, showForm]);
+
+    /**
+     * Pre-select all suppliers when form is auto-filled from Dashboard
+     * Uses supplier.supplierId (not _id) to match the checkbox values
+     * Only runs once when partFromDashboard exists and suppliers are loaded
+     */
+    useEffect(() => {
+        if (partFromDashboard && suppliers.length > 0 && !hasAutoSelectedSuppliers.current) {
+            // Auto-select all suppliers for comprehensive quotation
+            // Use supplierId (not _id) to match the checkbox values
+            const allSupplierIds = suppliers.map(s => s.supplierId);
+            setFormData(prev => ({
+                ...prev,
+                supplierIds: allSupplierIds
+            }));
+            
+            // Mark as auto-selected so this doesn't run again
+            hasAutoSelectedSuppliers.current = true;
+        }
+    }, [partFromDashboard, suppliers.length]); // Only depend on suppliers.length, not the array itself
 
     const fetchParts = async () => {
         try {
@@ -349,10 +403,6 @@ HeavySync Procurement Team
                             <p className="text-sm text-gray-500 mt-2">
                                 {formData.supplierIds.length} supplier(s) selected
                             </p>
-                            {/* Debug info */}
-                            <div className="text-xs text-blue-600 mt-2 p-2 bg-blue-50 rounded">
-                                <strong>Selected IDs:</strong> {formData.supplierIds.join(', ') || 'None'}
-                            </div>
                         </div>
 
                         {/* Notes */}

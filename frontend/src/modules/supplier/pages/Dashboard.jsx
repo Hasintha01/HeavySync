@@ -22,7 +22,8 @@ import {
   FiFileText, 
   FiAlertTriangle,
   FiTrendingUp,
-  FiPlusCircle
+  FiPlusCircle,
+  FiChevronDown
 } from "react-icons/fi";
 
 // Import services to fetch data
@@ -56,6 +57,9 @@ const Dashboard = () => {
 
   // State for loading indicator
   const [loading, setLoading] = useState(true);
+
+  // State for dropdown menu visibility (tracks which part's menu is open)
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   /**
    * Fetch all dashboard data on component mount
@@ -136,11 +140,45 @@ const Dashboard = () => {
    * Navigate to create quotation page for low stock item
    * @param {Object} part - Part that needs reordering
    */
-  const handleReorder = (part) => {
-    // Navigate to quotations page
-    // In future: Could auto-fill quotation form with this part's details
+  const handleRequestQuotation = (part) => {
+    // Navigate to quotations page with part data
+    // The quotation form can auto-fill with this part's details
     navigate("/quotations", { state: { part } });
   };
+
+  /**
+   * Navigate to create purchase order for low stock item
+   * @param {Object} part - Part that needs reordering
+   */
+  const handleCreatePO = (part) => {
+    // Navigate to purchase order form with part data
+    // The PO form can auto-fill with this part's details
+    navigate("/purchase-orders/new", { state: { part } });
+  };
+
+  /**
+   * Toggle dropdown menu for reorder options
+   * @param {string} partId - ID of the part to toggle dropdown for
+   */
+  const toggleDropdown = (partId) => {
+    // Close if already open, open if closed
+    setOpenDropdown(openDropdown === partId ? null : partId);
+  };
+
+  /**
+   * Close dropdown when clicking outside
+   */
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If click is outside dropdown, close it
+      if (!event.target.closest('.reorder-dropdown')) {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Show loading state while fetching data
   if (loading) {
@@ -281,14 +319,61 @@ const Dashboard = () => {
                         </div>
                       </div>
                       
-                      {/* Reorder Button */}
-                      <button
-                        onClick={() => handleReorder(part)}
-                        className="ml-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
-                      >
-                        <FiTrendingUp className="w-4 h-4" />
-                        Reorder
-                      </button>
+                      {/* Reorder Dropdown Button */}
+                      <div className="ml-4 relative reorder-dropdown">
+                        <button
+                          onClick={() => toggleDropdown(part._id)}
+                          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+                        >
+                          <FiTrendingUp className="w-4 h-4" />
+                          Reorder
+                          <FiChevronDown className="w-4 h-4" />
+                        </button>
+
+                        {/* Dropdown Menu */}
+                        {openDropdown === part._id && (
+                          <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-10">
+                            <div className="py-1">
+                              {/* Option 1: Request Quotation */}
+                              <button
+                                onClick={() => {
+                                  handleRequestQuotation(part);
+                                  setOpenDropdown(null);
+                                }}
+                                className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-start gap-3"
+                              >
+                                <FiFileText className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <p className="font-medium text-gray-800 text-sm">Request Quotation</p>
+                                  <p className="text-xs text-gray-600 mt-0.5">
+                                    Get quotes from multiple suppliers
+                                  </p>
+                                </div>
+                              </button>
+
+                              {/* Divider */}
+                              <div className="border-t border-gray-100"></div>
+
+                              {/* Option 2: Create Purchase Order */}
+                              <button
+                                onClick={() => {
+                                  handleCreatePO(part);
+                                  setOpenDropdown(null);
+                                }}
+                                className="w-full text-left px-4 py-3 hover:bg-green-50 transition-colors flex items-start gap-3"
+                              >
+                                <FiShoppingCart className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <p className="font-medium text-gray-800 text-sm">Create Purchase Order</p>
+                                  <p className="text-xs text-gray-600 mt-0.5">
+                                    Order directly from a supplier
+                                  </p>
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
