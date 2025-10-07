@@ -92,7 +92,8 @@ const QuotationComparison = () => {
             // Mark as auto-selected so this doesn't run again
             hasAutoSelectedSuppliers.current = true;
         }
-    }, [partFromDashboard, suppliers.length]); // Only depend on suppliers.length, not the array itself
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [partFromDashboard, suppliers.length]); // Only depend on suppliers.length to prevent infinite loops
 
     const fetchParts = async () => {
         try {

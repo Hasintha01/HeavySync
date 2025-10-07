@@ -13,6 +13,7 @@ import SupplierList from './modules/supplier/pages/SupplierList';
 import PurchaseOrderForm from './modules/supplier/pages/PurchaseOrderForm';
 import PurchaseOrderList from './modules/supplier/pages/PurchaseOrderList';
 import PurchaseOrderDetail from './modules/supplier/pages/PurchaseOrderDetail';
+import PurchaseOrderReport from './modules/supplier/pages/PurchaseOrderReport';
 import QuotationComparison from './modules/supplier/pages/QuotationComparison';
 import PartForm from './modules/supplier/pages/PartForm';
 import PartList from './modules/supplier/pages/PartList';
@@ -43,6 +44,9 @@ function App() {
             <Route path="/purchase-orders/new" element={<PurchaseOrderForm />} />
             <Route path="/purchase-orders/edit/:id" element={<PurchaseOrderForm />} />
             <Route path="/purchase-orders/:id" element={<PurchaseOrderDetail />} />
+            
+            {/* Reports Routes */}
+            <Route path="/reports/purchase-orders" element={<PurchaseOrderReport />} />
             
             {/* Quotation Routes */}
             <Route path="/quotations" element={<QuotationComparison />} />

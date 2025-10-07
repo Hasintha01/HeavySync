@@ -508,6 +508,17 @@ const Dashboard = () => {
             Request Quote
           </button>
         </div>
+        
+        {/* Reports Quick Link */}
+        <div className="mt-4 pt-4 border-t border-blue-400">
+          <button
+            onClick={() => navigate("/reports/purchase-orders")}
+            className="bg-white/10 hover:bg-white/20 border border-white/30 text-white rounded-lg px-6 py-3 flex items-center gap-3 transition-colors font-medium"
+          >
+            <FiTrendingUp className="w-5 h-5" />
+            View Purchase Order Report
+          </button>
+        </div>
       </div>
     </div>
   );

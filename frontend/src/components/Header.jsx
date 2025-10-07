@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FiHome, FiUsers, FiPackage, FiShoppingCart, FiFileText, FiPlusCircle } from 'react-icons/fi';
+import { FiHome, FiUsers, FiPackage, FiShoppingCart, FiFileText, FiPlusCircle, FiBarChart2 } from 'react-icons/fi';
 import './Header.css';
 
 const Header = () => {
@@ -55,6 +55,12 @@ const Header = () => {
             <NavLink to="/quotations" className="flex items-center gap-2">
               <FiFileText className="w-4 h-4" />
               Compare Quotations
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/reports/purchase-orders" className="flex items-center gap-2">
+              <FiBarChart2 className="w-4 h-4" />
+              PO Report
             </NavLink>
           </li>
         </ul>
