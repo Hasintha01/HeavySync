@@ -46,7 +46,7 @@ const createPurchaseOrder = async (req, res) => {
 // Get all purchase orders
 const getPurchaseOrders = async (req, res) => {
   try {
-    const orders = await PurchaseOrder.find().populate("supplier", "name contactEmail contactPhone");
+    const orders = await PurchaseOrder.find().populate("supplier", "name contactEmail contactPhone address");
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -58,7 +58,7 @@ const getPurchaseOrderById = async (req, res) => {
   try {
     const order = await PurchaseOrder.findById(req.params.id).populate(
       "supplier",
-      "name contactEmail contactPhone"
+      "name contactEmail contactPhone address"
     );
     if (!order) {
       return res.status(404).json({ message: "Purchase order not found" });
