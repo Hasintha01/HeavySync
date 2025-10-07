@@ -23,9 +23,17 @@ const PurchaseOrderList = () => {
    * Fetches all purchase orders from the backend and updates state
    */
   useEffect(() => {
+    fetchOrders();
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  const fetchOrders = () => {
     // Call the getOrders API and set the returned data to state
     purchaseOrderService.getOrders().then(setOrders);
-  }, []); // Empty dependency array ensures this runs only once on mount
+  };
+
+  const handleDelete = (deletedId) => {
+    setOrders(prevOrders => prevOrders.filter(o => o._id !== deletedId));
+  };
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
@@ -36,7 +44,7 @@ const PurchaseOrderList = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Map through orders array and render a PurchaseOrderCard for each */}
         {orders.map((o) => (
-          <PurchaseOrderCard key={o._id} order={o} />
+          <PurchaseOrderCard key={o._id} order={o} onDelete={handleDelete} />
         ))}
       </div>
     </div>

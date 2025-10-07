@@ -24,6 +24,10 @@ const SupplierList = () => {
    * Fetches all suppliers from the backend and updates state
    */
   useEffect(() => {
+    fetchSuppliers();
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  const fetchSuppliers = () => {
     // Call the getSuppliers API and set the returned data to state
     supplierService.getSuppliers().then((data) => {
       setSuppliers(data);
@@ -42,7 +46,11 @@ const SupplierList = () => {
         console.warn("Affected suppliers:", data.filter(s => duplicates.includes(s.supplierId)));
       }
     });
-  }, []); // Empty dependency array ensures this runs only once on mount
+  };
+
+  const handleDelete = (deletedId) => {
+    setSuppliers(prevSuppliers => prevSuppliers.filter(s => s._id !== deletedId));
+  };
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
@@ -63,7 +71,7 @@ const SupplierList = () => {
         {/* Map through suppliers array and render a SupplierCard for each */}
         {suppliers.map((s) => (
           <div key={s._id} className={duplicateIds.includes(s.supplierId) ? 'ring-2 ring-red-500 rounded-lg' : ''}>
-            <SupplierCard supplier={s} />
+            <SupplierCard supplier={s} onDelete={handleDelete} />
           </div>
         ))}
       </div>

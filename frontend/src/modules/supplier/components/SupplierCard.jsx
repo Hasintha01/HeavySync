@@ -6,9 +6,10 @@
  * Used in the SupplierList page to show supplier details
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiEdit } from "react-icons/fi"; // Feather Icons - Edit
+import { FiEdit, FiTrash2 } from "react-icons/fi"; // Feather Icons - Edit, Trash
+import supplierService from "../services/supplierService";
 
 /**
  * Supplier Card Component
@@ -21,21 +22,44 @@ import { FiEdit } from "react-icons/fi"; // Feather Icons - Edit
  * @param {string} props.supplier.contactPhone - Supplier phone number
  * @param {string} props.supplier.address - Supplier address
  * @param {string} props.supplier.reportId - Report ID (optional)
+ * @param {Function} props.onDelete - Callback function after successful deletion
  */
-const SupplierCard = ({ supplier }) => {
+const SupplierCard = ({ supplier, onDelete }) => {
   const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleEdit = () => {
     navigate(`/suppliers/edit/${supplier._id}`);
   };
 
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete "${supplier.name}"?\n\nThis action cannot be undone.`
+    );
+    
+    if (!confirmDelete) return;
+
+    setIsDeleting(true);
+    try {
+      await supplierService.deleteSupplier(supplier._id);
+      if (onDelete) {
+        onDelete(supplier._id);
+      }
+    } catch (error) {
+      alert(`Failed to delete supplier: ${error.response?.data?.message || error.message}`);
+      setIsDeleting(false);
+    }
+  };
+
   return (
-    <div className="card cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-      {/* Supplier Name - Main heading */}
-      <h3 className="text-xl font-bold mb-4 text-gray-800">{supplier.name}</h3>
+    <div className="card cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+      {/* Supplier Name - Main heading with fixed height to prevent layout shifts */}
+      <h3 className="text-xl font-bold mb-4 text-gray-800 min-h-[3.5rem] line-clamp-2">
+        {supplier.name}
+      </h3>
       
-      {/* Supplier Information Grid */}
-      <div className="space-y-3 mb-6">
+      {/* Supplier Information Grid - Flex grow to push buttons to bottom */}
+      <div className="space-y-3 mb-6 flex-grow">
         {/* Supplier ID */}
         <p className="text-sm">
           <strong className="text-gray-700">Supplier ID:</strong>{" "}
@@ -45,7 +69,7 @@ const SupplierCard = ({ supplier }) => {
         {/* Supplier Email */}
         <p className="text-sm">
           <strong className="text-gray-700">Email:</strong>{" "}
-          <span className="text-gray-600">{supplier.contactEmail}</span>
+          <span className="text-gray-600 break-all">{supplier.contactEmail}</span>
         </p>
         
         {/* Supplier Phone */}
@@ -69,15 +93,25 @@ const SupplierCard = ({ supplier }) => {
         )}
       </div>
 
-      {/* Edit Button */}
-      <div className="mt-6 pt-4 border-t border-gray-200">
-        <button 
-          onClick={handleEdit}
-          className="btn-primary text-sm flex items-center justify-center gap-2 w-full"
-        >
-          <FiEdit className="w-4 h-4" />
-          Edit Supplier
-        </button>
+      {/* Action Buttons - Always at bottom */}
+      <div className="mt-auto pt-4 border-t border-gray-200">
+        <div className="flex gap-3">
+          <button 
+            onClick={handleEdit}
+            className="btn-primary text-sm flex items-center justify-center gap-2 flex-1"
+          >
+            <FiEdit className="w-4 h-4" />
+            Edit
+          </button>
+          <button 
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 flex-1 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <FiTrash2 className="w-4 h-4" />
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </button>
+        </div>
       </div>
     </div>
   );
