@@ -63,7 +63,7 @@ const deleteOrder = async (id) => {
 };
 
 // Export all purchase order service functions
-export default {
+const purchaseOrderService = {
   getOrders,
   getOrderById,
   getPurchaseOrderById: getOrderById, // Alias for consistency
@@ -71,3 +71,5 @@ export default {
   updateOrder,
   deleteOrder,
 };
+
+export default purchaseOrderService;

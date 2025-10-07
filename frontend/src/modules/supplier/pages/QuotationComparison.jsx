@@ -7,7 +7,6 @@ import {
     createQuotation, 
     getAllQuotations, 
     updateQuotationStatus,
-    updateSupplierQuote,
     deleteQuotation 
 } from "../services/quotationService";
 

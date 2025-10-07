@@ -223,8 +223,10 @@ const testPDF = () => {
   }
 };
 
-export default {
+const pdfService = {
   generatePurchaseOrderPDF,
   previewPurchaseOrderPDF,
   testPDF
 };
+
+export default pdfService;

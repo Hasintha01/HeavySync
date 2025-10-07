@@ -62,10 +62,12 @@ const deleteSupplier = async (id) => {
 };
 
 // Export all supplier service functions
-export default {
+const supplierService = {
   getSuppliers,
   getSupplierById,
   createSupplier,
   updateSupplier,
   deleteSupplier,
 };
+
+export default supplierService;
