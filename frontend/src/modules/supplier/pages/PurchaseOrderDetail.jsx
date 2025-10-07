@@ -17,6 +17,7 @@ const PurchaseOrderDetail = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -40,6 +41,22 @@ const PurchaseOrderDetail = () => {
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Failed to generate PDF. Please try again.');
+    }
+  };
+
+  const handleStatusChange = async (newStatus) => {
+    if (window.confirm(`Are you sure you want to change the status to ${newStatus}?`)) {
+      setUpdating(true);
+      try {
+        const updatedOrder = await purchaseOrderService.updateOrder(id, { status: newStatus });
+        setOrder(updatedOrder);
+        alert('Status updated successfully!');
+      } catch (error) {
+        console.error('Error updating status:', error);
+        alert('Failed to update status. Please try again.');
+      } finally {
+        setUpdating(false);
+      }
     }
   };
 
@@ -89,19 +106,52 @@ const PurchaseOrderDetail = () => {
             </h1>
             <p className="text-gray-600">Order ID: #{order._id.slice(-8).toUpperCase()}</p>
           </div>
-          <span
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${
-              order.status === "Pending"
-                ? "bg-yellow-100 text-yellow-800"
-                : order.status === "Approved"
-                ? "bg-blue-100 text-blue-800"
-                : order.status === "Received"
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
-            }`}
-          >
-            {order.status}
-          </span>
+          <div className="flex flex-col items-end gap-3">
+            <span
+              className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                order.status === "Pending"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : order.status === "Approved"
+                  ? "bg-blue-100 text-blue-800"
+                  : order.status === "Received"
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {order.status}
+            </span>
+            
+            {/* Status Change Buttons */}
+            <div className="flex gap-2">
+              {order.status !== "Approved" && order.status !== "Received" && order.status !== "Cancelled" && (
+                <button
+                  onClick={() => handleStatusChange("Approved")}
+                  disabled={updating}
+                  className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                >
+                  {updating ? "Updating..." : "Approve"}
+                </button>
+              )}
+              {order.status === "Approved" && (
+                <button
+                  onClick={() => handleStatusChange("Received")}
+                  disabled={updating}
+                  className="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                >
+                  {updating ? "Updating..." : "Mark Received"}
+                </button>
+              )}
+              {order.status !== "Cancelled" && order.status !== "Received" && (
+                <button
+                  onClick={() => handleStatusChange("Cancelled")}
+                  disabled={updating}
+                  className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                >
+                  {updating ? "Updating..." : "Cancel"}
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-6 mb-6">

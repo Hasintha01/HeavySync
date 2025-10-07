@@ -127,8 +127,8 @@ const generatePurchaseOrderPDF = (order) => {
     (index + 1).toString(),
     item.name,
     item.quantity.toString(),
-    `$${item.unitPrice.toFixed(2)}`,
-    `$${item.totalPrice.toFixed(2)}`
+    `LKR ${item.unitPrice.toFixed(2)}`,
+    `LKR ${item.totalPrice.toFixed(2)}`
   ]);
 
   // Add table using autoTable
@@ -159,15 +159,15 @@ const generatePurchaseOrderPDF = (order) => {
   // Get final Y position after table
   const finalY = doc.lastAutoTable.finalY + 10;
 
-  // Total Amount Box
+  // Total Amount Box - wider to prevent text overlap
   doc.setFillColor(40, 44, 52);
-  doc.rect(130, finalY, 60, 15, 'F');
+  doc.rect(110, finalY, 80, 15, 'F');
   
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(14);
+  doc.setFontSize(12);
   doc.setFont(undefined, 'bold');
-  doc.text('TOTAL AMOUNT:', 135, finalY + 7);
-  doc.text(`$${order.totalAmount.toFixed(2)}`, 185, finalY + 7, { align: 'right' });
+  doc.text('TOTAL AMOUNT:', 115, finalY + 10);
+  doc.text(`LKR ${order.totalAmount.toFixed(2)}`, 185, finalY + 10, { align: 'right' });
 
   // Footer
   doc.setTextColor(128, 128, 128);
