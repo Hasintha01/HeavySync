@@ -75,7 +75,7 @@ const updatePurchaseOrder = async (req, res) => {
     const order = await PurchaseOrder.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
-    });
+    }).populate("supplier", "name contactEmail contactPhone address");
     if (!order) {
       return res.status(404).json({ message: "Purchase order not found" });
     }

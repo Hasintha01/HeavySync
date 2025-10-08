@@ -218,7 +218,7 @@ const PurchaseOrderDetail = () => {
               </thead>
               <tbody>
                 {order.items.map((item, index) => (
-                  <tr key={index} className="border-b hover:bg-gray-50">
+                  <tr key={index} className="border-b hover:bg-gray-50 transition-colors">
                     <td className="p-3">{index + 1}</td>
                     <td className="p-3 font-medium">{item.name}</td>
                     <td className="p-3 text-center">{item.quantity}</td>
@@ -228,7 +228,7 @@ const PurchaseOrderDetail = () => {
                 ))}
               </tbody>
               <tfoot>
-                <tr className="bg-gray-800 text-white">
+                <tr className="bg-gray-800 text-white hover:bg-gray-800">
                   <td colSpan="4" className="p-3 text-right font-bold">TOTAL AMOUNT:</td>
                   <td className="p-3 text-right font-bold text-lg">
                     LKR {order.totalAmount.toFixed(2)}
