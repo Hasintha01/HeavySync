@@ -18,6 +18,7 @@ const SupplierList = () => {
   // State to store the list of suppliers
   const [suppliers, setSuppliers] = useState([]);
   const [duplicateIds, setDuplicateIds] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   /**
    * useEffect Hook - Runs on component mount
@@ -52,10 +53,32 @@ const SupplierList = () => {
     setSuppliers(prevSuppliers => prevSuppliers.filter(s => s._id !== deletedId));
   };
 
+  // Filter suppliers based on search term
+  const filteredSuppliers = suppliers.filter((supplier) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      supplier.name?.toLowerCase().includes(searchLower) ||
+      supplier.supplierId?.toLowerCase().includes(searchLower) ||
+      supplier.email?.toLowerCase().includes(searchLower) ||
+      supplier.contactNumber?.includes(searchTerm)
+    );
+  });
+
   return (
     <div className="p-8 max-w-7xl mx-auto">
       {/* Page Title */}
       <h2 className="text-3xl font-bold mb-6 text-gray-800">Suppliers</h2>
+      
+      {/* Search Bar */}
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Search suppliers by name, ID, email, or contact number..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
       
       {/* Warning for duplicate IDs */}
       {duplicateIds.length > 0 && (
@@ -68,12 +91,20 @@ const SupplierList = () => {
       
       {/* Supplier Grid - Responsive: 1 column on mobile, 2 columns on medium+, 3 columns on large screens */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Map through suppliers array and render a SupplierCard for each */}
-        {suppliers.map((s) => (
-          <div key={s._id} className={duplicateIds.includes(s.supplierId) ? 'ring-2 ring-red-500 rounded-lg' : ''}>
-            <SupplierCard supplier={s} onDelete={handleDelete} />
+        {/* Map through filtered suppliers array and render a SupplierCard for each */}
+        {filteredSuppliers.length > 0 ? (
+          filteredSuppliers.map((s) => (
+            <div key={s._id} className={duplicateIds.includes(s.supplierId) ? 'ring-2 ring-red-500 rounded-lg' : ''}>
+              <SupplierCard supplier={s} onDelete={handleDelete} />
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-500 text-lg">
+              {searchTerm ? "No suppliers found matching your search." : "No suppliers available."}
+            </p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
