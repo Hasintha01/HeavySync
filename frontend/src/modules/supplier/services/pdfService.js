@@ -7,7 +7,7 @@
  */
 
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import 'jspdf-autotable';
 
 /**
  * Generate PDF for a purchase order
@@ -132,7 +132,7 @@ const generatePurchaseOrderPDF = (order) => {
   ]);
 
   // Add table using autoTable
-  autoTable(doc, {
+  doc.autoTable({
     startY: 145,
     head: [['#', 'Item Name', 'Quantity', 'Unit Price', 'Total']],
     body: tableData,

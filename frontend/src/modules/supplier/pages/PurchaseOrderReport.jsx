@@ -6,8 +6,7 @@ import purchaseOrderService from "../services/purchaseOrderService";
 import supplierService from "../services/supplierService";
 import { FiFilter, FiDownload, FiRefreshCw } from "react-icons/fi";
 import jsPDF from "jspdf";
-// eslint-disable-next-line no-unused-vars
-import autoTable from "jspdf-autotable";
+import 'jspdf-autotable';
 
 /**
  * Purchase Order Summary Report Component
@@ -212,7 +211,7 @@ const PurchaseOrderReport = () => {
             ];
         });
 
-        autoTable(doc, {
+        doc.autoTable({
             startY: yPos,
             head: [['PO ID', 'Supplier', 'Date', 'Status', 'Total Amount']],
             body: tableData,
