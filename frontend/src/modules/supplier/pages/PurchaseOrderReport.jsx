@@ -212,7 +212,7 @@ const PurchaseOrderReport = () => {
             ];
         });
 
-        doc.autoTable({
+        autoTable(doc, {
             startY: yPos,
             head: [['PO ID', 'Supplier', 'Date', 'Status', 'Total Amount']],
             body: tableData,

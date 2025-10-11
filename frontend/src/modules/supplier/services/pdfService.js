@@ -6,8 +6,8 @@
  * Uses jsPDF and jspdf-autotable for creating professional invoices
  */
 
-import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 /**
  * Generate PDF for a purchase order
@@ -132,7 +132,7 @@ const generatePurchaseOrderPDF = (order) => {
   ]);
 
   // Add table using autoTable
-  doc.autoTable({
+  autoTable(doc, {
     startY: 145,
     head: [['#', 'Item Name', 'Quantity', 'Unit Price', 'Total']],
     body: tableData,
