@@ -15,6 +15,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { 
   FiUsers, 
   FiPackage, 
@@ -23,7 +24,8 @@ import {
   FiAlertTriangle,
   FiTrendingUp,
   FiPlusCircle,
-  FiChevronDown
+  FiChevronDown,
+  FiSettings
 } from "react-icons/fi";
 
 // Import services to fetch data
@@ -185,8 +187,10 @@ const Dashboard = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading dashboard...</p>
+          <span className="inline-flex items-center justify-center rounded-full h-16 w-16 bg-gray-100 mx-auto mb-4">
+            <FiSettings className="animate-spin text-blue-600" style={{ fontSize: '2.5rem' }} />
+          </span>
+          <p className="text-gray-600 text-lg font-medium">Building Component...</p>
         </div>
       </div>
     );
