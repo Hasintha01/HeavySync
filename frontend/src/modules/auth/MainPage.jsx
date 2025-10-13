@@ -2,30 +2,22 @@
 // Main login and user creation page for HeavySync
 // Shows username/password fields and a button to reveal the registration form
 import React, { useState } from 'react';
-import RegisterForm from './RegisterForm';
 
 const MainPage = () => {
 
-  // State to show/hide registration form
-  const [showRegister, setShowRegister] = useState(false);
+  // For navigation
+  let navigate;
+  try {
+    navigate = require('react-router-dom').useNavigate();
+  } catch (e) {
+    navigate = null;
+  }
   // State for login form fields
   const [login, setLogin] = useState({ username: '', password: '' });
   // State for login feedback
   const [loginMessage, setLoginMessage] = useState('');
   // State for login loading
   const [loginLoading, setLoginLoading] = useState(false);
-
-  // For navigation after login
-  // Only import useNavigate if using react-router-dom v6+
-  // If not available, replace with window.location
-  let navigate;
-  try {
-    // Dynamically require to avoid breaking if not present
-    // eslint-disable-next-line
-    navigate = require('react-router-dom').useNavigate();
-  } catch (e) {
-    navigate = null;
-  }
 
   // Handle login field changes
   const handleLoginChange = (e) => {
@@ -66,6 +58,12 @@ const MainPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-center text-blue-700">
+          Welcome to the HeavySync<br />
+          Supplier &amp; Purchase Order Management
+        </h1>
+      </div>
       <form onSubmit={handleLoginSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow mb-6">
         <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
         <input
@@ -89,21 +87,20 @@ const MainPage = () => {
         <button
           type="submit"
           disabled={loginLoading}
-          className="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition mb-2"
+          className="w-full py-2 rounded font-semibold mb-2 text-white transition bg-gradient-to-r from-blue-700 to-blue-400 shadow-lg text-lg hover:from-blue-800 hover:to-blue-500"
         >
           {loginLoading ? 'Logging in...' : 'Login'}
         </button>
         <button
           type="button"
-          className="w-full bg-green-600 text-white py-2 rounded font-semibold hover:bg-green-700 transition"
-          onClick={() => setShowRegister(!showRegister)}
+          className="w-full py-2 rounded font-semibold text-white transition bg-gradient-to-r from-green-700 to-green-400 shadow-lg text-lg hover:from-green-800 hover:to-green-500"
+          onClick={() => navigate ? navigate('/register') : window.location.href = '/register'}
         >
           Create User
         </button>
         {/* Show login feedback message if present */}
         {loginMessage && <p className="mt-4 text-center text-red-600">{loginMessage}</p>}
       </form>
-      {showRegister && <RegisterForm />}
     </div>
   );
 };

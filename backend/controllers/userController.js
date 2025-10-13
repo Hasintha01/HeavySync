@@ -34,17 +34,22 @@ exports.login = async (req, res) => {
 // Registers a new user account
 exports.register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { fullName, username, email, password, phone, role } = req.body;
+    // Basic validation
+    if (!fullName || !username || !email || !password) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
     // Prevent duplicate usernames/emails
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
       return res.status(400).json({ message: 'Username or email already exists' });
     }
     // Save new user to database
-    const user = new User({ username, email, password });
+    const user = new User({ fullName, username, email, password, phone, role });
     await user.save();
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    console.error('Registration error:', err);
+    res.status(500).json({ message: 'Server error', error: err.message, stack: err.stack });
   }
 };
