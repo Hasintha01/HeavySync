@@ -1,3 +1,16 @@
+// GET /api/users/me
+// Returns authenticated user's profile
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
 // userController.js
 // User registration and login logic for HeavySync backend
 // See: https://github.com/Hasintha01/HeavySync for API details

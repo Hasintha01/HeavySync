@@ -39,13 +39,15 @@ const MainPage = () => {
       if (res.ok && data.token) {
         // Store JWT in localStorage for future requests
         localStorage.setItem('token', data.token);
-        setLoginMessage('Login successful!');
-        // Navigate to dashboard
-        if (navigate) {
-          navigate('/');
-        } else {
-          window.location.href = '/';
-        }
+        setLoginMessage('Login successful! Redirecting to dashboard...');
+        // Navigate to dashboard page
+        setTimeout(() => {
+          if (navigate) {
+            navigate('/dashboard');
+          } else {
+            window.location.href = '/dashboard';
+          }
+        }, 1200);
       } else {
         setLoginMessage(data.message || 'Login failed');
       }

@@ -1,3 +1,4 @@
+import ProfilePage from './modules/auth/ProfilePage';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -57,6 +58,7 @@ function App() {
                     <Route path="reports/purchase-orders" element={<PurchaseOrderReport />} />
                     {/* Quotation Routes */}
                     <Route path="quotations" element={<QuotationComparison />} />
+                      <Route path="/profile" element={<ProfilePage />} />
                   </Routes>
                 </main>
                 <Footer />

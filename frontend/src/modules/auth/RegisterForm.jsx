@@ -63,10 +63,16 @@ const RegisterForm = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        setMessage('Registration successful!');
+        setMessage('Registration successful! Redirecting to login...');
         setForm({
           fullName: '', username: '', email: '', password: '', confirmPassword: '', role: 'admin', phone: '', terms: false
         });
+        // Redirect to login page after short delay
+        setTimeout(() => {
+          if (window.location) {
+            window.location.href = '/login';
+          }
+        }, 1200);
       } else {
         setMessage(data.message || 'Registration failed');
       }
