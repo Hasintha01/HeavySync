@@ -16,7 +16,10 @@ const API_URL = "http://localhost:5000/api/suppliers";
  * @returns {Promise<Array>} Array of supplier objects
  */
 const getSuppliers = async () => {
-  const res = await axios.get(API_URL);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.get(API_URL, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
@@ -26,7 +29,10 @@ const getSuppliers = async () => {
  * @returns {Promise<Object>} Supplier object
  */
 const getSupplierById = async (id) => {
-  const res = await axios.get(`${API_URL}/${id}`);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.get(`${API_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
@@ -36,7 +42,10 @@ const getSupplierById = async (id) => {
  * @returns {Promise<Object>} Created supplier object
  */
 const createSupplier = async (supplierData) => {
-  const res = await axios.post(API_URL, supplierData);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.post(API_URL, supplierData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
@@ -47,7 +56,10 @@ const createSupplier = async (supplierData) => {
  * @returns {Promise<Object>} Updated supplier object
  */
 const updateSupplier = async (id, supplierData) => {
-  const res = await axios.put(`${API_URL}/${id}`, supplierData);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.put(`${API_URL}/${id}`, supplierData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
@@ -57,7 +69,10 @@ const updateSupplier = async (id, supplierData) => {
  * @returns {Promise<Object>} Deletion confirmation message
  */
 const deleteSupplier = async (id) => {
-  const res = await axios.delete(`${API_URL}/${id}`);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.delete(`${API_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 

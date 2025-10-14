@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { FiUsers, FiChevronDown } from 'react-icons/fi';
 import './Header.css';
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const token = localStorage.getItem('authToken');
+
+  // Hide header on login/register pages
+  if (!token || location.pathname === '/login' || location.pathname === '/register') {
+    return null;
+  }
 
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
@@ -12,6 +20,12 @@ const Header = () => {
 
   const closeDropdowns = () => {
     setOpenDropdown(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    closeDropdowns();
+    navigate('/login');
   };
 
   return (
@@ -199,7 +213,7 @@ const Header = () => {
                   <button
                     className="dropdown-item"
                     style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', padding: '0.9rem 1.2rem', color: '#374151', fontWeight: 500, background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
-                    onClick={() => { localStorage.removeItem('token'); closeDropdowns(); window.location.href = '/login'; }}
+                    onClick={handleLogout}
                   >
                     <span style={{ color: '#6366f1', fontSize: '1.1rem' }}><FiUsers /></span> Log out
                   </button>

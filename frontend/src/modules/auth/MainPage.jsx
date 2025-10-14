@@ -38,7 +38,7 @@ const MainPage = () => {
       const data = await res.json();
       if (res.ok && data.token) {
         // Store JWT in localStorage for future requests
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('authToken', data.token);
         setLoginMessage('Login successful! Redirecting to dashboard...');
         // Navigate to dashboard page
         setTimeout(() => {

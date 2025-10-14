@@ -14,7 +14,10 @@ const API_URL = "http://localhost:5000/api/parts";
  * @returns {Promise} Array of parts
  */
 const getParts = async () => {
-    const response = await axios.get(API_URL);
+    const token = localStorage.getItem('authToken');
+    const response = await axios.get(API_URL, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
 };
 
@@ -24,7 +27,10 @@ const getParts = async () => {
  * @returns {Promise} Part object
  */
 const getPartById = async (id) => {
-    const response = await axios.get(`${API_URL}/${id}`);
+    const token = localStorage.getItem('authToken');
+    const response = await axios.get(`${API_URL}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
 };
 
@@ -34,7 +40,10 @@ const getPartById = async (id) => {
  * @returns {Promise} Array of parts in category
  */
 const getPartsByCategory = async (categoryId) => {
-    const response = await axios.get(`${API_URL}/category/${categoryId}`);
+    const token = localStorage.getItem('authToken');
+    const response = await axios.get(`${API_URL}/category/${categoryId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
 };
 
@@ -43,7 +52,10 @@ const getPartsByCategory = async (categoryId) => {
  * @returns {Promise} Array of parts with low stock
  */
 const getLowStockParts = async () => {
-    const response = await axios.get(`${API_URL}/low-stock`);
+    const token = localStorage.getItem('authToken');
+    const response = await axios.get(`${API_URL}/low-stock`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
 };
 
@@ -53,7 +65,10 @@ const getLowStockParts = async () => {
  * @returns {Promise} Created part object
  */
 const createPart = async (partData) => {
-    const response = await axios.post(API_URL, partData);
+    const token = localStorage.getItem('authToken');
+    const response = await axios.post(API_URL, partData, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
 };
 
@@ -64,7 +79,10 @@ const createPart = async (partData) => {
  * @returns {Promise} Updated part object
  */
 const updatePart = async (id, partData) => {
-    const response = await axios.put(`${API_URL}/${id}`, partData);
+    const token = localStorage.getItem('authToken');
+    const response = await axios.put(`${API_URL}/${id}`, partData, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
 };
 
@@ -75,7 +93,10 @@ const updatePart = async (id, partData) => {
  * @returns {Promise} Updated part object
  */
 const updatePartQuantity = async (id, quantity) => {
-    const response = await axios.patch(`${API_URL}/${id}/quantity`, { quantity });
+    const token = localStorage.getItem('authToken');
+    const response = await axios.patch(`${API_URL}/${id}/quantity`, { quantity }, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
 };
 
@@ -85,7 +106,10 @@ const updatePartQuantity = async (id, quantity) => {
  * @returns {Promise} Success message
  */
 const deletePart = async (id) => {
-    const response = await axios.delete(`${API_URL}/${id}`);
+    const token = localStorage.getItem('authToken');
+    const response = await axios.delete(`${API_URL}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
 };
 

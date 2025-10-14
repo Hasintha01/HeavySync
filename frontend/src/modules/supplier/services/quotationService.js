@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // Quotation Service - Handles all API calls related to quotations
 
 const API_BASE_URL = "http://localhost:5000/api";
@@ -9,25 +11,11 @@ const API_BASE_URL = "http://localhost:5000/api";
  */
 export const createQuotation = async (quotationData) => {
     try {
-        console.log("Creating quotation with data:", quotationData);
-        
-        const response = await fetch(`${API_BASE_URL}/quotations`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(quotationData),
+        const token = localStorage.getItem('authToken');
+        const response = await axios.post(`${API_BASE_URL}/quotations`, quotationData, {
+            headers: { Authorization: `Bearer ${token}` }
         });
-
-        const data = await response.json();
-        
-        if (!response.ok) {
-            console.error("Server error response:", data);
-            throw new Error(data.message || "Failed to create quotation");
-        }
-
-        console.log("Quotation created successfully:", data);
-        return data;
+        return response.data;
     } catch (error) {
         console.error("Error creating quotation:", error);
         throw error;
@@ -40,13 +28,11 @@ export const createQuotation = async (quotationData) => {
  */
 export const getAllQuotations = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/quotations`);
-
-        if (!response.ok) {
-            throw new Error("Failed to fetch quotations");
-        }
-
-        return await response.json();
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get(`${API_BASE_URL}/quotations`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return response.data;
     } catch (error) {
         console.error("Error fetching quotations:", error);
         throw error;
@@ -60,13 +46,11 @@ export const getAllQuotations = async () => {
  */
 export const getQuotationById = async (id) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/quotations/${id}`);
-
-        if (!response.ok) {
-            throw new Error("Failed to fetch quotation");
-        }
-
-        return await response.json();
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get(`${API_BASE_URL}/quotations/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return response.data;
     } catch (error) {
         console.error("Error fetching quotation:", error);
         throw error;
@@ -81,20 +65,11 @@ export const getQuotationById = async (id) => {
  */
 export const updateQuotationStatus = async (id, status) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/quotations/${id}/status`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ status }),
+        const token = localStorage.getItem('authToken');
+        const response = await axios.put(`${API_BASE_URL}/quotations/${id}/status`, { status }, {
+            headers: { Authorization: `Bearer ${token}` }
         });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || "Failed to update quotation status");
-        }
-
-        return await response.json();
+        return response.data;
     } catch (error) {
         console.error("Error updating quotation status:", error);
         throw error;
@@ -110,23 +85,11 @@ export const updateQuotationStatus = async (id, status) => {
  */
 export const updateSupplierQuote = async (quotationId, supplierId, quoteData) => {
     try {
-        const response = await fetch(
-            `${API_BASE_URL}/quotations/${quotationId}/supplier/${supplierId}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(quoteData),
-            }
-        );
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || "Failed to update supplier quote");
-        }
-
-        return await response.json();
+        const token = localStorage.getItem('authToken');
+        const response = await axios.put(`${API_BASE_URL}/quotations/${quotationId}/supplier/${supplierId}`, quoteData, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return response.data;
     } catch (error) {
         console.error("Error updating supplier quote:", error);
         throw error;
@@ -140,16 +103,11 @@ export const updateSupplierQuote = async (quotationId, supplierId, quoteData) =>
  */
 export const deleteQuotation = async (id) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/quotations/${id}`, {
-            method: "DELETE",
+        const token = localStorage.getItem('authToken');
+        const response = await axios.delete(`${API_BASE_URL}/quotations/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
         });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || "Failed to delete quotation");
-        }
-
-        return await response.json();
+        return response.data;
     } catch (error) {
         console.error("Error deleting quotation:", error);
         throw error;

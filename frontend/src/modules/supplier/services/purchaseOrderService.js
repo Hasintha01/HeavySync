@@ -17,7 +17,10 @@ const API_URL = "http://localhost:5000/api/purchase-orders";
  * @returns {Promise<Array>} Array of purchase order objects
  */
 const getOrders = async () => {
-  const res = await axios.get(API_URL);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.get(API_URL, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
@@ -27,7 +30,10 @@ const getOrders = async () => {
  * @returns {Promise<Object>} Purchase order object
  */
 const getOrderById = async (id) => {
-  const res = await axios.get(`${API_URL}/${id}`);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.get(`${API_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
@@ -37,7 +43,10 @@ const getOrderById = async (id) => {
  * @returns {Promise<Object>} Created purchase order object
  */
 const createOrder = async (orderData) => {
-  const res = await axios.post(API_URL, orderData);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.post(API_URL, orderData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
@@ -48,7 +57,10 @@ const createOrder = async (orderData) => {
  * @returns {Promise<Object>} Updated purchase order object
  */
 const updateOrder = async (id, orderData) => {
-  const res = await axios.put(`${API_URL}/${id}`, orderData);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.put(`${API_URL}/${id}`, orderData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 
@@ -58,7 +70,10 @@ const updateOrder = async (id, orderData) => {
  * @returns {Promise<Object>} Deletion confirmation message
  */
 const deleteOrder = async (id) => {
-  const res = await axios.delete(`${API_URL}/${id}`);
+  const token = localStorage.getItem('authToken');
+  const res = await axios.delete(`${API_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return res.data;
 };
 

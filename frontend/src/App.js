@@ -7,6 +7,7 @@ import './App.css';
 // Import components
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Import pages
 import Dashboard from './modules/supplier/pages/Dashboard';
@@ -36,61 +37,63 @@ function App() {
           <Route
             path="/*"
             element={
-              <>
-                <Header />
-                <main className="App-main">
-                  <Routes>
-                    <Route path="dashboard" element={<Dashboard />} />
-                    {/* Supplier Routes */}
-                    <Route path="suppliers" element={<SupplierList />} />
-                    <Route path="suppliers/new" element={<SupplierForm />} />
-                    <Route path="suppliers/edit/:id" element={<SupplierForm />} />
-                    {/* Parts Routes */}
-                    <Route path="parts" element={<PartList />} />
-                    <Route path="parts/new" element={<PartForm />} />
-                    <Route path="parts/edit/:id" element={<PartForm />} />
-                    {/* Purchase Order Routes */}
-                    <Route path="purchase-orders" element={<PurchaseOrderList />} />
-                    <Route path="purchase-orders/new" element={<PurchaseOrderForm />} />
-                    <Route path="purchase-orders/edit/:id" element={<PurchaseOrderForm />} />
-                    <Route path="purchase-orders/:id" element={<PurchaseOrderDetail />} />
-                    {/* Reports Routes */}
-                    <Route path="reports/purchase-orders" element={<PurchaseOrderReport />} />
-                    {/* Quotation Routes */}
-                    <Route path="quotations" element={<QuotationComparison />} />
-                      <Route path="/profile" element={<ProfilePage />} />
-                  </Routes>
-                </main>
-                <Footer />
-                {/* Toast Notifications Container */}
-                <Toaster
-                  position="top-right"
-                  reverseOrder={false}
-                  toastOptions={{
-                    duration: 4000,
-                    style: {
-                      background: '#363636',
-                      color: '#fff',
-                      padding: '16px',
-                      borderRadius: '8px',
-                    },
-                    success: {
-                      duration: 3000,
-                      iconTheme: {
-                        primary: '#10b981',
-                        secondary: '#fff',
-                      },
-                    },
-                    error: {
+              <ProtectedRoute>
+                <>
+                  <Header />
+                  <main className="App-main">
+                    <Routes>
+                      <Route path="dashboard" element={<Dashboard />} />
+                      {/* Supplier Routes */}
+                      <Route path="suppliers" element={<SupplierList />} />
+                      <Route path="suppliers/new" element={<SupplierForm />} />
+                      <Route path="suppliers/edit/:id" element={<SupplierForm />} />
+                      {/* Parts Routes */}
+                      <Route path="parts" element={<PartList />} />
+                      <Route path="parts/new" element={<PartForm />} />
+                      <Route path="parts/edit/:id" element={<PartForm />} />
+                      {/* Purchase Order Routes */}
+                      <Route path="purchase-orders" element={<PurchaseOrderList />} />
+                      <Route path="purchase-orders/new" element={<PurchaseOrderForm />} />
+                      <Route path="purchase-orders/edit/:id" element={<PurchaseOrderForm />} />
+                      <Route path="purchase-orders/:id" element={<PurchaseOrderDetail />} />
+                      {/* Reports Routes */}
+                      <Route path="reports/purchase-orders" element={<PurchaseOrderReport />} />
+                      {/* Quotation Routes */}
+                      <Route path="quotations" element={<QuotationComparison />} />
+                      <Route path="profile" element={<ProfilePage />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                  {/* Toast Notifications Container */}
+                  <Toaster
+                    position="top-right"
+                    reverseOrder={false}
+                    toastOptions={{
                       duration: 4000,
-                      iconTheme: {
-                        primary: '#ef4444',
-                        secondary: '#fff',
+                      style: {
+                        background: '#363636',
+                        color: '#fff',
+                        padding: '16px',
+                        borderRadius: '8px',
                       },
-                    },
-                  }}
-                />
-              </>
+                      success: {
+                        duration: 3000,
+                        iconTheme: {
+                          primary: '#10b981',
+                          secondary: '#fff',
+                        },
+                      },
+                      error: {
+                        duration: 4000,
+                        iconTheme: {
+                          primary: '#ef4444',
+                          secondary: '#fff',
+                        },
+                      },
+                    }}
+                  />
+                </>
+              </ProtectedRoute>
             }
           />
         </Routes>
