@@ -11,10 +11,11 @@ const {
     updatePartQuantity,
     deletePart,
 } = require("../controllers/partController");
+    const auth = require('../middleware/auth');
 
 // @route   POST /api/parts
 // @desc    Create a new part
-router.post("/", createPart);
+router.post("/", auth, createPart);
 
 // @route   GET /api/parts
 // @desc    Get all parts
@@ -34,14 +35,14 @@ router.get("/:id", getPartById);
 
 // @route   PUT /api/parts/:id
 // @desc    Update a part
-router.put("/:id", updatePart);
+router.put("/:id", auth, updatePart);
 
 // @route   PATCH /api/parts/:id/quantity
 // @desc    Update part quantity only
-router.patch("/:id/quantity", updatePartQuantity);
+router.patch("/:id/quantity", auth, updatePartQuantity);
 
 // @route   DELETE /api/parts/:id
 // @desc    Delete a part
-router.delete("/:id", deletePart);
+router.delete("/:id", auth, deletePart);
 
 module.exports = router;

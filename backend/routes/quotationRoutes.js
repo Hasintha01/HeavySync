@@ -11,13 +11,14 @@ const {
     updateSupplierQuote,
     deleteQuotation,
 } = require("../controllers/quotationController");
+const auth = require('../middleware/auth');
 
 /**
  * @route   POST /api/quotations
  * @desc    Create a new quotation request
  * @access  Public
  */
-router.post("/", createQuotation);
+router.post("/", auth, createQuotation);
 
 /**
  * @route   GET /api/quotations
@@ -38,20 +39,20 @@ router.get("/:id", getQuotationById);
  * @desc    Update quotation status
  * @access  Public
  */
-router.put("/:id/status", updateQuotationStatus);
+router.put("/:id/status", auth, updateQuotationStatus);
 
 /**
  * @route   PUT /api/quotations/:id/supplier/:supplierId
  * @desc    Update supplier quote in a quotation
  * @access  Public
  */
-router.put("/:id/supplier/:supplierId", updateSupplierQuote);
+router.put("/:id/supplier/:supplierId", auth, updateSupplierQuote);
 
 /**
  * @route   DELETE /api/quotations/:id
  * @desc    Delete a quotation
  * @access  Public
  */
-router.delete("/:id", deleteQuotation);
+router.delete("/:id", auth, deleteQuotation);
 
 module.exports = router;
