@@ -35,7 +35,7 @@ const Header = () => {
           {/* Brand Section */}
           <div className="logo-section" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', minWidth: 180 }}>
             <h1 style={{ fontWeight: 700, fontSize: '1.7rem', color: '#6366f1', marginBottom: 0 }}>HeavySync</h1>
-            <p className="tagline" style={{ fontSize: '0.98rem', color: '#6366f1', fontWeight: 500, marginTop: 2, textShadow: '0 1px 2px rgba(0,0,0,0.07)' }}>Supplier & Purchase Order Management</p>
+            <p className="tagline" style={{ fontSize: '0.98rem', color: '#fff', fontWeight: 500, marginTop: 2, textShadow: '0 1px 2px rgba(0,0,0,0.07)' }}>Supplier & Purchase Order Management</p>
           </div>
 
           {/* Navigation Section */}
@@ -50,7 +50,7 @@ const Header = () => {
                 className={`nav-link dropdown-toggle ${openDropdown === 'suppliers' ? 'active' : ''}`}
                 style={{
                   fontWeight: 500,
-                  color: '#6366f1',
+                  color: '#fff',
                   fontSize: '1rem',
                   padding: '0.5rem 1rem',
                   background: openDropdown === 'suppliers' ? '#eef2ff' : 'none',
@@ -90,7 +90,7 @@ const Header = () => {
                 className={`nav-link dropdown-toggle ${openDropdown === 'parts' ? 'active' : ''}`}
                 style={{
                   fontWeight: 500,
-                  color: '#6366f1',
+                  color: '#fff',
                   fontSize: '1rem',
                   padding: '0.5rem 1rem',
                   background: openDropdown === 'parts' ? '#eef2ff' : 'none',
