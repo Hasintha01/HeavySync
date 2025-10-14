@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './ProfilePage.css';
-
-// Dummy user data for initial layout (replace with API call)
-// Remove dummyUser, use API data
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -15,34 +13,24 @@ const ProfilePage = () => {
   const [passwords, setPasswords] = useState({ old: '', new: '', confirm: '' });
   const [message, setMessage] = useState('');
 
-  // TODO: Replace with API call to fetch user info
   useEffect(() => {
-    // Fetch user info from backend
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('authToken');
         if (!token) {
           setMessage('No token found. Please log in again.');
           return;
         }
-        const res = await fetch('/api/users/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+        const { data } = await axios.get('http://localhost:5000/api/users/me', {
+          headers: { Authorization: `Bearer ${token}` }
         });
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-          setEditData({
-            fullName: data.fullName || '',
-            phone: data.phone || '',
-          });
-        } else {
-          const errorText = await res.text();
-          setMessage(`Error ${res.status}: ${errorText}`);
-        }
+        setUser(data);
+        setEditData({
+          fullName: data.fullName || '',
+          phone: data.phone || '',
+        });
       } catch (err) {
-        setMessage('Failed to load user info: ' + err.message);
+        setMessage('Failed to load user info: ' + (err.response?.data?.message || err.message));
       }
     };
     fetchUser();
@@ -52,59 +40,43 @@ const ProfilePage = () => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
 
-  const handleSave = e => {
+  const handleSave = async e => {
     e.preventDefault();
-    // API call to update user info
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    fetch('/api/users/me', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify(editData),
-    })
-      .then(res => res.json())
-      .then(data => {
-        setUser({ ...user, ...editData });
-        setEditMode(false);
-        setMessage('Profile updated successfully!');
-        setTimeout(() => setMessage(''), 2000);
-      })
-      .catch(() => {
-        setMessage('Failed to update profile');
+    try {
+      const token = localStorage.getItem('authToken');
+      const res = await axios.put('http://localhost:5000/api/users/me', editData, {
+        headers: { Authorization: `Bearer ${token}` }
       });
+      setUser({ ...user, ...editData });
+      setEditMode(false);
+      setMessage('Profile updated successfully!');
+      setTimeout(() => setMessage(''), 2000);
+    } catch (err) {
+      setMessage('Failed to update profile: ' + (err.response?.data?.message || err.message));
+    }
   };
 
-  const handlePasswordChange = e => {
+  const handlePasswordChange = async e => {
     e.preventDefault();
     if (passwords.new !== passwords.confirm) {
       setMessage('New passwords do not match!');
       return;
     }
-    const token = localStorage.getItem('token');
-    fetch('/api/users/change-password', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({
+    try {
+      const token = localStorage.getItem('authToken');
+      const res = await axios.post('http://localhost:5000/api/users/change-password', {
         oldPassword: passwords.old,
         newPassword: passwords.new,
-      }),
-    })
-      .then(res => res.json())
-      .then(data => {
-        setShowPasswordModal(false);
-        setMessage(data.message || 'Password changed successfully!');
-        setTimeout(() => setMessage(''), 2000);
-        setPasswords({ old: '', new: '', confirm: '' });
-      })
-      .catch(() => {
-        setMessage('Failed to change password');
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
       });
+      setShowPasswordModal(false);
+      setMessage(res.data.message || 'Password changed successfully!');
+      setTimeout(() => setMessage(''), 2000);
+      setPasswords({ old: '', new: '', confirm: '' });
+    } catch (err) {
+      setMessage('Failed to change password: ' + (err.response?.data?.message || err.message));
+    }
   };
 
   return (
@@ -152,7 +124,7 @@ const ProfilePage = () => {
                 <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-blue-700 to-blue-400 shadow-lg text-lg hover:from-blue-800 hover:to-blue-500" onClick={() => setEditMode(true)}>Edit</button>
               )}
               <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-yellow-700 to-yellow-400 shadow-lg text-lg hover:from-yellow-800 hover:to-yellow-500" onClick={() => setShowPasswordModal(true)}>Change Password</button>
-              <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-red-700 to-red-400 shadow-lg text-lg hover:from-red-800 hover:to-red-500" onClick={() => { localStorage.removeItem('token'); window.location.href = '/login'; }}>Log out</button>
+              <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-red-700 to-red-400 shadow-lg text-lg hover:from-red-800 hover:to-red-500" onClick={() => { localStorage.removeItem('authToken'); window.location.href = '/login'; }}>Log out</button>
             </div>
             {message && <div className="mt-4 text-center text-green-600">{message}</div>}
           </form>

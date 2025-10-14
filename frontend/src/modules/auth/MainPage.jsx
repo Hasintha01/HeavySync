@@ -61,7 +61,7 @@ const MainPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
       {/* Removed welcome text as requested */}
-      <form onSubmit={handleLoginSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow mb-6">
+      <form onSubmit={handleLoginSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow mb-6" autoComplete="on">
         <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
         <input
           type="text"
@@ -71,6 +71,7 @@ const MainPage = () => {
           onChange={handleLoginChange}
           required
           className="w-full px-3 py-2 border rounded mb-3"
+          autoComplete="username"
         />
         <input
           type="password"
@@ -80,6 +81,7 @@ const MainPage = () => {
           onChange={handleLoginChange}
           required
           className="w-full px-3 py-2 border rounded mb-4"
+          autoComplete="current-password"
         />
         <button
           type="submit"
