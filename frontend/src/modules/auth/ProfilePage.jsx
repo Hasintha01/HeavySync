@@ -10,7 +10,6 @@ const ProfilePage = () => {
   const [editData, setEditData] = useState({
     fullName: '',
     phone: '',
-    department: '',
   });
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwords, setPasswords] = useState({ old: '', new: '', confirm: '' });
@@ -37,7 +36,6 @@ const ProfilePage = () => {
           setEditData({
             fullName: data.fullName || '',
             phone: data.phone || '',
-            department: data.department || '',
           });
         } else {
           const errorText = await res.text();
@@ -110,72 +108,54 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="profile-bg">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       {!user && !message ? (
-        <div className="profile-card" style={{ textAlign: 'center', padding: '3rem' }}>
+        <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-4xl mx-auto mt-12" style={{ textAlign: 'center' }}>
           <span>Loading profile...</span>
         </div>
       ) : message && !user ? (
-        <div className="profile-card" style={{ textAlign: 'center', padding: '3rem', color: 'red' }}>
+        <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-4xl mx-auto mt-12" style={{ textAlign: 'center', color: 'red' }}>
           <span>{message}</span>
         </div>
       ) : (
-        <>
-          <div className="profile-card">
-            <div className="profile-header">
-              <div className="profile-avatar">
-                {user.fullName ? user.fullName.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase() : 'U'}
-              </div>
-              <div>
-                <h2>{user.fullName || ''}</h2>
-                <p className="profile-role">{user.role || ''}, HeavySync</p>
-              </div>
-            </div>
-            <div className="profile-info">
-              <div className="profile-row">
-                <span>Email:</span>
-                <span className="profile-value">{user.email || ''}</span>
-              </div>
-              <div className="profile-row">
-                <span>Department:</span>
-                <span className="profile-value">{editMode ? (
-                  <input name="department" value={editData.department} onChange={handleEditChange} className="profile-input" />
-                ) : (user.department || '')}</span>
-              </div>
-              <div className="profile-row">
-                <span>Contact No:</span>
-                <span className="profile-value">{editMode ? (
-                  <input name="phone" value={editData.phone} onChange={handleEditChange} className="profile-input" />
-                ) : (user.phone || '')}</span>
-              </div>
-              <div className="profile-row">
-                <span>Joined:</span>
-                <span className="profile-value">{user.joined || user.createdAt || ''}</span>
-              </div>
-              <div className="profile-row">
-                <span>Last Login:</span>
-                <span className="profile-value">{user.lastLogin || user.updatedAt || ''}</span>
-              </div>
-              <div className="profile-row">
-                <span>User ID:</span>
-                <span className="profile-value">{user.userId || user._id || ''}</span>
-              </div>
-              <div className="profile-row">
-                <span>Account Type:</span>
-                <span className="profile-value">{user.accountType || user.role || ''}</span>
-              </div>
-            </div>
-            <div className="profile-actions">
+        <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-4xl mx-auto mt-12">
+          <h2 className="text-2xl font-bold mb-6 text-center">Profile</h2>
+          <form className="space-y-4" onSubmit={handleSave}>
+            <div>
+              <label htmlFor="fullName" className="block mb-1 font-medium">Full Name <span className="text-red-500">*</span></label>
               {editMode ? (
-                <button className="profile-btn save" onClick={handleSave}>Save</button>
+                <input type="text" name="fullName" id="fullName" value={editData.fullName} onChange={handleEditChange} required className="w-full px-3 py-2 border rounded" />
               ) : (
-                <button className="profile-btn edit" onClick={() => setEditMode(true)}>Edit Details</button>
+                <input type="text" name="fullName" id="fullName" value={user.fullName || ''} readOnly className="w-full px-3 py-2 border rounded bg-gray-100" />
               )}
-              <button className="profile-btn password" onClick={() => setShowPasswordModal(true)}>Change Password</button>
-              <button className="profile-btn logout" onClick={() => { localStorage.removeItem('token'); window.location.href = '/login'; }}>Log out</button>
             </div>
-            {message && <div className="profile-message">{message}</div>}
-          </div>
+            <div>
+              <label htmlFor="username" className="block mb-1 font-medium">Username <span className="text-red-500">*</span></label>
+              <input type="text" name="username" id="username" value={user.username || ''} readOnly className="w-full px-3 py-2 border rounded bg-gray-100" />
+            </div>
+            <div>
+              <label htmlFor="email" className="block mb-1 font-medium">Email <span className="text-red-500">*</span></label>
+              <input type="email" name="email" id="email" value={user.email || ''} readOnly className="w-full px-3 py-2 border rounded bg-gray-100" />
+            </div>
+            <div>
+              <label htmlFor="phone" className="block mb-1 font-medium">Contact Number <span className="text-red-500">*</span></label>
+              {editMode ? (
+                <input type="text" name="phone" id="phone" value={editData.phone} onChange={handleEditChange} required className="w-full px-3 py-2 border rounded" placeholder="0712345678" />
+              ) : (
+                <input type="text" name="phone" id="phone" value={user.phone || ''} readOnly className="w-full px-3 py-2 border rounded bg-gray-100" />
+              )}
+            </div>
+            <div className="flex items-center gap-4 mt-4">
+              {editMode ? (
+                <button type="submit" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-green-700 to-green-400 shadow-lg text-lg hover:from-green-800 hover:to-green-500">Save</button>
+              ) : (
+                <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-blue-700 to-blue-400 shadow-lg text-lg hover:from-blue-800 hover:to-blue-500" onClick={() => setEditMode(true)}>Edit</button>
+              )}
+              <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-yellow-700 to-yellow-400 shadow-lg text-lg hover:from-yellow-800 hover:to-yellow-500" onClick={() => setShowPasswordModal(true)}>Change Password</button>
+              <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-red-700 to-red-400 shadow-lg text-lg hover:from-red-800 hover:to-red-500" onClick={() => { localStorage.removeItem('token'); window.location.href = '/login'; }}>Log out</button>
+            </div>
+            {message && <div className="mt-4 text-center text-green-600">{message}</div>}
+          </form>
           {showPasswordModal && (
             <div className="profile-modal-bg">
               <div className="profile-modal">
@@ -184,6 +164,7 @@ const ProfilePage = () => {
                   <input type="password" name="old" placeholder="Old Password" value={passwords.old} onChange={e => setPasswords({ ...passwords, old: e.target.value })} className="profile-input" required />
                   <input type="password" name="new" placeholder="New Password" value={passwords.new} onChange={e => setPasswords({ ...passwords, new: e.target.value })} className="profile-input" required />
                   <input type="password" name="confirm" placeholder="Confirm New Password" value={passwords.confirm} onChange={e => setPasswords({ ...passwords, confirm: e.target.value })} className="profile-input" required />
+                  <p className="text-xs text-gray-500 mt-1">Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.</p>
                   <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
                     <button type="submit" className="profile-btn save">Submit</button>
                     <button type="button" className="profile-btn logout" onClick={() => setShowPasswordModal(false)}>Cancel</button>
@@ -192,7 +173,7 @@ const ProfilePage = () => {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 // MainPage.jsx
 // Main login and user creation page for HeavySync
-// Shows username/password fields and a button to reveal the registration form
+// Shows username/password fields and a button to navigate to RegisterForm
 import React, { useState } from 'react';
 
 const MainPage = () => {
@@ -60,12 +60,7 @@ const MainPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-center text-blue-700">
-          Welcome to the HeavySync<br />
-          Supplier &amp; Purchase Order Management
-        </h1>
-      </div>
+      {/* Removed welcome text as requested */}
       <form onSubmit={handleLoginSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow mb-6">
         <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
         <input
@@ -98,7 +93,7 @@ const MainPage = () => {
           className="w-full py-2 rounded font-semibold text-white transition bg-gradient-to-r from-green-700 to-green-400 shadow-lg text-lg hover:from-green-800 hover:to-green-500"
           onClick={() => navigate ? navigate('/register') : window.location.href = '/register'}
         >
-          Create User
+          Create Account
         </button>
         {/* Show login feedback message if present */}
         {loginMessage && <p className="mt-4 text-center text-red-600">{loginMessage}</p>}
