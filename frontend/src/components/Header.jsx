@@ -41,7 +41,19 @@ const Header = () => {
           {/* Navigation Section */}
           <ul className="nav-menu" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', margin: 0, flex: 1, justifyContent: 'center' }}>
             <li>
-              <NavLink to="/dashboard" className="nav-link" style={{ fontWeight: 500, color: '#6366f1', fontSize: '1rem', padding: '0.5rem 1rem' }} activeStyle={{ textDecoration: 'underline', color: '#6366f1' }} onClick={closeDropdowns}>
+              <NavLink
+                to="/dashboard"
+                className="nav-link"
+                style={{
+                  fontWeight: 500,
+                  color: location.pathname === '/dashboard' ? '#6366f1' : '#fff',
+                  fontSize: '1rem',
+                  padding: '0.5rem 1rem',
+                  transition: 'color 0.2s',
+                }}
+                activeStyle={{ textDecoration: 'underline', color: '#6366f1' }}
+                onClick={closeDropdowns}
+              >
                 Dashboard
               </NavLink>
             </li>
@@ -50,13 +62,22 @@ const Header = () => {
                 className={`nav-link dropdown-toggle ${openDropdown === 'suppliers' ? 'active' : ''}`}
                 style={{
                   fontWeight: 500,
-                  color: '#fff',
+                  color:
+                    openDropdown === 'suppliers' || location.pathname === '/suppliers' || location.pathname === '/suppliers/new'
+                      ? '#6366f1'
+                      : '#fff',
                   fontSize: '1rem',
                   padding: '0.5rem 1rem',
-                  background: openDropdown === 'suppliers' ? '#eef2ff' : 'none',
+                  background:
+                    openDropdown === 'suppliers' || location.pathname === '/suppliers' || location.pathname === '/suppliers/new'
+                      ? '#eef2ff'
+                      : 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  borderBottom: openDropdown === 'suppliers' ? '1px solid #6366f1' : '1px solid transparent',
+                  borderBottom:
+                    openDropdown === 'suppliers' || location.pathname === '/suppliers' || location.pathname === '/suppliers/new'
+                      ? '1px solid #6366f1'
+                      : '1px solid transparent',
                   transition: 'background 0.2s, color 0.2s, border-bottom 0.2s',
                   outline: 'none',
                   display: 'flex',
@@ -70,9 +91,18 @@ const Header = () => {
                   e.currentTarget.style.borderBottom = '1px solid #6366f1';
                 }}
                 onMouseOut={e => {
-                  e.currentTarget.style.background = openDropdown === 'suppliers' ? '#eef2ff' : 'none';
-                  e.currentTarget.style.color = '#6366f1';
-                  e.currentTarget.style.borderBottom = openDropdown === 'suppliers' ? '1px solid #6366f1' : '1px solid transparent';
+                  e.currentTarget.style.background =
+                    openDropdown === 'suppliers' || location.pathname === '/suppliers' || location.pathname === '/suppliers/new'
+                      ? '#eef2ff'
+                      : 'none';
+                  e.currentTarget.style.color =
+                    openDropdown === 'suppliers' || location.pathname === '/suppliers' || location.pathname === '/suppliers/new'
+                      ? '#6366f1'
+                      : '#fff';
+                  e.currentTarget.style.borderBottom =
+                    openDropdown === 'suppliers' || location.pathname === '/suppliers' || location.pathname === '/suppliers/new'
+                      ? '1px solid #6366f1'
+                      : '1px solid transparent';
                 }}
               >
                 Suppliers
@@ -90,13 +120,22 @@ const Header = () => {
                 className={`nav-link dropdown-toggle ${openDropdown === 'parts' ? 'active' : ''}`}
                 style={{
                   fontWeight: 500,
-                  color: '#fff',
+                  color:
+                    openDropdown === 'parts' || location.pathname === '/parts' || location.pathname === '/parts/new'
+                      ? '#6366f1'
+                      : '#fff',
                   fontSize: '1rem',
                   padding: '0.5rem 1rem',
-                  background: openDropdown === 'parts' ? '#eef2ff' : 'none',
+                  background:
+                    openDropdown === 'parts' || location.pathname === '/parts' || location.pathname === '/parts/new'
+                      ? '#eef2ff'
+                      : 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  borderBottom: openDropdown === 'parts' ? '1px solid #6366f1' : '1px solid transparent',
+                  borderBottom:
+                    openDropdown === 'parts' || location.pathname === '/parts' || location.pathname === '/parts/new'
+                      ? '1px solid #6366f1'
+                      : '1px solid transparent',
                   transition: 'background 0.2s, color 0.2s, border-bottom 0.2s',
                   outline: 'none',
                   display: 'flex',
@@ -110,9 +149,18 @@ const Header = () => {
                   e.currentTarget.style.borderBottom = '1px solid #6366f1';
                 }}
                 onMouseOut={e => {
-                  e.currentTarget.style.background = openDropdown === 'parts' ? '#eef2ff' : 'none';
-                  e.currentTarget.style.color = '#6366f1';
-                  e.currentTarget.style.borderBottom = openDropdown === 'parts' ? '1px solid #6366f1' : '1px solid transparent';
+                  e.currentTarget.style.background =
+                    openDropdown === 'parts' || location.pathname === '/parts' || location.pathname === '/parts/new'
+                      ? '#eef2ff'
+                      : 'none';
+                  e.currentTarget.style.color =
+                    openDropdown === 'parts' || location.pathname === '/parts' || location.pathname === '/parts/new'
+                      ? '#6366f1'
+                      : '#fff';
+                  e.currentTarget.style.borderBottom =
+                    openDropdown === 'parts' || location.pathname === '/parts' || location.pathname === '/parts/new'
+                      ? '1px solid #6366f1'
+                      : '1px solid transparent';
                 }}
               >
                 Parts
