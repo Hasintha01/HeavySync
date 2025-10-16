@@ -48,10 +48,11 @@ const ProfilePage = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser({ ...user, ...editData });
-      setEditMode(false);
+      setEditMode(false); // Always reset edit mode after save
       setMessage('Profile updated successfully!');
       setTimeout(() => setMessage(''), 2000);
     } catch (err) {
+      setEditMode(false); // Also reset edit mode on error
       setMessage('Failed to update profile: ' + (err.response?.data?.message || err.message));
     }
   };
@@ -121,7 +122,9 @@ const ProfilePage = () => {
               {editMode ? (
                 <button type="submit" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-green-700 to-green-400 shadow-lg text-lg hover:from-green-800 hover:to-green-500">Save</button>
               ) : (
-                <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-blue-700 to-blue-400 shadow-lg text-lg hover:from-blue-800 hover:to-blue-500" onClick={() => setEditMode(true)}>Edit</button>
+                <>
+                  <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-blue-700 to-blue-400 shadow-lg text-lg hover:from-blue-800 hover:to-blue-500" onClick={() => setEditMode(true)}>Edit</button>
+                </>
               )}
               <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-yellow-700 to-yellow-400 shadow-lg text-lg hover:from-yellow-800 hover:to-yellow-500" onClick={() => setShowPasswordModal(true)}>Change Password</button>
               <button type="button" className="py-2 px-6 rounded font-semibold text-white transition bg-gradient-to-r from-red-700 to-red-400 shadow-lg text-lg hover:from-red-800 hover:to-red-500" onClick={() => { localStorage.removeItem('authToken'); window.location.href = '/login'; }}>Log out</button>
