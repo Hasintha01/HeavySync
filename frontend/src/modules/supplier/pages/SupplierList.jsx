@@ -64,11 +64,54 @@ const SupplierList = () => {
     );
   });
 
+  // Export filtered suppliers to CSV
+  const exportToCSV = () => {
+    if (!filteredSuppliers.length) return;
+    const headers = [
+      'Supplier ID', 'Name', 'Email', 'Contact Number', 'Address', 'Report ID'
+    ];
+    const rows = filteredSuppliers.map(supplier => [
+      supplier.supplierId,
+      supplier.name,
+      supplier.email,
+      supplier.contactNumber,
+      supplier.address,
+      supplier.reportId
+    ]);
+    let csvContent = '';
+    csvContent += headers.join(',') + '\n';
+    rows.forEach(row => {
+      csvContent += row.map(val => `"${val ?? ''}"`).join(',') + '\n';
+    });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Suppliers_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="p-8 max-w-7xl mx-auto">
-      {/* Page Title */}
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Suppliers</h2>
-      
+      {/* Page Title and Export Button */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-gray-800">Suppliers</h2>
+        <button
+          onClick={exportToCSV}
+          disabled={filteredSuppliers.length === 0}
+          className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md"
+          style={{ minWidth: 160 }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="12" fill="#22c55e" />
+            <path d="M12 16V8M12 16L8 12M12 16L16 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Export to CSV
+        </button>
+      </div>
+
       {/* Search Bar */}
       <div className="mb-6">
         <input
@@ -79,7 +122,7 @@ const SupplierList = () => {
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
-      
+
       {/* Warning for duplicate IDs */}
       {duplicateIds.length > 0 && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6 shadow-sm">
@@ -88,7 +131,7 @@ const SupplierList = () => {
           <span className="text-sm mt-2 block">Please update these suppliers with unique IDs to avoid issues.</span>
         </div>
       )}
-      
+
       {/* Supplier Grid - Responsive: 1 column on mobile, 2 columns on medium+, 3 columns on large screens */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Map through filtered suppliers array and render a SupplierCard for each */}
