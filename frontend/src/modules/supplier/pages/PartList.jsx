@@ -77,6 +77,36 @@ const PartList = () => {
    */
   const lowStockCount = parts.filter((part) => part.quantity <= part.minimumStock).length;
 
+  // Export filtered parts to CSV
+  const exportToCSV = () => {
+    if (!filteredParts.length) return;
+    const headers = [
+      'Part ID', 'Name', 'Part Number', 'Category', 'Quantity', 'Minimum Stock', 'Unit Price'
+    ];
+    const rows = filteredParts.map(part => [
+      part.partId,
+      part.name,
+      part.partNumber,
+      part.categoryId,
+      part.quantity,
+      part.minimumStock,
+      part.unitPrice
+    ]);
+    let csvContent = '';
+    csvContent += headers.join(',') + '\n';
+    rows.forEach(row => {
+      csvContent += row.map(val => `"${val ?? ''}"`).join(',') + '\n';
+    });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Parts_Inventory_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="container mx-auto p-8 max-w-7xl">
       {/* Page Header */}
@@ -88,6 +118,20 @@ const PartList = () => {
             Low Stock: <span className="font-semibold text-red-600">{lowStockCount}</span>
           </p>
         </div>
+        {/* Export to CSV Button */}
+        <button
+          onClick={exportToCSV}
+          disabled={filteredParts.length === 0}
+          className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md"
+          style={{ minWidth: 160 }}
+        >
+          {/* Use the same icon as PDF export, but green */}
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="12" fill="#22c55e" />
+            <path d="M12 16V8M12 16L8 12M12 16L16 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          Export to CSV
+        </button>
       </div>
 
       {/* Search and Filter Bar */}
