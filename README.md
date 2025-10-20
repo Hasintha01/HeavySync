@@ -1,77 +1,97 @@
-# HeavySync - Supplier & Purchase Order Management System
+# HeavySync
 
-A full-stack application for managing suppliers, parts, purchase orders, and quotations.
+HeavySync is a full-stack web application designed to streamline the management of suppliers, parts, quotations, and purchase orders for businesses. It provides a secure, user-friendly interface for both administrators and staff to handle procurement workflows efficiently.
+
+## Features
+- **User Authentication:** Register, login, and manage user profiles securely.
+- **Supplier Management:** Add, edit, view, and delete supplier information.
+- **Part Management:** Manage inventory parts, including details and supplier associations.
+- **Low Stock Alerts:** Instantly see which parts are low in stock on the Parts Inventory page, highlighted for quick action.
+- **Quotation Handling:** Request, compare, and manage quotations from suppliers.
+- **Purchase Orders:** Create, track, and report on purchase orders.
+- **Reporting:** Generate and export reports (PDF) for quotations and purchase orders.
+- **CSV Export:** Export supplier and part lists to CSV for use in Excel or other tools.
+- **Role-Based Access:** Protect sensitive routes and actions based on user roles.
+- **Responsive UI:** Clean, modern interface with mobile support.
 
 ## Tech Stack
+- **Frontend:** React, Tailwind CSS, React Router, Axios, jsPDF
+- **Backend:** Node.js, Express, Mongoose (MongoDB)
+- **Other:** JWT for authentication, CORS, dotenv
 
-**Frontend:** React 18.2.0  
-**Backend:** Node.js with Express 5.1.0  
-**Database:** MongoDB (Mongoose 8.18.3)
+## Project Structure
+```
+HeavySync/
+├── backend/      # Node.js/Express API server
+│   ├── config/   # Database configuration
+│   ├── controllers/  # Route controllers (business logic)
+│   ├── middleware/   # Auth and other middleware
+│   ├── models/       # Mongoose schemas/models
+│   ├── routes/       # API route definitions
+│   ├── package.json  # Backend dependencies
+│   └── server.js     # Entry point
+├── frontend/     # React client app
+│   ├── build/    # Production build output
+│   ├── public/   # Static files
+│   ├── src/      # Source code
+│   │   ├── components/  # Shared UI components
+│   │   ├── modules/     # Feature modules (auth, supplier, etc.)
+│   ├── package.json     # Frontend dependencies
+└── README.md
+```
 
-## Key Libraries
+## Getting Started
 
-### Frontend
-- **UI Framework:** React 18.2.0, React Router DOM 6.20.0
-- **Styling:** TailwindCSS 3.4.0
-- **Icons:** React Icons 5.5.0
-- **Notifications:** React Hot Toast 2.6.0
-- **PDF Generation:** jsPDF 2.5.2, jsPDF-AutoTable 3.8.3
-- **HTTP Client:** Axios 1.6.2
-
-### Backend
-- **Server:** Express 5.1.0
-- **Database:** Mongoose 8.18.3
-- **Middleware:** CORS 2.8.5, Body-Parser 2.2.0
-- **Environment:** dotenv 17.2.3
-- **Dev Tool:** Nodemon 3.1.10
-
-## Prerequisites
-
-- Node.js (v16 or higher)
+### Prerequisites
+- Node.js (v14 or higher)
 - MongoDB (local or Atlas)
-- npm or yarn
+- npm (or yarn)
 
-## Installation
+### Backend Setup
+1. Navigate to the backend folder:
+   ```sh
+   cd backend
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Configure MongoDB connection in `config/db.js` or via environment variables (e.g., `.env`):
+   ```env
+   MONGO_URI=mongodb://localhost:27017/heavysync
+   PORT=5000
+   ```
+4. Start the backend server:
+   ```sh
+   npm start
+   ```
 
-### 1. Clone & Install
+### Frontend Setup
+1. Navigate to the frontend folder:
+   ```sh
+   cd frontend
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Start the frontend development server:
+   ```sh
+   npm start
+   ```
 
-```bash
-git clone <repository-url>
-cd HeavySync
-```
+## Usage
+- Open your browser and go to `http://localhost:3000` for the frontend.
+- The backend API runs on `http://localhost:5000` by default.
+- Register a new user or login with existing credentials.
+- Use the dashboard to manage suppliers, parts, quotations, and purchase orders.
+- Export reports as PDF from the relevant pages.
+- **Export to CSV:** On the Suppliers and Parts pages, click the "Export to CSV" button to download the current list as a CSV file for use in Excel or Google Sheets.
 
-### 2. Backend Setup
+## Customization
+- **API URLs:** If you deploy the backend separately, update API URLs in the frontend (see `src/modules/*/services/*.js`).
+- **Styling:** Modify Tailwind config or component CSS for custom branding.
+- **Authentication:** Adjust roles and permissions in backend middleware as needed.
 
-```bash
-cd backend
-npm install
-```
-
-Create `.env` file:
-```
-MONGO_URI=mongodb://localhost:27017/heavysync
-PORT=5000
-```
-
-### 3. Frontend Setup
-
-```bash
-cd frontend
-npm install
-```
-
-## Running the Application
-
-### Start Backend (Port 5000)
-```bash
-cd backend
-npm run dev
-```
-
-### Start Frontend (Port 3000)
-```bash
-cd frontend
-npm start
-```
-
-Access the application at `http://localhost:3000`
+## License
+This project is for educational/demo purposes. You may modify and use it as needed.
