@@ -73,7 +73,7 @@ const createQuotation = async (req, res) => {
  */
 const getAllQuotations = async (req, res) => {
     try {
-        const quotations = await Quotation.find().sort({ createdAt: -1 });
+    const quotations = await Quotation.find().sort({ createdAt: -1 }).lean();
         res.status(200).json(quotations);
     } catch (error) {
         console.error("Error fetching quotations:", error);

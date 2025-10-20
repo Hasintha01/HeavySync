@@ -68,7 +68,7 @@ const createPart = async (req, res) => {
 // @access  Public
 const getParts = async (req, res) => {
     try {
-        const parts = await Part.find().sort({ name: 1 });
+    const parts = await Part.find().sort({ name: 1 }).lean();
         res.status(200).json(parts);
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
@@ -80,7 +80,7 @@ const getParts = async (req, res) => {
 // @access  Public
 const getPartById = async (req, res) => {
     try {
-        const part = await Part.findById(req.params.id);
+        const part = await Part.findById(req.params.id).lean();
         if (!part) {
             return res.status(404).json({ message: "Part not found" });
         }
@@ -95,7 +95,7 @@ const getPartById = async (req, res) => {
 // @access  Public
 const getPartsByCategory = async (req, res) => {
     try {
-        const parts = await Part.find({ categoryId: req.params.categoryId }).sort({ name: 1 });
+    const parts = await Part.find({ categoryId: req.params.categoryId }).sort({ name: 1 }).lean();
         res.status(200).json(parts);
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
@@ -107,7 +107,7 @@ const getPartsByCategory = async (req, res) => {
 // @access  Public
 const getLowStockParts = async (req, res) => {
     try {
-        const parts = await Part.find({ $expr: { $lte: ['$quantity', '$minimumStock'] } }).sort({ quantity: 1 });
+    const parts = await Part.find({ $expr: { $lte: ['$quantity', '$minimumStock'] } }).sort({ quantity: 1 }).lean();
         res.status(200).json(parts);
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });

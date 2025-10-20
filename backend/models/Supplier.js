@@ -39,11 +39,15 @@ const supplierSchema = new mongoose.Schema(
             required: false, // Optional field
             trim: true,
         },
+
     },
     {
         timestamps: true, // Automatically add createdAt and updatedAt
     }
 );
+
+// Add index for faster queries on supplierId (already unique, but explicit index helps)
+supplierSchema.index({ supplierId: 1 });
 
 // Create Supplier model using the schema
 const Supplier = mongoose.model("Supplier", supplierSchema);

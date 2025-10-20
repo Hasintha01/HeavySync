@@ -65,11 +65,15 @@ const quotationSchema = new mongoose.Schema(
             type: String,
             default: '',
         },
+
     },
     {
         timestamps: true,
     }
 );
+
+// Add index for faster queries on quotationId (already unique, but explicit index helps)
+quotationSchema.index({ quotationId: 1 });
 
 // Create Quotation model using the schema
 const Quotation = mongoose.model("Quotation", quotationSchema);
