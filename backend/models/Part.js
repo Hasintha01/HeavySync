@@ -9,6 +9,7 @@ const partSchema = new mongoose.Schema(
             required: true,
             unique: true,   // Ensure part ID is unique
             trim: true,
+            index: true, // Index for faster lookup
         },
         name: {
             type: String,
@@ -25,6 +26,7 @@ const partSchema = new mongoose.Schema(
             required: true,
             unique: true,   // Part number should be unique
             trim: true,
+            index: true, // Index for faster lookup
         },
         quantity: {
             type: Number,
@@ -52,6 +54,7 @@ const partSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
+            index: true, // Index for faster lookup
         },
         reportId: {
             type: String,

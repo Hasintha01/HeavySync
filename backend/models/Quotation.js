@@ -9,11 +9,13 @@ const quotationSchema = new mongoose.Schema(
             required: true,
             unique: true,
             trim: true,
+            index: true, // Index for faster lookup
         },
         part: {
             partId: {
                 type: String,
                 required: true,
+                index: true, // Index for faster lookup
             },
             partNumber: {
                 type: String,
@@ -33,6 +35,7 @@ const quotationSchema = new mongoose.Schema(
             supplierId: {
                 type: String,
                 required: true,
+                index: true, // Index for faster lookup
             },
             name: {
                 type: String,
@@ -65,15 +68,11 @@ const quotationSchema = new mongoose.Schema(
             type: String,
             default: '',
         },
-
     },
     {
         timestamps: true,
     }
 );
-
-// Add index for faster queries on quotationId (already unique, but explicit index helps)
-quotationSchema.index({ quotationId: 1 });
 
 // Create Quotation model using the schema
 const Quotation = mongoose.model("Quotation", quotationSchema);
