@@ -67,8 +67,6 @@ const partSchema = new mongoose.Schema(
     }
 );
 
-// categoryId is already indexed via the field's `index: true` option above.
-// Removed duplicate schema-level index to avoid Mongoose "Duplicate schema index" warnings.
 
 // Virtual property to check if stock is low
 partSchema.virtual('isLowStock').get(function() {

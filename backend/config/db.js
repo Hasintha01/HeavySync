@@ -5,8 +5,6 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
         try {
                 await mongoose.connect(process.env.MONGO_URI, {
-                        // Removed deprecated driver options: useNewUrlParser and useUnifiedTopology
-                        // Mongoose / MongoDB Node driver v4+ uses sensible defaults.
                         autoIndex: true, // Build indexes automatically (disable in production if you use migrations)
                         serverSelectionTimeoutMS: 10000, // Timeout after 10s instead of 30s
                 });
