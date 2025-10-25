@@ -15,8 +15,8 @@ const partRoutes = require("./routes/partRoutes");
 const quotationRoutes = require("./routes/quotationRoutes");
 const userRoutes = require("./routes/userRoutes");
 
-// Load environment variables
-dotenv.config();
+// Load environment variables (quiet: true suppresses dotenv's informational log)
+dotenv.config({ quiet: true });
 
 // Initialize Express
 const app = express();
