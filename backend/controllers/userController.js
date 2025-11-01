@@ -92,7 +92,7 @@ exports.login = async (req, res) => {
     // Issue JWT token for authenticated user
     const token = jwt.sign(
       { userId: user._id, username: user.username },
-      process.env.JWT_SECRET || 'secretkey',
+      process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
     res.json({ token, message: 'Login successful' });

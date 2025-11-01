@@ -15,25 +15,26 @@ const {
 
 
 const auth = require('../middleware/auth');
+const { validateSupplier, validateMongoId } = require('../middleware/validation');
 // Create a router
 const router = express.Router();
 
 // Routes mapping
 
 // Create a new supplier (protected)
-router.post("/", auth, createSupplier);
+router.post("/", auth, validateSupplier, createSupplier);
 
 // Get all suppliers
 router.get("/", getSuppliers);
 
 // Get a supplier by ID
-router.get("/:id", getSupplierById);
+router.get("/:id", validateMongoId, getSupplierById);
 
 // Update a supplier by ID (protected)
-router.put("/:id", auth, updateSupplier);
+router.put("/:id", auth, validateMongoId, validateSupplier, updateSupplier);
 
 // Delete a supplier by ID (protected)
-router.delete("/:id", auth, deleteSupplier);
+router.delete("/:id", auth, validateMongoId, deleteSupplier);
 
 // Export router to use in server.js
 module.exports = router;
