@@ -17,7 +17,7 @@ import { SkeletonCard } from "../../../components/Skeletons";
  */
 const PartList = () => {
   // 🚀 Using custom hook - cleaner data management!
-  const { parts, loading, error, lowStockParts, deletePart, searchParts } = useParts();
+  const { parts, loading, error, lowStockParts, deletePart, searchParts, refetchParts } = useParts();
   
   const [searchTerm, setSearchTerm] = useState("");
   const [showLowStockOnly, setShowLowStockOnly] = useState(false);
@@ -180,7 +180,7 @@ const PartList = () => {
 
           {/* Refresh Button */}
           <button
-            onClick={fetchParts}
+            onClick={refetchParts}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             Refresh
