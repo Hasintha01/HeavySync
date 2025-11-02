@@ -3,11 +3,11 @@
 /**
  * SupplierList Page Component
  * Displays a grid of all suppliers in the system
- * Fetches supplier data on component mount and displays using SupplierCard components
+ * NOW USING CUSTOM HOOK - Much cleaner and reusable!
  */
 
-import React, { useEffect, useState } from "react";
-import supplierService from "../services/supplierService";
+import React, { useState } from "react";
+import { useSuppliers } from "../../../hooks";
 import SupplierCard from "../components/SupplierCard";
 
 /**
@@ -15,54 +15,18 @@ import SupplierCard from "../components/SupplierCard";
  * @returns {JSX.Element} Supplier list page with grid layout
  */
 const SupplierList = () => {
-  // State to store the list of suppliers
-  const [suppliers, setSuppliers] = useState([]);
-  const [duplicateIds, setDuplicateIds] = useState([]);
+  // 🚀 Using custom hook - replaced ~40 lines with 1 line!
+  const { suppliers, loading, error, duplicateIds, deleteSupplier, searchSuppliers } = useSuppliers();
+  
   const [searchTerm, setSearchTerm] = useState("");
 
-  /**
-   * useEffect Hook - Runs on component mount
-   * Fetches all suppliers from the backend and updates state
-   */
-  useEffect(() => {
-    fetchSuppliers();
-  }, []); // Empty dependency array ensures this runs only once on mount
+  // Use the built-in search function from the hook
+  const filteredSuppliers = searchSuppliers(searchTerm);
 
-  const fetchSuppliers = () => {
-    // Call the getSuppliers API and set the returned data to state
-    supplierService.getSuppliers().then((data) => {
-      setSuppliers(data);
-      
-      // Check for duplicate supplier IDs
-      const idCounts = {};
-      data.forEach(s => {
-        idCounts[s.supplierId] = (idCounts[s.supplierId] || 0) + 1;
-      });
-      
-      const duplicates = Object.keys(idCounts).filter(id => idCounts[id] > 1);
-      setDuplicateIds(duplicates);
-      
-      if (duplicates.length > 0) {
-        console.warn("⚠️ DUPLICATE SUPPLIER IDs FOUND:", duplicates);
-        console.warn("Affected suppliers:", data.filter(s => duplicates.includes(s.supplierId)));
-      }
-    });
+  // Delete handler using the hook's delete function
+  const handleDelete = async (deletedId) => {
+    await deleteSupplier(deletedId);
   };
-
-  const handleDelete = (deletedId) => {
-    setSuppliers(prevSuppliers => prevSuppliers.filter(s => s._id !== deletedId));
-  };
-
-  // Filter suppliers based on search term
-  const filteredSuppliers = suppliers.filter((supplier) => {
-    const searchLower = searchTerm.toLowerCase();
-    return (
-      supplier.name?.toLowerCase().includes(searchLower) ||
-      supplier.supplierId?.toLowerCase().includes(searchLower) ||
-      supplier.email?.toLowerCase().includes(searchLower) ||
-      supplier.contactNumber?.includes(searchTerm)
-    );
-  });
 
   // Export filtered suppliers to CSV
   const exportToCSV = () => {
@@ -92,6 +56,28 @@ const SupplierList = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="flex justify-center items-center h-64">
+          <div className="text-xl text-gray-600">Loading suppliers...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+          <strong>Error:</strong> {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 max-w-7xl mx-auto">

@@ -3,48 +3,30 @@
 /**
  * PartList Page Component
  * Displays all parts in a grid layout
- * Allows filtering and viewing low stock items
+ * NOW USING CUSTOM HOOK - Cleaner and more maintainable!
  */
 
 import React, { useState, useEffect } from "react";
 import PartCard from "../components/PartCard";
-import partService from "../services/partService";
+import { useParts } from "../../../hooks";
 
 /**
  * Part List Component
  * @returns {JSX.Element} Part list page with cards
  */
 const PartList = () => {
-  const [parts, setParts] = useState([]);
-  const [filteredParts, setFilteredParts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  // 🚀 Using custom hook - cleaner data management!
+  const { parts, loading, error, lowStockParts, deletePart, searchParts } = useParts();
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [showLowStockOnly, setShowLowStockOnly] = useState(false);
-
-  /**
-   * Fetch all parts on component mount
-   */
-  useEffect(() => {
-    fetchParts();
-  }, []);
+  const [filteredParts, setFilteredParts] = useState([]);
 
   /**
    * Filter parts based on search and low stock filter
    */
   useEffect(() => {
-    let filtered = parts;
-
-    // Filter by search term
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (part) =>
-          part.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          part.partId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          part.partNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          part.categoryId.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+    let filtered = searchParts(searchTerm);
 
     // Filter by low stock
     if (showLowStockOnly) {
@@ -52,30 +34,12 @@ const PartList = () => {
     }
 
     setFilteredParts(filtered);
-  }, [searchTerm, showLowStockOnly, parts]);
-
-  /**
-   * Fetch parts from API
-   */
-  const fetchParts = async () => {
-    try {
-      setLoading(true);
-      const data = await partService.getParts();
-      setParts(data);
-      setFilteredParts(data);
-      setError("");
-    } catch (err) {
-      console.error("Error fetching parts:", err);
-      setError("Failed to load parts. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [searchTerm, showLowStockOnly, parts, searchParts]);
 
   /**
    * Get count of low stock items
    */
-  const lowStockCount = parts.filter((part) => part.quantity <= part.minimumStock).length;
+  const lowStockCount = lowStockParts.length;
 
   // Export filtered parts to CSV
   const exportToCSV = () => {
