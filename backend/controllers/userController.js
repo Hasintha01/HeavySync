@@ -81,22 +81,39 @@ const jwt = require('jsonwebtoken');
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log('Login attempt for username:', username);
+    
     const user = await User.findOne({ username });
     if (!user) {
+      console.log('User not found:', username);
       return res.status(400).json({ message: 'Invalid username or password' });
     }
+    
+    console.log('User found, comparing password...');
     const isMatch = await user.comparePassword(password);
+    console.log('Password match result:', isMatch);
+    
     if (!isMatch) {
+      console.log('Password mismatch for user:', username);
       return res.status(400).json({ message: 'Invalid username or password' });
     }
+    
+    // Verify JWT_SECRET exists
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET is not defined in environment variables');
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
+    
     // Issue JWT token for authenticated user
     const token = jwt.sign(
       { userId: user._id, username: user.username },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
+    console.log('Login successful for user:', username);
     res.json({ token, message: 'Login successful' });
   } catch (err) {
+    console.error('Login error:', err);
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
