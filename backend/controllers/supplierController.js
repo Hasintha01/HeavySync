@@ -30,25 +30,28 @@ const createSupplier = async (req, res) => {
             return res.status(400).json({ message: "Phone number must be exactly 10 digits" });
         }
         
-        // Check if any digit appears more than 4 times
-        const digitCount = {};
-        for (let digit of contactPhone) {
-            digitCount[digit] = (digitCount[digit] || 0) + 1;
-            if (digitCount[digit] > 4) {
-                return res.status(400).json({ message: "Invalid phone number pattern" });
-            }
+        // Check if any digit appears more than 4 times (optimized)
+        const digitCount = contactPhone.split('').reduce((acc, digit) => {
+            acc[digit] = (acc[digit] || 0) + 1;
+            return acc;
+        }, {});
+        
+        if (Object.values(digitCount).some(count => count > 4)) {
+            return res.status(400).json({ message: "Invalid phone number pattern" });
         }
 
-        // Check if supplier with same supplierId already exists
-        const existingSupplierById = await Supplier.findOne({ supplierId });
-        if (existingSupplierById) {
-            return res.status(400).json({ message: "Supplier ID already exists" });
-        }
-
-        // Check if supplier with same email already exists
-        const existingSupplier = await Supplier.findOne({ contactEmail });
+        // Check if supplier with same supplierId or email already exists (single query)
+        const existingSupplier = await Supplier.findOne({
+            $or: [{ supplierId }, { contactEmail }]
+        }).lean();
+        
         if (existingSupplier) {
-            return res.status(400).json({ message: "Supplier with this email already exists" });
+            if (existingSupplier.supplierId === supplierId) {
+                return res.status(400).json({ message: "Supplier ID already exists" });
+            }
+            if (existingSupplier.contactEmail === contactEmail) {
+                return res.status(400).json({ message: "Supplier with this email already exists" });
+            }
         }
 
         const supplier = new Supplier({
@@ -77,7 +80,7 @@ const createSupplier = async (req, res) => {
 // @access  Public
 const getSuppliers = async (req, res) => {
     try {
-        const suppliers = await Supplier.find();
+        const suppliers = await Supplier.find().lean();
         res.status(200).json(suppliers);
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
@@ -89,7 +92,7 @@ const getSuppliers = async (req, res) => {
 // @access  Public
 const getSupplierById = async (req, res) => {
     try {
-        const supplier = await Supplier.findById(req.params.id);
+        const supplier = await Supplier.findById(req.params.id).lean();
         if (!supplier) {
             return res.status(404).json({ message: "Supplier not found" });
         }
@@ -133,13 +136,14 @@ const updateSupplier = async (req, res) => {
                 return res.status(400).json({ message: "Phone number must be exactly 10 digits" });
             }
             
-            // Check if any digit appears more than 4 times
-            const digitCount = {};
-            for (let digit of contactPhone) {
-                digitCount[digit] = (digitCount[digit] || 0) + 1;
-                if (digitCount[digit] > 4) {
-                    return res.status(400).json({ message: "Invalid phone number pattern" });
-                }
+            // Check if any digit appears more than 4 times (optimized)
+            const digitCount = contactPhone.split('').reduce((acc, digit) => {
+                acc[digit] = (acc[digit] || 0) + 1;
+                return acc;
+            }, {});
+            
+            if (Object.values(digitCount).some(count => count > 4)) {
+                return res.status(400).json({ message: "Invalid phone number pattern" });
             }
         }
 

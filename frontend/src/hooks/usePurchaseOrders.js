@@ -21,7 +21,7 @@
  * } = usePurchaseOrders();
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import purchaseOrderService from '../modules/supplier/services/purchaseOrderService';
 import toast from 'react-hot-toast';
 
@@ -127,7 +127,7 @@ const usePurchaseOrders = () => {
   }, [purchaseOrders]);
 
   // Get statistics
-  const getStats = useCallback(() => {
+  const stats = useMemo(() => {
     return {
       total: purchaseOrders.length,
       pending: purchaseOrders.filter(po => po.status === 'Pending').length,
@@ -147,7 +147,7 @@ const usePurchaseOrders = () => {
     getPurchaseOrderById,
     filterByStatus,
     searchPurchaseOrders,
-    stats: getStats(),
+    stats,
     refreshPurchaseOrders: fetchPurchaseOrders,
   };
 };

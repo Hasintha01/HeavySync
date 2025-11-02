@@ -34,7 +34,8 @@ const useFetch = (fetchFunction, dependencies = []) => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, ...dependencies]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchData]);
 
   // Manual refetch function
   const refetch = useCallback(() => {
