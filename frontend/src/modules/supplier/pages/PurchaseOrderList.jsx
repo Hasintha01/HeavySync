@@ -3,57 +3,61 @@
 /**
  * PurchaseOrderList Page Component
  * Displays a grid of all purchase orders in the system
- * Fetches purchase order data on component mount and displays using PurchaseOrderCard components
+ * NOW USING CUSTOM HOOK + SKELETON LOADERS!
  */
 
-import React, { useEffect, useState } from "react";
-import purchaseOrderService from "../services/purchaseOrderService";
+import React, { useState } from "react";
+import { usePurchaseOrders } from "../../../hooks";
 import PurchaseOrderCard from "../components/PurchaseOrderCard";
+import { SkeletonCard } from "../../../components/Skeletons";
 
 /**
  * Purchase Order List Page
  * @returns {JSX.Element} Purchase order list page with grid layout
  */
 const PurchaseOrderList = () => {
-  // State to store the list of purchase orders
-  const [orders, setOrders] = useState([]);
+  // 🚀 Using custom hook
+  const { purchaseOrders, loading, error, deletePurchaseOrder, searchPurchaseOrders } = usePurchaseOrders();
   const [searchTerm, setSearchTerm] = useState("");
 
-  /**
-   * useEffect Hook - Runs on component mount
-   * Fetches all purchase orders from the backend and updates state
-   */
-  useEffect(() => {
-    fetchOrders();
-  }, []); // Empty dependency array ensures this runs only once on mount
+  // Use the built-in search function from the hook
+  const filteredOrders = searchPurchaseOrders(searchTerm);
 
-  const fetchOrders = () => {
-    // Call the getOrders API and set the returned data to state
-    purchaseOrderService.getOrders().then(setOrders);
+  const handleDelete = async (deletedId) => {
+    await deletePurchaseOrder(deletedId);
   };
 
-  const handleDelete = (deletedId) => {
-    setOrders(prevOrders => prevOrders.filter(o => o._id !== deletedId));
-  };
-
-  // Filter purchase orders based on search term
-  const filteredOrders = orders.filter((order) => {
-    const searchLower = searchTerm.toLowerCase();
-    
-    // Get supplier name - handle both populated object and string ID
-    const supplierName = typeof order.supplier === 'object' && order.supplier?.name
-      ? order.supplier.name.toLowerCase()
-      : (typeof order.supplier === 'string' ? order.supplier.toLowerCase() : '');
-    
-    // Search by order ID (last 6 characters), supplier name, status, or total amount
+  // Show loading state with skeleton loaders
+  if (loading) {
     return (
-      order._id?.toLowerCase().includes(searchLower) ||
-      supplierName.includes(searchLower) ||
-      order.status?.toLowerCase().includes(searchLower) ||
-      order.totalAmount?.toString().includes(searchTerm) ||
-      order.items?.some(item => item.name?.toLowerCase().includes(searchLower))
+      <div className="p-8 max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold mb-6 text-gray-800">Purchase Orders</h2>
+        
+        {/* Search Bar Skeleton */}
+        <div className="mb-6">
+          <div className="skeleton-box h-12 w-full rounded-lg"></div>
+        </div>
+        
+        {/* Skeleton Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <SkeletonCard key={`skeleton-${idx}`} />
+          ))}
+        </div>
+      </div>
     );
-  });
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+          <strong>Error:</strong> {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 max-w-7xl mx-auto">

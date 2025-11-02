@@ -3,12 +3,13 @@
 /**
  * SupplierList Page Component
  * Displays a grid of all suppliers in the system
- * NOW USING CUSTOM HOOK - Much cleaner and reusable!
+ * NOW USING CUSTOM HOOK + SKELETON LOADERS!
  */
 
 import React, { useState } from "react";
 import { useSuppliers } from "../../../hooks";
 import SupplierCard from "../components/SupplierCard";
+import { SkeletonCard } from "../../../components/Skeletons";
 
 /**
  * Supplier List Page
@@ -57,12 +58,36 @@ const SupplierList = () => {
     document.body.removeChild(link);
   };
 
-  // Show loading state
+  // Show loading state with skeleton loaders
   if (loading) {
     return (
       <div className="p-8 max-w-7xl mx-auto">
-        <div className="flex justify-center items-center h-64">
-          <div className="text-xl text-gray-600">Loading suppliers...</div>
+        {/* Page Title */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold text-gray-800">Suppliers</h2>
+          <button
+            disabled
+            className="flex items-center gap-2 bg-gray-400 text-white px-6 py-3 rounded-lg cursor-not-allowed font-medium shadow-md"
+            style={{ minWidth: 160 }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="24" height="24" rx="12" fill="#9ca3af" />
+              <path d="M12 16V8M12 16L8 12M12 16L16 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Export to CSV
+          </button>
+        </div>
+
+        {/* Search Bar Skeleton */}
+        <div className="mb-6">
+          <div className="skeleton-box h-12 w-full rounded-lg"></div>
+        </div>
+
+        {/* Skeleton Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <SkeletonCard key={`skeleton-${idx}`} />
+          ))}
         </div>
       </div>
     );

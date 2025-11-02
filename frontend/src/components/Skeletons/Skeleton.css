@@ -1,0 +1,95 @@
+/**
+ * Skeleton Loader Styles
+ * 
+ * CSS animations and base styles for skeleton components
+ */
+
+/* Base skeleton box style */
+.skeleton-box {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #e0e0e0 20%,
+    #f0f0f0 40%,
+    #f0f0f0 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+/* Skeleton loading animation */
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Pulse animation (alternative) */
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Dark mode skeleton (if needed) */
+@media (prefers-color-scheme: dark) {
+  .skeleton-box {
+    background: linear-gradient(
+      90deg,
+      #2d2d2d 0%,
+      #3d3d3d 20%,
+      #2d2d2d 40%,
+      #2d2d2d 100%
+    );
+    background-size: 200% 100%;
+  }
+}
+
+/* Shimmer effect variant */
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.skeleton-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.3) 20%,
+    rgba(255, 255, 255, 0.6) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-box,
+  .skeleton-shimmer::after {
+    animation: none;
+  }
+  
+  .animate-pulse {
+    animation: none;
+  }
+}

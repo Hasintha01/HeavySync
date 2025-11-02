@@ -3,12 +3,13 @@
 /**
  * PartList Page Component
  * Displays all parts in a grid layout
- * NOW USING CUSTOM HOOK - Cleaner and more maintainable!
+ * NOW USING CUSTOM HOOK + SKELETON LOADERS!
  */
 
 import React, { useState, useEffect } from "react";
 import PartCard from "../components/PartCard";
 import { useParts } from "../../../hooks";
+import { SkeletonCard } from "../../../components/Skeletons";
 
 /**
  * Part List Component
@@ -70,6 +71,60 @@ const PartList = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+  // Show loading state with skeleton loaders
+  if (loading) {
+    return (
+      <div className="container mx-auto p-8 max-w-7xl">
+        {/* Page Header Skeleton */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">Parts Inventory</h1>
+            <div className="skeleton-box h-6 w-64 mt-2 rounded"></div>
+          </div>
+          <button
+            disabled
+            className="flex items-center gap-2 bg-gray-400 text-white px-6 py-3 rounded-lg cursor-not-allowed font-medium shadow-md"
+            style={{ minWidth: 160 }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="24" height="24" rx="12" fill="#9ca3af" />
+              <path d="M12 16V8M12 16L8 12M12 16L16 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Export to CSV
+          </button>
+        </div>
+
+        {/* Search Bar Skeleton */}
+        <div className="mb-6">
+          <div className="skeleton-box h-12 w-full rounded-lg"></div>
+        </div>
+
+        {/* Filter Button Skeleton */}
+        <div className="mb-6">
+          <div className="skeleton-box h-10 w-48 rounded-lg"></div>
+        </div>
+
+        {/* Skeleton Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <SkeletonCard key={`skeleton-${idx}`} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="container mx-auto p-8 max-w-7xl">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+          <strong>Error:</strong> {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-8 max-w-7xl">

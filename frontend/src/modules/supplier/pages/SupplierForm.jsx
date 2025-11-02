@@ -3,13 +3,14 @@
 /**
  * SupplierForm Page Component
  * Form for creating or editing a supplier
- * NOW USING REACT HOOK FORM - Much cleaner and more powerful!
+ * NOW USING REACT HOOK FORM + SKELETON LOADERS!
  */
 
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSuppliers, useFormHandler } from "../../../hooks";
 import { supplierSchema } from "../../../utils/validationSchemas";
+import { SkeletonForm } from "../../../components/Skeletons";
 
 /**
  * Supplier Form Component
@@ -90,8 +91,8 @@ const SupplierForm = () => {
   if (loadingData) {
     return (
       <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
-        <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-2xl mt-12">
-          <p className="text-center text-lg text-gray-600">Loading supplier data...</p>
+        <div className="w-full max-w-2xl mt-12">
+          <SkeletonForm fields={6} />
         </div>
       </div>
     );
