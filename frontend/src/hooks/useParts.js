@@ -21,7 +21,7 @@
  * } = useParts();
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import partService from '../modules/supplier/services/partService';
 import toast from 'react-hot-toast';
 
@@ -122,7 +122,7 @@ const useParts = () => {
   }, [parts]);
 
   // Get parts with low stock (quantity <= minimumStock)
-  const lowStockParts = useCallback(() => {
+  const lowStockParts = useMemo(() => {
     return parts.filter(part => part.quantity <= part.minimumStock);
   }, [parts]);
 
@@ -135,7 +135,7 @@ const useParts = () => {
     deletePart,
     getPartById,
     searchParts,
-    lowStockParts: lowStockParts(),
+    lowStockParts,
     refreshParts: fetchParts,
   };
 };

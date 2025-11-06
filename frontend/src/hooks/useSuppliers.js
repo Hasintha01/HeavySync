@@ -38,17 +38,22 @@ const useSuppliers = () => {
       const data = await supplierService.getSuppliers();
       setSuppliers(data);
 
-      // Check for duplicate supplier IDs
-      const idCounts = {};
-      data.forEach(s => {
-        idCounts[s.supplierId] = (idCounts[s.supplierId] || 0) + 1;
-      });
+      // Check for duplicate supplier IDs (optimized - single pass)
+      const duplicates = data.reduce((acc, supplier) => {
+        const id = supplier.supplierId;
+        if (acc.seen.has(id)) {
+          acc.duplicates.add(id);
+        } else {
+          acc.seen.add(id);
+        }
+        return acc;
+      }, { seen: new Set(), duplicates: new Set() }).duplicates;
 
-      const duplicates = Object.keys(idCounts).filter(id => idCounts[id] > 1);
-      setDuplicateIds(duplicates);
+      const duplicateArray = Array.from(duplicates);
+      setDuplicateIds(duplicateArray);
 
-      if (duplicates.length > 0) {
-        console.warn('⚠️ DUPLICATE SUPPLIER IDs FOUND:', duplicates);
+      if (duplicateArray.length > 0) {
+        console.warn('⚠️ DUPLICATE SUPPLIER IDs FOUND:', duplicateArray);
       }
 
       return data;

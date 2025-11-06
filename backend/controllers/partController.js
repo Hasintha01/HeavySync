@@ -26,16 +26,18 @@ const createPart = async (req, res) => {
             return res.status(400).json({ message: "Unit price cannot be negative" });
         }
 
-        // Check if part with same partId already exists
-        const existingPartById = await Part.findOne({ partId });
-        if (existingPartById) {
-            return res.status(400).json({ message: "Part ID already exists" });
-        }
-
-        // Check if part with same partNumber already exists
-        const existingPartByNumber = await Part.findOne({ partNumber });
-        if (existingPartByNumber) {
-            return res.status(400).json({ message: "Part number already exists" });
+        // Check if part with same partId or partNumber already exists (single query)
+        const existingPart = await Part.findOne({
+            $or: [{ partId }, { partNumber }]
+        }).lean();
+        
+        if (existingPart) {
+            if (existingPart.partId === partId) {
+                return res.status(400).json({ message: "Part ID already exists" });
+            }
+            if (existingPart.partNumber === partNumber) {
+                return res.status(400).json({ message: "Part number already exists" });
+            }
         }
 
         const part = new Part({
