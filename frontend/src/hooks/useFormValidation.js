@@ -12,13 +12,13 @@
  * });
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 const useFormValidation = () => {
   const [errors, setErrors] = useState({});
 
   // Validation rules
-  const validators = {
+  const validators = useMemo(() => ({
     required: (value) => {
       if (!value || value.toString().trim() === '') {
         return 'This field is required';
@@ -111,7 +111,7 @@ const useFormValidation = () => {
       }
       return null;
     },
-  };
+  }), []);
 
   // Validate a single field
   const validateField = useCallback((fieldName, value, rules) => {
@@ -130,7 +130,7 @@ const useFormValidation = () => {
     }));
 
     return error === null;
-  }, []);
+  }, [validators]);
 
   // Validate all fields
   const validateForm = useCallback((formData, validationRules) => {
@@ -154,7 +154,7 @@ const useFormValidation = () => {
 
     setErrors(newErrors);
     return isValid;
-  }, []);
+  }, [validators]);
 
   // Clear error for a specific field
   const clearError = useCallback((fieldName) => {

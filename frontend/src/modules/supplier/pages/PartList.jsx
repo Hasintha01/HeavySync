@@ -17,7 +17,7 @@ import { SkeletonCard } from "../../../components/Skeletons";
  */
 const PartList = () => {
   // 🚀 Using custom hook - cleaner data management!
-  const { parts, loading, error, lowStockParts, deletePart, searchParts, refetchParts } = useParts();
+  const { parts, loading, error, lowStockParts, searchParts, refetchParts } = useParts();
   
   const [searchTerm, setSearchTerm] = useState("");
   const [showLowStockOnly, setShowLowStockOnly] = useState(false);

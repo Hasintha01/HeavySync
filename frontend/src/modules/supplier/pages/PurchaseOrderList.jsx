@@ -17,7 +17,7 @@ import { SkeletonCard } from "../../../components/Skeletons";
  */
 const PurchaseOrderList = () => {
   // 🚀 Using custom hook
-  const { purchaseOrders, loading, error, deletePurchaseOrder, searchPurchaseOrders } = usePurchaseOrders();
+  const { loading, error, deletePurchaseOrder, searchPurchaseOrders } = usePurchaseOrders();
   const [searchTerm, setSearchTerm] = useState("");
 
   // Use the built-in search function from the hook

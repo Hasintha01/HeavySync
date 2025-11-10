@@ -44,7 +44,7 @@ const ProfilePage = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('authToken');
-      const res = await axios.put('http://localhost:5000/api/users/me', editData, {
+      await axios.put('http://localhost:5000/api/users/me', editData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser({ ...user, ...editData });

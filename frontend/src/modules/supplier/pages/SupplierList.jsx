@@ -17,7 +17,7 @@ import { SkeletonCard } from "../../../components/Skeletons";
  */
 const SupplierList = () => {
   // 🚀 Using custom hook - replaced ~40 lines with 1 line!
-  const { suppliers, loading, error, duplicateIds, deleteSupplier, searchSuppliers } = useSuppliers();
+  const { loading, error, duplicateIds, deleteSupplier, searchSuppliers } = useSuppliers();
   
   const [searchTerm, setSearchTerm] = useState("");
 
