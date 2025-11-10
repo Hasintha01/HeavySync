@@ -7,40 +7,49 @@
 @layer components {
   .card {
     @apply p-4 border rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow;
+    @apply dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100;
   }
 
   .btn-primary {
     @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 transition-colors;
+    @apply dark:bg-blue-500 dark:hover:bg-blue-600;
   }
 
   .btn-success {
     @apply bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:bg-gray-400 transition-colors;
+    @apply dark:bg-green-500 dark:hover:bg-green-600;
   }
 
   .btn-danger {
     @apply bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 disabled:bg-gray-400 transition-colors;
+    @apply dark:bg-red-500 dark:hover:bg-red-600;
   }
 
   .form-input {
     @apply w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+    @apply dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400;
   }
 
   .form-label {
     @apply block font-medium text-gray-700 mb-1;
+    @apply dark:text-gray-200;
   }
 }
 
 /* Keep some custom styles if needed */
 .App {
   @apply min-h-screen flex flex-col;
+  @apply dark:bg-slate-900;
 }
 
 .App-header {
   @apply bg-gray-800 text-white p-4 shadow-md;
+  @apply dark:bg-gray-900 dark:border-b dark:border-gray-700;
 }
 
 .App-header h1 {
   @apply m-0 mb-4 text-2xl font-bold;
+  @apply dark:text-gray-100;
 }
 
 .nav-menu {
@@ -53,59 +62,73 @@
 
 .nav-menu a {
   @apply text-blue-400 no-underline font-medium transition-colors hover:text-blue-300;
+  @apply dark:text-blue-300 dark:hover:text-blue-200;
 }
 
 .App-main {
   @apply flex-1 p-8 max-w-7xl mx-auto w-full;
+  @apply dark:bg-slate-900;
 }
 
 .home {
   @apply text-center p-12 bg-white rounded-lg shadow-md;
+  @apply dark:bg-gray-800 dark:text-gray-100;
 }
 
 .home h2 {
   @apply text-gray-800 mb-4 text-3xl;
+  @apply dark:text-gray-100;
 }
 
 .home p {
   @apply text-gray-600 text-xl;
+  @apply dark:text-gray-300;
 }
 
 .list-container {
   @apply bg-white p-8 rounded-lg shadow-md;
+  @apply dark:bg-gray-800 dark:text-gray-100;
 }
 
 .list-container h2 {
   @apply mt-0 text-gray-800 text-2xl mb-6;
+  @apply dark:text-gray-100;
 }
 
 .error {
   @apply text-red-700 bg-red-100 p-4 rounded mb-4 border border-red-200;
+  @apply dark:text-red-200 dark:bg-red-900 dark:border-red-700;
 }
 
 .success {
   @apply text-green-700 bg-green-100 p-4 rounded mb-4 border border-green-200;
+  @apply dark:text-green-200 dark:bg-green-900 dark:border-green-700;
 }
 
 .loading {
   @apply text-center p-8 text-gray-600;
+  @apply dark:text-gray-300;
 }
 
 /* Table Styles with Tailwind */
 table {
   @apply w-full border-collapse bg-white rounded-lg overflow-hidden shadow-md;
+  @apply dark:bg-gray-800;
 }
 
 th {
   @apply bg-gray-800 text-white p-4 text-left font-semibold;
+  @apply dark:bg-gray-700 dark:text-gray-100;
 }
 
 td {
   @apply p-4 border-b border-gray-200;
+  @apply dark:border-gray-700 dark:text-gray-200;
 }
 
 tr:hover {
   @apply bg-gray-50;
+  @apply dark:bg-gray-700;
 }
 
 tr:last-child td {

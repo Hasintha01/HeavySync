@@ -7,6 +7,7 @@ import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Import pages
 
@@ -26,10 +27,11 @@ const ProfilePage = lazy(() => import('./modules/auth/ProfilePage'));
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Suspense fallback={<div className="loading">Loading...</div>}>
-          <Routes>
+    <ThemeProvider>
+      <Router>
+        <div className="App">
+          <Suspense fallback={<div className="loading">Loading...</div>}>
+            <Routes>
             {/* MainPage is now the root route and login page */}
             <Route path="/" element={<MainPage />} />
             <Route path="/login" element={<MainPage />} />
@@ -98,10 +100,11 @@ function App() {
                 </ProtectedRoute>
               }
             />
-          </Routes>
-        </Suspense>
-      </div>
-    </Router>
+            </Routes>
+          </Suspense>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 

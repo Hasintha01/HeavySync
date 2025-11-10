@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FiUsers, FiChevronDown } from 'react-icons/fi';
+import { FiUsers, FiChevronDown, FiMoon, FiSun } from 'react-icons/fi';
 import './Header.css';
+import { useTheme } from '../context/ThemeContext';
 
 const Header = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const token = localStorage.getItem('authToken');
+  const { isDarkMode, toggleTheme } = useTheme();
 
   // Hide header on login/register pages
   if (!token || location.pathname === '/login' || location.pathname === '/register') {
@@ -177,6 +179,36 @@ const Header = () => {
 
           {/* Actions Section */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="theme-toggle"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: isDarkMode ? '#374151' : '#f3f4f6',
+                border: 'none',
+                borderRadius: '50%',
+                width: '2.5rem',
+                height: '2.5rem',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                color: isDarkMode ? '#fbbf24' : '#6366f1',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+              }}
+              onMouseOver={e => {
+                e.currentTarget.style.transform = 'scale(1.1)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15)';
+              }}
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
+            </button>
             <NavLink
               to="/quotations"
               className="nav-link quotations-btn"
