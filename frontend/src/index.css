@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import './styles/darkModeClasses.css';
+@import './styles/globalDarkMode.css';
 
 body {
   margin: 0;

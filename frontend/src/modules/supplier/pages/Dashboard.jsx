@@ -200,8 +200,8 @@ const Dashboard = () => {
     <div className="p-8 max-w-7xl mx-auto">
       {/* Dashboard Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Dashboard</h1>
-        <p className="text-gray-600 text-lg">Welcome to HeavySync - Overview of your operations</p>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-50 mb-2">Dashboard</h1>
+        <p className="text-gray-700 dark:text-gray-300 text-lg">Welcome to HeavySync - Overview of your operations</p>
       </div>
 
       {/* Statistics Cards Grid */}
@@ -209,88 +209,88 @@ const Dashboard = () => {
         
         {/* Suppliers Card */}
         <div 
-          className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow cursor-pointer"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-xl p-6 border-l-4 border-blue-500 hover:shadow-lg dark:hover:shadow-2xl transition-shadow cursor-pointer"
           onClick={() => navigate("/suppliers")}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium mb-1">Total Suppliers</p>
-              <p className="text-3xl font-bold text-gray-800">{stats.totalSuppliers}</p>
+              <p className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Total Suppliers</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-gray-50">{stats.totalSuppliers}</p>
             </div>
-            <div className="bg-blue-100 p-3 rounded-full">
-              <FiUsers className="w-8 h-8 text-blue-600" />
+            <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+              <FiUsers className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
-          <p className="text-xs text-gray-500 mt-3">Click to view all suppliers</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mt-3">Click to view all suppliers</p>
         </div>
 
         {/* Parts Card */}
         <div 
-          className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow cursor-pointer"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-xl p-6 border-l-4 border-green-500 hover:shadow-lg dark:hover:shadow-2xl transition-shadow cursor-pointer"
           onClick={() => navigate("/parts")}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium mb-1">Total Parts</p>
-              <p className="text-3xl font-bold text-gray-800">{stats.totalParts}</p>
+              <p className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Total Parts</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-gray-50">{stats.totalParts}</p>
             </div>
-            <div className="bg-green-100 p-3 rounded-full">
-              <FiPackage className="w-8 h-8 text-green-600" />
+            <div className="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+              <FiPackage className="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
           </div>
-          <p className="text-xs text-gray-500 mt-3">Click to view inventory</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mt-3">Click to view inventory</p>
         </div>
 
         {/* Purchase Orders Card */}
         <div 
-          className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow cursor-pointer"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-xl p-6 border-l-4 border-purple-500 hover:shadow-lg dark:hover:shadow-2xl transition-shadow cursor-pointer"
           onClick={() => navigate("/purchase-orders")}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium mb-1">Purchase Orders</p>
-              <p className="text-3xl font-bold text-gray-800">{stats.totalPurchaseOrders}</p>
-              <p className="text-xs text-purple-600 font-medium mt-1">
+              <p className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Purchase Orders</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-gray-50">{stats.totalPurchaseOrders}</p>
+              <p className="text-xs text-purple-600 dark:text-purple-400 font-medium mt-1">
                 {stats.activePOs} active
               </p>
             </div>
-            <div className="bg-purple-100 p-3 rounded-full">
-              <FiShoppingCart className="w-8 h-8 text-purple-600" />
+            <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-full">
+              <FiShoppingCart className="w-8 h-8 text-purple-600 dark:text-purple-400" />
             </div>
           </div>
-          <p className="text-xs text-gray-500 mt-2">Click to view orders</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Click to view orders</p>
         </div>
 
         {/* Quotations Card */}
         <div 
-          className="bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow cursor-pointer"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-xl p-6 border-l-4 border-orange-500 hover:shadow-lg dark:hover:shadow-2xl transition-shadow cursor-pointer"
           onClick={() => navigate("/quotations")}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium mb-1">Quotations</p>
-              <p className="text-3xl font-bold text-gray-800">{stats.totalQuotations}</p>
+              <p className="text-gray-700 dark:text-gray-300 text-sm font-medium mb-1">Quotations</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-gray-50">{stats.totalQuotations}</p>
             </div>
-            <div className="bg-orange-100 p-3 rounded-full">
-              <FiFileText className="w-8 h-8 text-orange-600" />
+            <div className="bg-orange-100 dark:bg-orange-900 p-3 rounded-full">
+              <FiFileText className="w-8 h-8 text-orange-600 dark:text-orange-400" />
             </div>
           </div>
-          <p className="text-xs text-gray-500 mt-3">Click to compare quotes</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mt-3">Click to compare quotes</p>
         </div>
       </div>
 
       {/* Low Stock Alerts Section */}
       {stats.lowStockItems > 0 && (
-        <div className="bg-red-50 border-l-4 border-red-500 rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 rounded-lg shadow-md p-6 mb-8">
           <div className="flex items-start">
             <div className="flex-shrink-0">
-              <FiAlertTriangle className="w-6 h-6 text-red-600" />
+              <FiAlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
             </div>
             <div className="ml-3 flex-1">
-              <h3 className="text-lg font-semibold text-red-800 mb-2">
+              <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
                 Low Stock Alert - {stats.lowStockItems} Item(s) Need Attention
               </h3>
-              <p className="text-sm text-red-700 mb-4">
+              <p className="text-sm text-red-700 dark:text-red-300 mb-4">
                 The following parts are at or below minimum stock levels and need reordering:
               </p>
               
@@ -299,26 +299,26 @@ const Dashboard = () => {
                 {lowStockParts.map((part) => (
                   <div 
                     key={part._id} 
-                    className="bg-white rounded-lg p-4 border border-red-200 hover:border-red-400 transition-colors"
+                    className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-red-200 dark:border-red-700 hover:border-red-400 dark:hover:border-red-500 transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-800">{part.name}</p>
-                        <p className="text-sm text-gray-600">
+                        <p className="font-semibold text-gray-900 dark:text-gray-100">{part.name}</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
                           Part ID: {part.partId} | Location: {part.location}
                         </p>
                         <div className="mt-2 flex items-center gap-4">
                           <span className="text-sm">
-                            <span className="font-medium text-gray-700">Current:</span>{" "}
-                            <span className="text-red-600 font-bold">{part.quantity}</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">Current:</span>{" "}
+                            <span className="text-red-600 dark:text-red-400 font-bold">{part.quantity}</span>
                           </span>
                           <span className="text-sm">
-                            <span className="font-medium text-gray-700">Minimum:</span>{" "}
-                            <span className="text-gray-600">{part.minimumStock}</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">Minimum:</span>{" "}
+                            <span className="text-gray-700 dark:text-gray-300">{part.minimumStock}</span>
                           </span>
                           <span className="text-sm">
-                            <span className="font-medium text-gray-700">Unit Price:</span>{" "}
-                            <span className="text-gray-600">LKR {part.unitPrice.toLocaleString()}</span>
+                            <span className="font-medium text-gray-800 dark:text-gray-200">Unit Price:</span>{" "}
+                            <span className="text-gray-700 dark:text-gray-300">LKR {part.unitPrice.toLocaleString()}</span>
                           </span>
                         </div>
                       </div>

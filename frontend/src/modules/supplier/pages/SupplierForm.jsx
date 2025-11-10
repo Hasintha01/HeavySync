@@ -90,7 +90,7 @@ const SupplierForm = () => {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 p-8 flex justify-center items-start">
         <div className="w-full max-w-2xl mt-12">
           <SkeletonForm fields={6} />
         </div>
@@ -99,26 +99,26 @@ const SupplierForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 flex justify-center items-start">
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-8 shadow-lg rounded-lg w-full max-w-2xl mt-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 p-8 flex justify-center items-start">
+      <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-gray-800 p-8 shadow-lg dark:shadow-2xl rounded-lg w-full max-w-2xl mt-12">
         {/* Form Title */}
-        <h2 className="text-3xl font-bold mb-8 text-gray-800">
+        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-50">
           {isEditMode ? 'Edit Supplier' : 'Add New Supplier'}
         </h2>
 
         {/* Supplier ID */}
         <div className="mb-6">
-          <label htmlFor="supplierId" className="block font-semibold mb-2 text-gray-700">
-            Supplier ID <span className="text-red-500">*</span>
+          <label htmlFor="supplierId" className="block font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            Supplier ID <span className="text-red-500 dark:text-red-400">*</span>
           </label>
           <input
             id="supplierId"
             type="text"
             {...register("supplierId")}
             placeholder="Enter unique supplier ID"
-            className={`w-full border p-2 rounded ${errors.supplierId ? 'border-red-500' : 'border-gray-300'}`}
+            className={`w-full border p-2 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${errors.supplierId ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
           />
-          <p className="text-xs text-gray-500 mt-1">Must be unique (e.g., SUP001, SUP002)</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Must be unique (e.g., SUP001, SUP002)</p>
           {errors.supplierId && (
             <p className="text-red-500 text-xs mt-1">{errors.supplierId.message}</p>
           )}
@@ -126,84 +126,84 @@ const SupplierForm = () => {
 
         {/* Supplier Name */}
         <div className="mb-6">
-          <label htmlFor="name" className="block font-semibold mb-2 text-gray-700">
-            Supplier Name <span className="text-red-500">*</span>
+          <label htmlFor="name" className="block font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            Supplier Name <span className="text-red-500 dark:text-red-400">*</span>
           </label>
           <input
             id="name"
             type="text"
             {...register("name")}
             placeholder="Enter supplier name"
-            className={`w-full border p-2 rounded ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+            className={`w-full border p-2 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
           />
           {errors.name && (
-            <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
+            <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.name.message}</p>
           )}
         </div>
 
         {/* Contact Email */}
         <div className="mb-6">
-          <label htmlFor="contactEmail" className="block font-semibold mb-2 text-gray-700">
-            Contact Email <span className="text-red-500">*</span>
+          <label htmlFor="contactEmail" className="block font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            Contact Email <span className="text-red-500 dark:text-red-400">*</span>
           </label>
           <input
             id="contactEmail"
             type="email"
             {...register("contactEmail")}
             placeholder="email@example.com"
-            className={`w-full border p-2 rounded ${errors.contactEmail ? 'border-red-500' : 'border-gray-300'}`}
+            className={`w-full border p-2 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${errors.contactEmail ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
           />
           {errors.contactEmail && (
-            <p className="text-red-500 text-xs mt-1">{errors.contactEmail.message}</p>
+            <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.contactEmail.message}</p>
           )}
         </div>
 
         {/* Contact Phone */}
         <div className="mb-6">
-          <label htmlFor="contactPhone" className="block font-semibold mb-2 text-gray-700">
-            Contact Phone <span className="text-red-500">*</span>
+          <label htmlFor="contactPhone" className="block font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            Contact Phone <span className="text-red-500 dark:text-red-400">*</span>
           </label>
           <input
             id="contactPhone"
             type="tel"
             {...register("contactPhone")}
             placeholder="0712345678 (10 digits)"
-            className={`w-full border p-2 rounded ${errors.contactPhone ? 'border-red-500' : 'border-gray-300'}`}
+            className={`w-full border p-2 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${errors.contactPhone ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
             maxLength="10"
           />
           {errors.contactPhone && (
-            <p className="text-red-500 text-xs mt-1">{errors.contactPhone.message}</p>
+            <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.contactPhone.message}</p>
           )}
         </div>
 
         {/* Address */}
         <div className="mb-6">
-          <label htmlFor="address" className="block font-semibold mb-2 text-gray-700">
-            Address <span className="text-red-500">*</span>
+          <label htmlFor="address" className="block font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            Address <span className="text-red-500 dark:text-red-400">*</span>
           </label>
           <textarea
             id="address"
             {...register("address")}
             placeholder="Enter supplier address"
-            className={`w-full border p-2 rounded ${errors.address ? 'border-red-500' : 'border-gray-300'}`}
+            className={`w-full border p-2 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${errors.address ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
             rows="3"
           />
           {errors.address && (
-            <p className="text-red-500 text-xs mt-1">{errors.address.message}</p>
+            <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.address.message}</p>
           )}
         </div>
 
         {/* Report ID (Optional) */}
         <div className="mb-6">
-          <label htmlFor="reportId" className="block font-semibold mb-2 text-gray-700">
-            Report ID <span className="text-gray-500 text-sm">(Optional)</span>
+          <label htmlFor="reportId" className="block font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            Report ID <span className="text-gray-600 dark:text-gray-400 text-sm">(Optional)</span>
           </label>
           <input
             id="reportId"
             type="text"
             {...register("reportId")}
             placeholder="Enter report ID if applicable"
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 dark:border-gray-600 p-2 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
         </div>
 

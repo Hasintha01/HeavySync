@@ -56,7 +56,7 @@ const SupplierCard = ({ supplier, onDelete }) => {
   return (
     <div className="card cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
       {/* Supplier Name - Main heading with fixed height to prevent layout shifts */}
-      <h3 className="text-xl font-bold mb-4 text-gray-800 min-h-[3.5rem] line-clamp-2">
+      <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-gray-50 min-h-[3.5rem] line-clamp-2">
         {supplier.name}
       </h3>
       
@@ -64,39 +64,39 @@ const SupplierCard = ({ supplier, onDelete }) => {
       <div className="space-y-3 mb-6 flex-grow">
         {/* Supplier ID */}
         <p className="text-sm">
-          <strong className="text-gray-700">Supplier ID:</strong>{" "}
-          <span className="text-gray-600">{supplier.supplierId}</span>
+          <strong className="text-gray-800 dark:text-gray-200">Supplier ID:</strong>{" "}
+          <span className="text-gray-700 dark:text-gray-300">{supplier.supplierId}</span>
         </p>
         
         {/* Supplier Email */}
         <p className="text-sm">
-          <strong className="text-gray-700">Email:</strong>{" "}
-          <span className="text-gray-600 break-all">{supplier.contactEmail}</span>
+          <strong className="text-gray-800 dark:text-gray-200">Email:</strong>{" "}
+          <span className="text-gray-700 dark:text-gray-300 break-all">{supplier.contactEmail}</span>
         </p>
         
         {/* Supplier Phone */}
         <p className="text-sm">
-          <strong className="text-gray-700">Phone:</strong>{" "}
-          <span className="text-gray-600">{supplier.contactPhone}</span>
+          <strong className="text-gray-800 dark:text-gray-200">Phone:</strong>{" "}
+          <span className="text-gray-700 dark:text-gray-300">{supplier.contactPhone}</span>
         </p>
         
         {/* Supplier Address */}
         <p className="text-sm">
-          <strong className="text-gray-700">Address:</strong>{" "}
-          <span className="text-gray-600">{supplier.address}</span>
+          <strong className="text-gray-800 dark:text-gray-200">Address:</strong>{" "}
+          <span className="text-gray-700 dark:text-gray-300">{supplier.address}</span>
         </p>
         
         {/* Report ID - Only show if exists */}
         {supplier.reportId && (
           <p className="text-sm">
-            <strong className="text-gray-700">Report ID:</strong>{" "}
-            <span className="text-gray-600">{supplier.reportId}</span>
+            <strong className="text-gray-800 dark:text-gray-200">Report ID:</strong>{" "}
+            <span className="text-gray-700 dark:text-gray-300">{supplier.reportId}</span>
           </p>
         )}
       </div>
 
       {/* Action Buttons - Always at bottom */}
-      <div className="mt-auto pt-4 border-t border-gray-200">
+      <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-700">
         <div className="flex gap-3">
           <button 
             onClick={handleEdit}

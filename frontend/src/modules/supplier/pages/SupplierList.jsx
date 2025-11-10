@@ -64,7 +64,7 @@ const SupplierList = () => {
       <div className="p-8 max-w-7xl mx-auto">
         {/* Page Title */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-800">Suppliers</h2>
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Suppliers</h2>
           <button
             disabled
             className="flex items-center gap-2 bg-gray-400 text-white px-6 py-3 rounded-lg cursor-not-allowed font-medium shadow-md"
@@ -97,7 +97,7 @@ const SupplierList = () => {
   if (error) {
     return (
       <div className="p-8 max-w-7xl mx-auto">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-6 py-4 rounded-lg">
           <strong>Error:</strong> {error}
         </div>
       </div>
@@ -108,7 +108,7 @@ const SupplierList = () => {
     <div className="p-8 max-w-7xl mx-auto">
       {/* Page Title and Export Button */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">Suppliers</h2>
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Suppliers</h2>
         <button
           onClick={exportToCSV}
           disabled={filteredSuppliers.length === 0}
@@ -130,13 +130,13 @@ const SupplierList = () => {
           placeholder="Search suppliers by name, ID, email, or contact number..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
 
       {/* Warning for duplicate IDs */}
       {duplicateIds.length > 0 && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg mb-6 shadow-sm">
+        <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-6 py-4 rounded-lg mb-6 shadow-sm">
           <strong>⚠️ Warning:</strong> Found {duplicateIds.length} duplicate Supplier ID(s): {duplicateIds.join(', ')}
           <br />
           <span className="text-sm mt-2 block">Please update these suppliers with unique IDs to avoid issues.</span>
@@ -154,7 +154,7 @@ const SupplierList = () => {
           ))
         ) : (
           <div className="col-span-full text-center py-12">
-            <p className="text-gray-500 text-lg">
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
               {searchTerm ? "No suppliers found matching your search." : "No suppliers available."}
             </p>
           </div>

@@ -59,10 +59,10 @@ const MainPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-900">
       {/* Removed welcome text as requested */}
-      <form onSubmit={handleLoginSubmit} className="w-full max-w-md p-6 bg-white rounded-lg shadow mb-6" autoComplete="on">
-        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+      <form onSubmit={handleLoginSubmit} className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-2xl mb-6" autoComplete="on">
+        <h2 className="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-gray-100">Login</h2>
         <input
           type="text"
           name="username"
@@ -70,7 +70,7 @@ const MainPage = () => {
           value={login.username}
           onChange={handleLoginChange}
           required
-          className="w-full px-3 py-2 border rounded mb-3"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded mb-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
           autoComplete="username"
         />
         <input
@@ -80,25 +80,25 @@ const MainPage = () => {
           value={login.password}
           onChange={handleLoginChange}
           required
-          className="w-full px-3 py-2 border rounded mb-4"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded mb-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
           autoComplete="current-password"
         />
         <button
           type="submit"
           disabled={loginLoading}
-          className="w-full py-2 rounded font-semibold mb-2 text-white transition bg-gradient-to-r from-blue-700 to-blue-400 shadow-lg text-lg hover:from-blue-800 hover:to-blue-500"
+          className="w-full py-2 rounded font-semibold mb-2 text-white transition bg-gradient-to-r from-blue-700 to-blue-400 shadow-lg text-lg hover:from-blue-800 hover:to-blue-500 dark:from-blue-600 dark:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-600"
         >
           {loginLoading ? 'Logging in...' : 'Login'}
         </button>
         <button
           type="button"
-          className="w-full py-2 rounded font-semibold text-white transition bg-gradient-to-r from-green-700 to-green-400 shadow-lg text-lg hover:from-green-800 hover:to-green-500"
+          className="w-full py-2 rounded font-semibold text-white transition bg-gradient-to-r from-green-700 to-green-400 shadow-lg text-lg hover:from-green-800 hover:to-green-500 dark:from-green-600 dark:to-green-500 dark:hover:from-green-700 dark:hover:to-green-600"
           onClick={() => navigate ? navigate('/register') : window.location.href = '/register'}
         >
           Create Account
         </button>
         {/* Show login feedback message if present */}
-        {loginMessage && <p className="mt-4 text-center text-red-600">{loginMessage}</p>}
+        {loginMessage && <p className="mt-4 text-center text-red-600 dark:text-red-400">{loginMessage}</p>}
       </form>
     </div>
   );
