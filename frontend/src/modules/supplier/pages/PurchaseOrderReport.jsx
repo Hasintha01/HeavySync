@@ -272,11 +272,11 @@ const PurchaseOrderReport = () => {
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-gray-800">Purchase Order Report</h2>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Purchase Order Report</h2>
                 <button
                     onClick={exportToPDF}
                     disabled={filteredOrders.length === 0}
-                    className="btn-primary flex items-center gap-2"
+                    className="btn-primary flex items-center gap-2 text-white"
                 >
                     <FiDownload /> Export to PDF
                 </button>
@@ -287,8 +287,8 @@ const PurchaseOrderReport = () => {
             )}
 
             {/* Filters Section */}
-            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md dark:shadow-2xl mb-6">
+                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-50">
                     <FiFilter /> Filters
                 </h3>
                 
@@ -368,25 +368,25 @@ const PurchaseOrderReport = () => {
 
             {/* Summary Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-                    <p className="text-gray-600 text-sm">Total Orders</p>
-                    <p className="text-2xl font-bold text-blue-700">{summary.orderCount}</p>
+                <div className="bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blue-500 p-4 rounded">
+                    <p className="text-gray-700 dark:text-gray-300 text-sm">Total Orders</p>
+                    <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{summary.orderCount}</p>
                 </div>
-                <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
-                    <p className="text-gray-600 text-sm">Total Amount</p>
-                    <p className="text-2xl font-bold text-green-700">
+                <div className="bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 p-4 rounded">
+                    <p className="text-gray-700 dark:text-gray-300 text-sm">Total Amount</p>
+                    <p className="text-2xl font-bold text-green-700 dark:text-green-400">
                         LKR {summary.totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </p>
                 </div>
-                <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded">
-                    <p className="text-gray-600 text-sm">Average Order</p>
-                    <p className="text-2xl font-bold text-purple-700">
+                <div className="bg-purple-50 dark:bg-purple-900/30 border-l-4 border-purple-500 p-4 rounded">
+                    <p className="text-gray-700 dark:text-gray-300 text-sm">Average Order</p>
+                    <p className="text-2xl font-bold text-purple-700 dark:text-purple-400">
                         LKR {summary.averageAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </p>
                 </div>
-                <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded">
-                    <p className="text-gray-600 text-sm">Status Breakdown</p>
-                    <div className="text-sm mt-1">
+                <div className="bg-orange-50 dark:bg-orange-900/30 border-l-4 border-orange-500 p-4 rounded">
+                    <p className="text-gray-700 dark:text-gray-300 text-sm">Status Breakdown</p>
+                    <div className="text-sm mt-1 text-gray-800 dark:text-gray-200">
                         {Object.entries(summary.statusCounts).map(([status, count]) => (
                             <div key={status} className="flex justify-between">
                                 <span className="capitalize">{status}:</span>
@@ -398,55 +398,55 @@ const PurchaseOrderReport = () => {
             </div>
 
             {/* Orders Table */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-2xl overflow-hidden">
                 <div className="overflow-x-auto">
                     {loading ? (
                         <div className="text-center py-12">
                             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                            <p className="mt-4 text-gray-600">Loading orders...</p>
+                            <p className="mt-4 text-gray-700 dark:text-gray-300">Loading orders...</p>
                         </div>
                     ) : filteredOrders.length === 0 ? (
                         <div className="text-center py-12">
-                            <p className="text-gray-500 text-lg">No purchase orders found matching the filters.</p>
+                            <p className="text-gray-600 dark:text-gray-400 text-lg">No purchase orders found matching the filters.</p>
                         </div>
                     ) : (
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead className="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                         PO ID
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                         Supplier
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                         Date Created
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                         Status
                                     </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                         Items
                                     </th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                                         Total Amount
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 {filteredOrders.map((order) => {
                                     // Supplier is populated by backend, so order.supplier is an object
                                     const supplierName = order.supplier?.name || 'N/A';
                                     
                                     return (
-                                        <tr key={order._id} className="hover:bg-gray-50">
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <tr key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                                                 {order._id?.slice(-8).toUpperCase() || 'N/A'}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                                 {supplierName}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                                                 {new Date(order.createdAt).toLocaleDateString()}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
@@ -454,10 +454,10 @@ const PurchaseOrderReport = () => {
                                                     {order.status}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                                                 {order.items?.length || 0} item(s)
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-semibold">
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-right font-semibold">
                                                 LKR {(order.totalAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                                             </td>
                                         </tr>

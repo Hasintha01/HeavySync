@@ -30,7 +30,7 @@ const PartCard = ({ part }) => {
     <div className={`card cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${isLowStock ? 'border-l-4 border-red-500' : 'border-l-4 border-green-500'}`}>
       {/* Part Name - Main heading */}
       <div className="flex justify-between items-start mb-2">
-        <h3 className="text-lg font-bold">{part.name}</h3>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-50">{part.name}</h3>
         {isLowStock && (
           <StatusBadge status="low-stock" />
         )}
@@ -39,47 +39,47 @@ const PartCard = ({ part }) => {
       {/* Part ID and Number */}
       <div className="grid grid-cols-2 gap-2 mb-2">
         <p className="text-sm">
-          <strong>Part ID:</strong> {part.partId}
+          <strong className="text-gray-800 dark:text-gray-200">Part ID:</strong> <span className="text-gray-700 dark:text-gray-300">{part.partId}</span>
         </p>
         <p className="text-sm">
-          <strong>Part #:</strong> {part.partNumber}
+          <strong className="text-gray-800 dark:text-gray-200">Part #:</strong> <span className="text-gray-700 dark:text-gray-300">{part.partNumber}</span>
         </p>
       </div>
       
       {/* Description */}
-      <p className="mb-2 text-sm text-gray-600">
+      <p className="mb-2 text-sm text-gray-700 dark:text-gray-300">
         {part.description}
       </p>
       
       {/* Stock Information */}
       <div className="grid grid-cols-2 gap-2 mb-2">
         <p className="text-sm">
-          <strong>Quantity:</strong> {part.quantity}
+          <strong className="text-gray-800 dark:text-gray-200">Quantity:</strong> <span className="text-gray-700 dark:text-gray-300">{part.quantity}</span>
         </p>
         <p className="text-sm">
-          <strong>Min Stock:</strong> {part.minimumStock}
+          <strong className="text-gray-800 dark:text-gray-200">Min Stock:</strong> <span className="text-gray-700 dark:text-gray-300">{part.minimumStock}</span>
         </p>
       </div>
       
       {/* Price and Location */}
       <div className="grid grid-cols-2 gap-2 mb-2">
         <p className="text-sm">
-          <strong>Unit Price:</strong> LKR {part.unitPrice?.toFixed(2)}
+          <strong className="text-gray-800 dark:text-gray-200">Unit Price:</strong> <span className="text-gray-700 dark:text-gray-300">LKR {part.unitPrice?.toFixed(2)}</span>
         </p>
         <p className="text-sm">
-          <strong>Location:</strong> {part.location}
+          <strong className="text-gray-800 dark:text-gray-200">Location:</strong> <span className="text-gray-700 dark:text-gray-300">{part.location}</span>
         </p>
       </div>
       
       {/* Category */}
       <p className="mb-2 text-sm">
-        <strong>Category:</strong> {part.categoryId}
+        <strong className="text-gray-800 dark:text-gray-200">Category:</strong> <span className="text-gray-700 dark:text-gray-300">{part.categoryId}</span>
       </p>
       
       {/* Report ID - Only show if exists */}
       {part.reportId && (
-        <p className="text-sm text-gray-500">
-          <strong>Report ID:</strong> {part.reportId}
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          <strong className="text-gray-800 dark:text-gray-200">Report ID:</strong> <span className="text-gray-700 dark:text-gray-300">{part.reportId}</span>
         </p>
       )}
       
@@ -87,7 +87,7 @@ const PartCard = ({ part }) => {
       <div className="mt-4">
         <button 
           onClick={handleEdit}
-          className="btn-primary text-sm flex items-center gap-2"
+          className="btn-primary text-sm flex items-center gap-2 text-white"
         >
           <FiEdit className="w-4 h-4" />
           Edit Part

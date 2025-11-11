@@ -308,7 +308,7 @@ HeavySync Procurement Team
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-gray-800">Quotation Comparison</h2>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Quotation Comparison</h2>
                 <button
                     onClick={() => setShowForm(!showForm)}
                     className="btn-primary"
@@ -327,8 +327,8 @@ HeavySync Procurement Team
 
             {/* Quotation Request Form */}
             {showForm && (
-                <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                    <h3 className="text-xl font-semibold mb-4">Create Quotation Request</h3>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md dark:shadow-2xl mb-6">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-50">Create Quotation Request</h3>
                     
                     <form onSubmit={handleSubmit}>
                         {/* Part Selection */}
@@ -351,13 +351,13 @@ HeavySync Procurement Team
 
                         {/* Display selected part details */}
                         {selectedPart && (
-                            <div className="bg-blue-50 p-4 rounded mb-4">
-                                <h4 className="font-semibold mb-2">Selected Part Details:</h4>
-                                <p><strong>Part ID:</strong> {selectedPart.partId}</p>
-                                <p><strong>Part Number:</strong> {selectedPart.partNumber}</p>
-                                <p><strong>Part Name:</strong> {selectedPart.name}</p>
-                                <p><strong>Description:</strong> {selectedPart.description}</p>
-                                <p><strong>Current Stock:</strong> {selectedPart.quantity}</p>
+                            <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded mb-4">
+                                <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Selected Part Details:</h4>
+                                <p className="text-gray-800 dark:text-gray-200"><strong>Part ID:</strong> {selectedPart.partId}</p>
+                                <p className="text-gray-800 dark:text-gray-200"><strong>Part Number:</strong> {selectedPart.partNumber}</p>
+                                <p className="text-gray-800 dark:text-gray-200"><strong>Part Name:</strong> {selectedPart.name}</p>
+                                <p className="text-gray-800 dark:text-gray-200"><strong>Description:</strong> {selectedPart.description}</p>
+                                <p className="text-gray-800 dark:text-gray-200"><strong>Current Stock:</strong> {selectedPart.quantity}</p>
                             </div>
                         )}
 
@@ -377,14 +377,14 @@ HeavySync Procurement Team
                         {/* Supplier Selection */}
                         <div className="mb-4">
                             <label className="form-label">Select Suppliers</label>
-                            <div className="border rounded p-4 max-h-60 overflow-y-auto">
+                            <div className="border border-gray-300 dark:border-gray-600 rounded p-4 max-h-60 overflow-y-auto bg-white dark:bg-gray-700">
                                 {suppliers.length === 0 ? (
-                                    <p className="text-gray-500">No suppliers available</p>
+                                    <p className="text-gray-600 dark:text-gray-400">No suppliers available</p>
                                 ) : (
                                     suppliers.map(supplier => (
                                         <div 
                                             key={supplier._id} 
-                                            className="mb-2 flex items-center hover:bg-gray-50 p-2 rounded cursor-pointer"
+                                            className="mb-2 flex items-center hover:bg-gray-50 dark:hover:bg-gray-600 p-2 rounded cursor-pointer"
                                             onClick={() => handleSupplierToggle(supplier.supplierId)}
                                         >
                                             <input
@@ -394,15 +394,15 @@ HeavySync Procurement Team
                                                 className="mr-3 pointer-events-none"
                                             />
                                             <div>
-                                                <span className="font-medium">{supplier.name}</span>
-                                                <span className="text-gray-600 ml-2">({supplier.supplierId})</span>
-                                                <p className="text-sm text-gray-500">{supplier.contactEmail}</p>
+                                                <span className="font-medium text-gray-900 dark:text-gray-100">{supplier.name}</span>
+                                                <span className="text-gray-700 dark:text-gray-300 ml-2">({supplier.supplierId})</span>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400">{supplier.contactEmail}</p>
                                             </div>
                                         </div>
                                     ))
                                 )}
                             </div>
-                            <p className="text-sm text-gray-500 mt-2">
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                                 {formData.supplierIds.length} supplier(s) selected
                             </p>
                         </div>
@@ -413,7 +413,7 @@ HeavySync Procurement Team
                             <textarea
                                 value={formData.notes}
                                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                                className="form-input"
+                                className="form-input bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
                                 rows="3"
                                 placeholder="Any additional information for suppliers..."
                             />
@@ -432,13 +432,13 @@ HeavySync Procurement Team
             )}
 
             {/* Quotations List */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold mb-4">Quotation Requests</h3>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md dark:shadow-2xl">
+                <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-50">Quotation Requests</h3>
 
-                {loading && <p className="text-center py-4">Loading quotations...</p>}
+                {loading && <p className="text-center py-4 text-gray-700 dark:text-gray-300">Loading quotations...</p>}
 
                 {!loading && quotations.length === 0 && (
-                    <p className="text-gray-500 text-center py-8">
+                    <p className="text-gray-600 dark:text-gray-400 text-center py-8">
                         No quotation requests yet. Click "Open Quotation" to create one.
                     </p>
                 )}
@@ -446,29 +446,29 @@ HeavySync Procurement Team
                 {!loading && quotations.length > 0 && (
                     <div className="space-y-4">
                         {quotations.map(quotation => (
-                            <div key={quotation._id} className="border rounded-lg p-4 hover:shadow-lg transition-shadow">
+                            <div key={quotation._id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg transition-shadow bg-white dark:bg-gray-750">
                                 <div className="flex justify-between items-start mb-3">
                                     <div>
-                                        <h4 className="text-lg font-semibold">{quotation.quotationId}</h4>
-                                        <p className="text-gray-600">
+                                        <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-50">{quotation.quotationId}</h4>
+                                        <p className="text-gray-700 dark:text-gray-300">
                                             {quotation.part.name} ({quotation.part.partNumber})
                                         </p>
-                                        <p className="text-sm text-gray-500">Quantity: {quotation.quantity}</p>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">Quantity: {quotation.quantity}</p>
                                     </div>
-                                    <span className={`px-3 py-1 rounded text-white text-sm ${getStatusColor(quotation.status)}`}>
+                                    <span className={`px-3 py-1 rounded text-white text-sm font-medium ${getStatusColor(quotation.status)}`}>
                                         {quotation.status}
                                     </span>
                                 </div>
 
                                 {/* Suppliers */}
                                 <div className="mb-3">
-                                    <p className="font-medium mb-2">Suppliers ({quotation.suppliers.length}):</p>
+                                    <p className="font-medium mb-2 text-gray-900 dark:text-gray-100">Suppliers ({quotation.suppliers.length}):</p>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                         {quotation.suppliers.map(supplier => (
-                                            <div key={supplier.supplierId} className="bg-gray-50 p-2 rounded text-sm">
-                                                <p className="font-medium">{supplier.name}</p>
-                                                <p className="text-gray-600">{supplier.contactEmail}</p>
-                                                <p className="text-xs text-gray-500">Status: {supplier.status}</p>
+                                            <div key={supplier.supplierId} className="bg-gray-50 dark:bg-gray-700 p-2 rounded text-sm">
+                                                <p className="font-medium text-gray-900 dark:text-gray-100">{supplier.name}</p>
+                                                <p className="text-gray-700 dark:text-gray-300">{supplier.contactEmail}</p>
+                                                <p className="text-xs text-gray-600 dark:text-gray-400">Status: {supplier.status}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -478,25 +478,25 @@ HeavySync Procurement Team
                                 <div className="flex gap-2 mt-3">
                                     <button
                                         onClick={() => handleSendEmails(quotation)}
-                                        className="btn-primary text-sm"
+                                        className="btn-primary text-sm text-white"
                                     >
                                         📧 Send Email to Suppliers
                                     </button>
                                     <button
                                         onClick={() => handleDeleteQuotation(quotation._id)}
-                                        className="btn-danger text-sm"
+                                        className="btn-danger text-sm text-white"
                                     >
                                         Delete
                                     </button>
                                 </div>
 
                                 {quotation.notes && (
-                                    <div className="mt-3 p-2 bg-yellow-50 rounded">
-                                        <p className="text-sm"><strong>Notes:</strong> {quotation.notes}</p>
+                                    <div className="mt-3 p-2 bg-yellow-50 dark:bg-yellow-900/30 rounded border border-yellow-200 dark:border-yellow-700">
+                                        <p className="text-sm text-gray-800 dark:text-gray-200"><strong>Notes:</strong> {quotation.notes}</p>
                                     </div>
                                 )}
 
-                                <p className="text-xs text-gray-400 mt-2">
+                                <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
                                     Created: {new Date(quotation.createdAt).toLocaleString()}
                                 </p>
                             </div>

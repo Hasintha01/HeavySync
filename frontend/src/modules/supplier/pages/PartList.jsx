@@ -79,7 +79,7 @@ const PartList = () => {
         {/* Page Header Skeleton */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Parts Inventory</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Parts Inventory</h1>
             <div className="skeleton-box h-6 w-64 mt-2 rounded"></div>
           </div>
           <button
@@ -131,10 +131,10 @@ const PartList = () => {
       {/* Page Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Parts Inventory</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Parts Inventory</h1>
+          <p className="text-gray-700 dark:text-gray-300 mt-2">
             Total: <span className="font-semibold">{parts.length}</span> parts | 
-            Low Stock: <span className="font-semibold text-red-600">{lowStockCount}</span>
+            Low Stock: <span className="font-semibold text-red-600 dark:text-red-400">{lowStockCount}</span>
           </p>
         </div>
         {/* Export to CSV Button */}
@@ -154,7 +154,7 @@ const PartList = () => {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md dark:shadow-2xl mb-8">
         <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
           {/* Search Input */}
           <div className="flex-1 w-full">
@@ -198,12 +198,12 @@ const PartList = () => {
       {/* Loading State */}
       {loading ? (
         <div className="text-center py-16">
-          <p className="text-gray-500 text-lg">Loading parts...</p>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Loading parts...</p>
         </div>
       ) : filteredParts.length === 0 ? (
         /* No Parts Found */
-        <div className="text-center py-16 bg-gray-50 rounded-lg">
-          <p className="text-gray-500 text-lg">
+        <div className="text-center py-16 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <p className="text-gray-600 dark:text-gray-400 text-lg">
             {searchTerm || showLowStockOnly
               ? "No parts match your search criteria."
               : "No parts available. Add a new part to get started."}
