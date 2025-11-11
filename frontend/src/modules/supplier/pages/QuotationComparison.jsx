@@ -478,13 +478,13 @@ HeavySync Procurement Team
                                 <div className="flex gap-2 mt-3">
                                     <button
                                         onClick={() => handleSendEmails(quotation)}
-                                        className="btn-primary text-sm text-white"
+                                        className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg text-sm transition-colors"
                                     >
                                         📧 Send Email to Suppliers
                                     </button>
                                     <button
                                         onClick={() => handleDeleteQuotation(quotation._id)}
-                                        className="btn-danger text-sm text-white"
+                                        className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-lg text-sm transition-colors"
                                     >
                                         Delete
                                     </button>

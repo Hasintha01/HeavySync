@@ -100,7 +100,7 @@ const SupplierCard = ({ supplier, onDelete }) => {
         <div className="flex gap-3">
           <button 
             onClick={handleEdit}
-            className="btn-primary text-sm flex items-center justify-center gap-2 flex-1"
+            className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 flex-1 transition-colors"
           >
             <FiEdit className="w-4 h-4" />
             Edit
@@ -108,7 +108,7 @@ const SupplierCard = ({ supplier, onDelete }) => {
           <button 
             onClick={handleDelete}
             disabled={isDeleting}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 flex-1 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 flex-1 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <FiTrash2 className="w-4 h-4" />
             {isDeleting ? 'Deleting...' : 'Delete'}

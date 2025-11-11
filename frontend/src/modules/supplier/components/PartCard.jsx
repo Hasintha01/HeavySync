@@ -87,7 +87,7 @@ const PartCard = ({ part }) => {
       <div className="mt-4">
         <button 
           onClick={handleEdit}
-          className="btn-primary text-sm flex items-center gap-2 text-white"
+          className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors w-full justify-center"
         >
           <FiEdit className="w-4 h-4" />
           Edit Part

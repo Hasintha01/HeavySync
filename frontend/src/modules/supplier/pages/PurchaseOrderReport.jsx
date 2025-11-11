@@ -261,12 +261,12 @@ const PurchaseOrderReport = () => {
      */
     const getStatusColor = (status) => {
         const colors = {
-            pending: "bg-yellow-500",
-            approved: "bg-blue-500",
-            received: "bg-green-500",
-            cancelled: "bg-red-500",
+            pending: "bg-yellow-500 dark:bg-yellow-700",
+            approved: "bg-blue-500 dark:bg-blue-700",
+            received: "bg-green-500 dark:bg-green-700",
+            cancelled: "bg-red-500 dark:bg-red-700",
         };
-        return colors[status.toLowerCase()] || "bg-gray-500";
+        return colors[status.toLowerCase()] || "bg-gray-500 dark:bg-gray-700";
     };
 
     return (
